@@ -1,19 +1,23 @@
 <?php 
-include 'init.php'; 
+include 'init.php';
+
 if(!$users->isLoggedIn()) {
 	header("Location: login.php");	
 }
+
 include('inc/header.php');
 $user = $users->getUserInfo();
 ?>
-<title>Helpdesk System with PHP & MySQL</title>
-<script src="js/jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap.min.js"></script>		
-<link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
-<script src="js/general.js"></script>
-<script src="js/department.js"></script>
-<link rel="stylesheet" href="css/style.css" />
-<?php include('inc/container.php');?>
+	<title>Helpdesk System</title>
+
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/dataTables.bootstrap.min.js"></script>		
+	<link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
+	<script src="js/general.js"></script>
+	<script src="js/department.js"></script>
+	<link rel="stylesheet" href="css/style.css"/>
+<?php include('inc/container.php'); ?>
+
 <div class="container">	
 	<div class="row home-sections">
 	<h2>Helpdesk System</h2>	

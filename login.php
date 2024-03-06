@@ -35,10 +35,11 @@ include('inc/header.php');
 					</div>	
 					<div style="margin-top:10px" class="form-group">                               
 						<div class="col-sm-12 controls">
-						Admin: admin@webdamn.com<br>
-						password:123	<br><br>
+						Admin: ezekiel@oxc.com<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sudayon@oxc.com<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password:123123	<br><br>
 						User: smith@webdamn.com<br>
-						password:123							
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password:123							
 						</div>						
 					</div>	
 				</form>   

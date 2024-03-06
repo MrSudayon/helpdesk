@@ -10,6 +10,9 @@ require 'class/Users.php';
 require 'class/Time.php';
 require 'class/Tickets.php';
 require 'class/Department.php';
+// for Purchase Form
+require 'class/Purchase.php';
+
 $database = new Database;
 $users = new Users;
 $time = new Time;

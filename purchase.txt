@@ -2,8 +2,6 @@
 include 'init.php'; 
 if(!$users->isLoggedIn()) {
 	header("Location: login.php");	
-} else {
-	header("Location: ticket.php");	
 }
 include('inc/header.php');
 $user = $users->getUserInfo();
@@ -30,7 +28,6 @@ $user = $users->getUserInfo();
 					<h3 class="panel-title"></h3>
 				</div>
 				<div class="col-md-2" align="right">
-					<button type="button" name="req" id="purchaseReq" class="btn btn-success btn-xs">Purchase Request</button>
 					<button type="button" name="add" id="createTicket" class="btn btn-success btn-xs">Create Ticket</button>
 				</div>
 			</div>
@@ -52,6 +49,6 @@ $user = $users->getUserInfo();
 			</thead>
 		</table>
 	</div>
-	<?php include('add_ticket_model.php'); ?>
+	<?php include('add_purchase_model.php'); ?>
 </div>	
 <?php include('inc/footer.php');?>
