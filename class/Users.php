@@ -69,7 +69,7 @@ class Users extends Database {
 		if(!empty($_POST["order"])){
 			$sqlQuery .= ' ORDER BY '.$_POST['order']['0']['column'].' '.$_POST['order']['0']['dir'].' ';
 		} else {
-			$sqlQuery .= ' ORDER BY id DESC ';
+			$sqlQuery .= ' ORDER BY status DESC ';
 		}
 		if($_POST["length"] != -1){
 			$sqlQuery .= ' LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
@@ -159,7 +159,7 @@ class Users extends Database {
 	public function delete() {      
 		if($this->deleteUserId) {		          
 			$queryUpdate = "
-				DELETE FROM ".$this->userTable." 
+				UPDATE ".$this->userTable." SET status=0
 				WHERE id = '".$this->deleteUserId."'";				
 			mysqli_query($this->dbConnect, $queryUpdate);			
 		}
