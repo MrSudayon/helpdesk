@@ -23,8 +23,8 @@ $user = $users->getUserInfo();
 	<div class="">   		
 		<p>View and manage tickets that may have responses from support team.</p>	
 		<!-- Ticket Counts -->
-		Open Tickets: <h1><?php echo "2"; ?></h1>
-		Closed Tickets: <h1><?php echo "2"; ?></h1>
+		Open Tickets: <h1><?php echo $database->openTicketCount(); ?></h1>
+		Closed Tickets: <h1><?php echo $database->openTicketCount(); ?></h1>
 
 		<div class="panel-heading">
 			<div class="row">
@@ -32,7 +32,7 @@ $user = $users->getUserInfo();
 					<h3 class="panel-title"></h3>
 				</div>
 				<div class="col-md-12" align="right">
-					<button type="button" name="req" id="purchaseReq" class="btn btn-success btn-xs">Purchase Request</button>
+					<button type="button" name="req" id="purchaseRequest" class="btn btn-success btn-xs">Purchase Request</button>
 			
 					<button type="button" name="add" id="createTicket" class="btn btn-success btn-xs">Create Ticket</button>
 				</div>

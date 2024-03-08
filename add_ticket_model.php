@@ -33,6 +33,8 @@
 							</label>
 						<?php } ?>	
 					</div>
+
+					<!-- Urgency/Priority -->
 				</div>
 				<div class="modal-footer">
 					<input type="hidden" name="ticketId" id="ticketId" />

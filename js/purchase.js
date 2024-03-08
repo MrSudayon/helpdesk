@@ -16,20 +16,31 @@ $(document).ready(function() {
 	// 			location.reload();
 	// 		}
 	// 	})
-	// });
+	// });deleteRequestForm
 	var requestFormTemplate = $('#requestform').html();
-
+	var keepModalOpen = false;
 	$('#addRequestForm').on('click', function() {
 		$('.asset-details:last').append(requestFormTemplate);
+		keepModalOpen = true; 
 	});
-	 
-	$('#purchaseReq').click(function(){
+	$('#deleteRequestForm').on('click', function() {
+		$('.asset-details:last').remove(requestFormTemplate);
+		keepModalOpen = true; 
+	});
+
+	$('#purchaseRequest').click(function(){
 		$('#purchaseModal').modal('show');
 		$('#purchaseForm')[0].reset();
 		$('.modal-title').html("<i class='fa fa-plus'></i> Purchase Form");
 		$('#action').val('createTicket');
 		$('#save').val('Save Ticket');
 	});	
+	$('#purchaseModal').on('hide.bs.modal', function (e) {
+		if (keepModalOpen) {
+			e.preventDefault(); // Prevent the modal from closing
+			keepModalOpen = false; // Reset the flag
+		}
+	});
 	// if($('#listTickets').length) {
 	// 	var ticketData = $('#listTickets').DataTable({
 	// 		"lengthChange": false,
@@ -50,22 +61,22 @@ $(document).ready(function() {
 	// 		],
 	// 		"pageLength": 10
 	// 	});			
-	// 	$(document).on('submit','#ticketForm', function(event){
-	// 		event.preventDefault();
-	// 		$('#save').attr('disabled','disabled');
-	// 		var formData = $(this).serialize();
-	// 		$.ajax({
-	// 			url:"ticket_action.php",
-	// 			method:"POST",
-	// 			data:formData,
-	// 			success:function(data){				
-	// 				$('#ticketForm')[0].reset();
-	// 				$('#ticketModal').modal('hide');				
-	// 				$('#save').attr('disabled', false);
-	// 				ticketData.ajax.reload();
-	// 			}
-	// 		})
-	// 	});			
+	$(document).on('submit','#purchaseForm', function(event){
+		event.preventDefault();
+		$('#save').attr('disabled','disabled');
+		var formData = $(this).serialize();
+		$.ajax({
+			url:"purchase_action.php",
+			method:"POST",
+			data:formData,
+			success:function(data){				
+				$('#purchaseForm')[0].reset();
+				$('#purchaseModal').modal('hide');				
+				$('#save').attr('disabled', false);
+				ticketData.ajax.reload();
+			}
+		})
+	});			
 	// 	$(document).on('click', '.update', function(){
 	// 		var ticketId = $(this).attr("id");
 	// 		var action = 'getTicketDetails';

@@ -1,5 +1,6 @@
 <div id="purchaseModal" class="modal fade">
 	<div class="modal-dialog">
+		
 		<form method="post" id="purchaseForm">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -86,8 +87,7 @@
 
 					<div class="title">Request Form</div>
 					<button id="addRequestForm" class="btn btn-primary" style="width: 100%;">+ Add form</button>
-					<div class="form" id="requestform">
-					<div class="asset-details">
+					<div class="asset-details" class="form" id="requestform">
 						<div class="input-box">
 							<span class="details">Category</span>  	
 							<input type="text" name="category[]" id="category" value=""/>
@@ -97,7 +97,10 @@
 							<input type="text" name="asd" id="asd" value=""/>
 						</div>
 					</div>
-							
+					<a data-dismiss="purchaseModal modal" id="deleteRequestForm" class="btn btn-warning" style="width: 100%;" data-toggle="purchaseModal" href="#requestform">- Remove</a>
+
+					<!-- <button id="deleteRequestForm" class="btn btn-warning" style="width: 100%;">- Remove</button> -->
+					<div class="title"></div>
 						<!-- <div class="input-box">
 							<span class="details">Account Name</span>  	
 							<input type="text" name="accname" id="accname" value=""/>

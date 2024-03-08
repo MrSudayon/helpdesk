@@ -7,9 +7,9 @@ if(!empty($_POST['action']) && $_POST['action'] == 'listTicket') {
 	// $tickets->showTickets();
     echo "listTicket";
 }
-if(!empty($_POST['action']) && $_POST['action'] == 'createTicket') {
-	// $tickets->createTicket();
-    echo "createTicket";
+if(!empty($_POST['action']) && $_POST['action'] == 'purchaseRequest') {
+	$tickets->createTicket();
+    // print_r("createTicket");
 }
 if(!empty($_POST['action']) && $_POST['action'] == 'getTicketDetails') {
 	// $tickets->getTicketDetails();
