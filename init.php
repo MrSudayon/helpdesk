@@ -18,4 +18,5 @@ $users = new Users;
 $time = new Time;
 $department = new Department;
 $tickets = new Tickets;
+$purchase = new Purchase;
 ?>

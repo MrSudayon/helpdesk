@@ -1,19 +1,28 @@
+// Add req form
+
 $(document).ready(function() {     
-    $(document).on('submit','#ticketReply', function(event){
-		event.preventDefault();
-		$('#reply').attr('disabled','disabled');
-		var formData = $(this).serialize();
-		$.ajax({
-			url:"ticket_action.php",
-			method:"POST",
-			data:formData,
-			success:function(data){				
-				$('#ticketReply')[0].reset();
-				$('#reply').attr('disabled', false);
-				location.reload();
-			}
-		})
-	});		
+
+    // $('#ticketReply').click(function(event){
+	// 	event.preventDefault();
+	// 	$('#reply').attr('disabled','disabled');
+	// 	var formData = $(this).serialize();
+	// 	$.ajax({
+	// 		url:"ticket_action.php",
+	// 		method:"POST",
+	// 		data:formData,
+	// 		success:function(data){				
+	// 			$('#ticketReply')[0].reset();
+	// 			$('#reply').attr('disabled', false);
+	// 			location.reload();
+	// 		}
+	// 	})
+	// });
+	var requestFormTemplate = $('#requestform').html();
+
+	$('#addRequestForm').on('click', function() {
+		$('.asset-details:last').append(requestFormTemplate);
+	});
+	 
 	$('#purchaseReq').click(function(){
 		$('#purchaseModal').modal('show');
 		$('#purchaseForm')[0].reset();

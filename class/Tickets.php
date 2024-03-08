@@ -55,7 +55,7 @@ class Tickets extends Database {
 			$disbaled = '';
 			if(!isset($_SESSION["admin"])) {
 				$disbaled = 'disabled';
-			}			
+			}
 			$ticketRows[] = $ticket['id'];
 			$ticketRows[] = $ticket['uniqid'];
 			$ticketRows[] = $title;

@@ -49,7 +49,7 @@ $(document).ready(function() {
 				url:"ticket_action.php",
 				method:"POST",
 				data:formData,
-				success:function(data){				
+				success:function(data){
 					$('#ticketForm')[0].reset();
 					$('#ticketModal').modal('hide');				
 					$('#save').attr('disabled', false);

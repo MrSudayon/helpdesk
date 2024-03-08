@@ -22,6 +22,9 @@ $user = $users->getUserInfo();
 	</div> 
 	<div class="">   		
 		<p>View and manage tickets that may have responses from support team.</p>	
+		<!-- Ticket Counts -->
+		Open Tickets: <h1><?php echo "2"; ?></h1>
+		Closed Tickets: <h1><?php echo "2"; ?></h1>
 
 		<div class="panel-heading">
 			<div class="row">
@@ -35,7 +38,7 @@ $user = $users->getUserInfo();
 				</div>
 			</div>
 		</div>
-		<table id="listTickets" class="table table-bordered table-striped">
+		<table id="listTickets" class="table table-bordered table-striped">	
 			<thead>
 				<tr>
 					<th>S/N</th>

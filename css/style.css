@@ -9,3 +9,55 @@
 	background-color:#7079d6;
 	margin:0px 0px 0px 5px;
 }
+
+.asset-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 15px 0 5px 0;
+}
+.asset-details .input-box {
+    margin-bottom: 10px;
+    width: calc(100% / 2 - 20px);
+}
+.asset-details .input-box .details {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+.asset-details .input-box input,
+.asset-details .input-box select,
+.asset-details .input-box .asset-tag {
+    height: 40px;
+    width: 100%;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding-left: 15px;
+}
+
+input[type=radio],
+.payment {
+	cursor: pointer;
+}
+
+.modal-body .title {
+    margin: 10px 0 5px;
+    font-size: 25px;
+    font-weight: 800;
+    position: relative;
+}
+.modal-body .title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background: green;
+}
+.title {
+    margin-top: 0px;
+    display: flex;
+    justify-content: space-between;
+}

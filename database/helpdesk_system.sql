@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 29, 2021 at 06:08 PM
--- Server version: 10.4.20-MariaDB
--- PHP Version: 7.3.29
+-- Generation Time: Mar 06, 2024 at 04:31 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,19 +31,18 @@ CREATE TABLE `hd_departments` (
   `id` int(11) NOT NULL,
   `name` varchar(250) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `hd_departments`
 --
 
 INSERT INTO `hd_departments` (`id`, `name`, `status`) VALUES
-(1, 'Technical', 1),
-(2, 'Testing', 1),
-(3, 'Automation', 1),
-(4, 'Design', 1),
-(5, 'Programming', 1),
-(7, 'Security', 1);
+(1, 'IT', 1),
+(2, 'Sales/Marketing', 1),
+(3, 'Sauber', 1),
+(4, 'Operation', 1),
+(5, 'Finance', 1);
 
 -- --------------------------------------------------------
 
@@ -63,7 +62,7 @@ CREATE TABLE `hd_tickets` (
   `user_read` int(11) NOT NULL,
   `admin_read` int(11) NOT NULL,
   `resolved` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `hd_tickets`
@@ -89,7 +88,7 @@ CREATE TABLE `hd_ticket_replies` (
   `text` text NOT NULL,
   `ticket_id` text NOT NULL,
   `date` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `hd_ticket_replies`
@@ -118,15 +117,16 @@ CREATE TABLE `hd_users` (
   `name` varchar(250) NOT NULL,
   `user_type` enum('admin','user') NOT NULL,
   `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `hd_users`
 --
 
 INSERT INTO `hd_users` (`id`, `email`, `password`, `create_date`, `name`, `user_type`, `status`) VALUES
-(1, 'admin@webdamn.com', '202cb962ac59075b964b07152d234b70', '2021-10-25 23:24:33', 'Kane Wiliam ', 'admin', 1),
-(2, 'smith@webdamn.com', '202cb962ac59075b964b07152d234b70', '2021-10-25 23:24:46', 'Jhon Smith', 'user', 1);
+(1, 'ezekiel@oxc.com', '4297f44b13955235245b2497399d7a93', '2021-10-25 23:24:33', 'Ezekiel Santos', 'admin', 1),
+(2, 'smith@webdamn.com', '202cb962ac59075b964b07152d234b70', '2021-10-25 23:24:46', 'Jhon Smith', 'user', 1),
+(5, 'sudayon@oxc.com', '4297f44b13955235245b2497399d7a93', '2024-03-06 11:11:32', 'Fernando Sudayon', 'admin', 1);
 
 --
 -- Indexes for dumped tables
@@ -164,7 +164,7 @@ ALTER TABLE `hd_users`
 -- AUTO_INCREMENT for table `hd_departments`
 --
 ALTER TABLE `hd_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `hd_tickets`
@@ -182,7 +182,7 @@ ALTER TABLE `hd_ticket_replies`
 -- AUTO_INCREMENT for table `hd_users`
 --
 ALTER TABLE `hd_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

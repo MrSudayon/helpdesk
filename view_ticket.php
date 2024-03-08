@@ -1,15 +1,18 @@
 <?php 
 include 'init.php'; 
+
 if(!$users->isLoggedIn()) {
 	header("Location: authenticate.php");	
 }
+
 include('inc/header.php');
 $ticketDetails = $tickets->ticketInfo($_GET['id']);
 $ticketReplies = $tickets->getTicketReplies($ticketDetails['id']);
 $user = $users->getUserInfo();
 $tickets->updateTicketReadStatus($ticketDetails['id']);
 ?>	
-<title>Build Helpdesk System with PHP & MySQL</title>
+
+<title>Helpdesk System</title>
 <script src="js/general.js"></script>
 <script src="js/tickets.js"></script>
 <link rel="stylesheet" href="css/style.css" />
@@ -57,11 +60,13 @@ $tickets->updateTicketReadStatus($ticketDetails['id']);
 				<div class="col-md-10 col-sm-10">
 					<div class="panel panel-default arrow right">
 						<div class="panel-heading">
+
 							<?php if($replies['user_type'] == 'admin') { ?>							
 								<span class="glyphicon glyphicon-user"></span> <?php echo $ticketDetails['department']; ?>
 							<?php } else { ?>
 								<span class="glyphicon glyphicon-user"></span> <?php echo $replies['creater']; ?>
 							<?php } ?>
+
 							&nbsp;&nbsp;<span class="glyphicon glyphicon-time"></span> <time class="comment-date" datetime="16-12-2014 01:05"><i class="fa fa-clock-o"></i> <?php echo $time->ago($replies['date']); ?></time>							
 						</div>
 						<div class="panel-body">						
