@@ -21,11 +21,17 @@ $user = $users->getUserInfo();
 	<?php include('menus.php'); ?>		
 	</div> 
 	<div class="">   		
-		<p>View and manage tickets that may have responses from support team.</p>	
 		<!-- Ticket Counts -->
-		Open Tickets: <h1><?php echo $database->openTicketCount(); ?></h1>
-		Closed Tickets: <h1><?php echo $database->openTicketCount(); ?></h1>
-
+		<div class="ticketCounts">
+			<?php if(isset($_SESSION["admin"])) { ?>
+			<div class="count">All Tickets: <h1><?php echo $database->allTicketCount(); ?></h1></div>
+			<!-- <div class="count">New Tickets: <h1>\</h1></div> -->
+			<div class="count">Open Tickets: <h1><?php echo $database->openTicketCount(); ?></h1></div>
+			<div class="count">Closed Tickets: <h1><?php echo $database->closedTicketCount(); ?></h1></div>
+			<?php } ?>
+			
+		</div>
+			
 		<div class="panel-heading">
 			<div class="row">
 				<div class="col-md-10">
@@ -33,11 +39,13 @@ $user = $users->getUserInfo();
 				</div>
 				<div class="col-md-12" align="right">
 					<button type="button" name="req" id="purchaseRequest" class="btn btn-success btn-xs">Purchase Request</button>
-			
 					<button type="button" name="add" id="createTicket" class="btn btn-success btn-xs">Create Ticket</button>
 				</div>
 			</div>
 		</div>
+		
+		<div class="col-sm-6" style="height: 35px; padding: 0 15px 0 15px;">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
+
 		<table id="listTickets" class="table table-bordered table-striped">	
 			<thead>
 				<tr>

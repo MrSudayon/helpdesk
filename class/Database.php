@@ -16,15 +16,27 @@ class Database {
         }
         return $DBH;    
     } 
-    public function __construct(){		
+    public function __construct() {		
         $this->dbConnect = $this->dbConnect();
     } 
+
+    public function allTicketCount() {
+        $sql = "SELECT COUNT(*) AS count FROM ". $this->ticketsTable;
+        $result = mysqli_query($this->dbConnect, $sql);	
+        $row = mysqli_fetch_assoc($result);
+        return $row['count'];
+    }
     public function openTicketCount() {
-        // Status countss
-        if()
-        $sqlQuery = "SELECT * FROM ". $this->ticketsTable ."";
-        $result = mysqli_query($this->dbConnect, $sqlQuery);	
-		$row = $result->num_rows;
-		echo json_encode($row);
-    }    
+        $sql = "SELECT COUNT(*) AS count FROM ". $this->ticketsTable ." WHERE resolved = 0";
+        $result = mysqli_query($this->dbConnect, $sql);	
+        $row = mysqli_fetch_assoc($result);
+        return $row['count'];
+    }
+    public function closedTicketCount() {
+        $sql = "SELECT COUNT(*) AS count FROM ". $this->ticketsTable ." WHERE resolved = 1";
+        $result = mysqli_query($this->dbConnect, $sql);	
+        $row = mysqli_fetch_assoc($result);
+        return $row['count'];
+    }
+    
 }
