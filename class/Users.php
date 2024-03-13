@@ -38,9 +38,29 @@ class Users extends Database {
 		}
 		return $errorMessage; 		
 	}
+	public function registerUser($name, $email, $role, $password, $confirm) { // Registers user role only
+		$errorMessage = '';
+		if($name && $email) {	
+			$name = strip_tags($name);			
+			$email = strip_tags($email);			
+
+			if($password == $confirm) {
+				$password = md5($password);	
+
+				$queryInsert = "
+					INSERT INTO ".$this->userTable."(name, email, user_type, status, password) VALUES(
+					'$name', '$email', '$role','1', '$password')";				
+				mysqli_query($this->dbConnect, $queryInsert);		
+			} else {
+				$errorMessage = 'Password does not match';
+			}
+		}
+		return $errorMessage;
+	}
+
 	public function getUserInfo() {
 		if(!empty($_SESSION["userid"])) {
-			$sqlQuery = "SELECT * FROM ".$this->userTable." 
+			$sqlQuery = "SELECT name, email, create_date, user_type, status FROM ".$this->userTable." 
 				WHERE id ='".$_SESSION["userid"]."'";
 			$result = mysqli_query($this->dbConnect, $sqlQuery);		
 			$userDetails = mysqli_fetch_assoc($result);
@@ -57,20 +77,40 @@ class Users extends Database {
 	
 	
 	public function listUser(){
-			 			 
-		$sqlQuery = "SELECT id, name, email, create_date, user_type, status 
-			FROM ".$this->userTable;
+		
+
+		$sqlQuery = "SELECT * FROM ".$this->userTable;
 			
 		if(!empty($_POST["search"]["value"])){
-			$sqlQuery .= ' (id LIKE "%'.$_POST["search"]["value"].'%" ';					
-			$sqlQuery .= ' OR name LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR status LIKE "%'.$_POST["search"]["value"].'%" ';					
+			$sqlQuery .= ' (name LIKE "%'.$_POST["search"]["value"].'%" ';					
+			$sqlQuery .= ' OR email LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR create_date LIKE "%'.$_POST["search"]["value"].'%" ';					
 		}
 		if(!empty($_POST["order"])){
-			$sqlQuery .= ' ORDER BY '.$_POST['order']['0']['column'].' '.$_POST['order']['0']['dir'].' ';
+
+			$orderColumnIndex = $_POST['order']['0']['column'];
+			$orderColumnName = $_POST['columns'][$orderColumnIndex]['data'];
+
+			if ($orderColumnName == '1' || $orderColumnName == 'name') {
+				$sqlQuery .= ' ORDER BY name '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '2' || $orderColumnName == 'email') {
+				$sqlQuery .= ' ORDER BY email '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '3' || $orderColumnName == 'create_date') {
+				$sqlQuery .= ' ORDER BY create_date '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '4' || $orderColumnName == 'user_type') {
+				$sqlQuery .= ' ORDER BY user_type '.$_POST['order']['0']['dir'].' ';
+			}
+			elseif ($orderColumnName == '5' || $orderColumnName == 'status') {
+				$sqlQuery .= ' ORDER BY status '.$_POST['order']['0']['dir'].' ';
+			}
+			
 		} else {
 			$sqlQuery .= ' ORDER BY status DESC ';
 		}
+
 		if($_POST["length"] != -1){
 			$sqlQuery .= ' LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
 		}	

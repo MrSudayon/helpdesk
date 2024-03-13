@@ -6,10 +6,11 @@ if($users->isLoggedIn()) {
 $errorMessage = $users->login();
 include('inc/header.php');
 ?>
-<title>Helpdesk System with PHP & MySQL</title>
+<title>Helpdesk System</title>
 <?php include('inc/container.php');?>
-<div class="container contact">	
-	<h2>Helpdesk System</h2>	
+
+<div class="container contact">
+	<h2>Login</h2>	
 	<div class="col-md-6">                    
 		<div class="panel panel-info">
 			<div class="panel-heading" style="background:#00796B;color:white;">

@@ -33,5 +33,4 @@ if(!empty($_POST['action']) && $_POST['action'] == 'deleteUser') {
 	$users->deleteUserId = $_POST["userId"];
 	$users->delete();
 }
-
 ?>

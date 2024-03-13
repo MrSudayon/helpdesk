@@ -35,7 +35,7 @@ $(document).ready(function() {
 			},
 			"columnDefs":[
 				{
-					"targets":[0, 6, 7, 8, 9],
+					"targets":[0, 7, 8, 9],
 					"orderable":false,
 				},
 			],
