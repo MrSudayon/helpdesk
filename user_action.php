@@ -33,4 +33,10 @@ if(!empty($_POST['action']) && $_POST['action'] == 'deleteUser') {
 	$users->deleteUserId = $_POST["userId"];
 	$users->delete();
 }
+
+// Registers member role
+if(!empty($_POST['action']) && $_POST['action'] == 'registerUser') {
+	$users->registerUser();
+}
+
 ?>

@@ -7,7 +7,7 @@ if($users->isLoggedIn()) {
 include('inc/header.php');
 ?>
 	<title>Helpdesk System</title>
-	<script src="js/register.js"></script>
+	<script type="text/javascript" src="js/register.js"></script>
 
 <?php include('inc/container.php');?>
 <div class="container contact">	
@@ -43,7 +43,8 @@ include('inc/header.php');
 					<div style="margin-top:10px" class="form-group">                               
 						<div class="col-sm-12 controls">
 							<input type="hidden" name="action" id="action" value="" />
-						  	<input type="submit" name="register" id="register" value="Register" class="btn btn-success">						  
+						  	<!-- <input type="submit" name="register" id="register" value="Register" class="btn btn-success">						   -->
+						  	<input type="submit" onclick="submitData('registerUser')" value="Register" class="btn btn-success">						  
 						  	<a href="login.php" class="link">have an account already?</a>						  
 						</div>						
 					</div>	

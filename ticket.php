@@ -44,7 +44,6 @@ $user = $users->getUserInfo();
 			</div>
 		</div>
 		
-		<div class="col-sm-6" style="height: 35px; padding: 0 15px 0 15px;">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
 
 		<table id="listTickets" class="table table-bordered table-striped">	
 			<thead>

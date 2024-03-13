@@ -38,9 +38,15 @@ class Users extends Database {
 		}
 		return $errorMessage; 		
 	}
-	public function registerUser($name, $email, $role, $password, $confirm) { // Registers user role only
-		$errorMessage = '';
-		if($name && $email) {	
+	public function registerUser() { // Registers user role only
+		 
+		if($_POST["name"] && $_POST["email"]) {
+			$name = $_POST["name"];
+			$email = $_POST["email"];
+			$role = $_POST["role"];
+			$password = $_POST["pass"];
+			$confirm = $_POST["cpass"];  
+
 			$name = strip_tags($name);			
 			$email = strip_tags($email);			
 
@@ -48,14 +54,15 @@ class Users extends Database {
 				$password = md5($password);	
 
 				$queryInsert = "
-					INSERT INTO ".$this->userTable."(name, email, user_type, status, password) VALUES(
-					'$name', '$email', '$role','1', '$password')";				
-				mysqli_query($this->dbConnect, $queryInsert);		
+					INSERT INTO ".$this->userTable." (name, email, password, user_type, status) VALUES(
+					'$name', '$email', '$password', '$role','1')";				
+				mysqli_query($this->dbConnect, $queryInsert);	
+				
+				echo "Registered Successfully";
 			} else {
-				$errorMessage = 'Password does not match';
+				echo "Password does not match";
 			}
 		}
-		return $errorMessage;
 	}
 
 	public function getUserInfo() {
@@ -78,7 +85,6 @@ class Users extends Database {
 	
 	public function listUser(){
 		
-
 		$sqlQuery = "SELECT * FROM ".$this->userTable;
 			
 		if(!empty($_POST["search"]["value"])){
@@ -112,7 +118,7 @@ class Users extends Database {
 		}
 
 		if($_POST["length"] != -1){
-			$sqlQuery .= ' LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
+			$sqlQuery .= ' LIMIT ' . $_POST['start'] . ', ' . $_POST["length"];
 		}	
 		
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
@@ -123,15 +129,19 @@ class Users extends Database {
 			$status = '';
 			if($user['status'] == 1)	{
 				$status = '<span class="label label-success">Active</span>';
-			} else if($user['status'] == 0) {
+			} elseif($user['status'] == 0) {
 				$status = '<span class="label label-danger">Inactive</span>';
 			}	
 			
 			$userRole = '';
-			if($user['user_type'] == 'admin')	{
+			if($user['user_type'] == 'admin')	{	
 				$userRole = '<span class="label label-danger">Admin</span>';
-			} else if($user['user_type'] == 'user') {
-				$userRole = '<span class="label label-warning">Member</span>';
+			} elseif($user['user_type'] == 'approver1') {
+				$userRole = '<span class="label label-success">Approver</span>';
+			} elseif($user['user_type'] == 'approver2') {
+				$userRole = '<span class="label label-primary">Final Approver</span>';
+			} elseif($user['user_type'] == 'user') {
+				$userRole = '<span class="label label-default">Member</span>';
 			}	
 			
 			$userRows[] = $user['id'];
@@ -158,7 +168,7 @@ class Users extends Database {
 	public function getUserDetails(){		
 		if($this->id) {		
 			$sqlQuery = "
-				SELECT id, name, email, password, create_date, user_type, status 
+				SELECT * 
 				FROM ".$this->userTable." 
 				WHERE id = '".$this->id."'";
 			$result = mysqli_query($this->dbConnect, $sqlQuery);	

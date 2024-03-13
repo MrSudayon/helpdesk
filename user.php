@@ -74,8 +74,10 @@ $user = $users->getUserInfo();
 						<div class="form-group">
 							<label for="status" class="control-label">Role</label>				
 							<select id="role" name="role" class="form-control">
-							<option value="admin">Admin</option>				
-							<option value="user">Member</option>	
+								<option value="admin">Admin</option>				
+								<option value="user">Member</option>	
+								<option value="approver1">2nd Approver</option>	
+								<option value="approver2">Final Approver</option>	
 							</select>						
 						</div>	
 						
@@ -103,5 +105,6 @@ $user = $users->getUserInfo();
 			</form>
 		</div>
 	</div>
+
 </div>	
 <?php include('inc/footer.php');?>

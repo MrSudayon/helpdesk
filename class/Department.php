@@ -19,7 +19,17 @@ class Department extends Database {
 			$sqlQuery .= ' OR status LIKE "%'.$_POST["search"]["value"].'%" ';					
 		}
 		if(!empty($_POST["order"])){
-			$sqlQuery .= ' ORDER BY '.$_POST['order']['0']['column'].' '.$_POST['order']['0']['dir'].' ';
+
+			$orderColumnIndex = $_POST['order']['0']['column'];
+			$orderColumnName = $_POST['columns'][$orderColumnIndex]['data'];
+
+			if ($orderColumnName == '1' || $orderColumnName == 'name') {
+				$sqlQuery .= ' ORDER BY name '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '2' || $orderColumnName == 'status') {
+				$sqlQuery .= ' ORDER BY status '.$_POST['order']['0']['dir'].' ';
+			} 
+
 		} else {
 			$sqlQuery .= ' ORDER BY status DESC ';
 		}

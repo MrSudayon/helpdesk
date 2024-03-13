@@ -30,7 +30,29 @@ class Tickets extends Database {
 			$sqlQuery .= ' OR last_reply LIKE "%'.$_POST["search"]["value"].'%") ';			
 		}
 		if(!empty($_POST["order"])){
-			$sqlQuery .= 'ORDER BY '.$_POST['order']['0']['column'].' '.$_POST['order']['0']['dir'].' ';
+			
+			$orderColumnIndex = $_POST['order']['0']['column'];
+			$orderColumnName = $_POST['columns'][$orderColumnIndex]['data'];
+
+			if ($orderColumnName == '1' || $orderColumnName == 't.uniqid') {
+				$sqlQuery .= ' ORDER BY t.uniqid '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '2' || $orderColumnName == 't.title') {
+				$sqlQuery .= ' ORDER BY t.title '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '3' || $orderColumnName == 'department') {
+				$sqlQuery .= ' ORDER BY department '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '4' || $orderColumnName == 'creater') {
+				$sqlQuery .= ' ORDER BY creater '.$_POST['order']['0']['dir'].' ';
+			}
+			elseif ($orderColumnName == '5' || $orderColumnName == 't.date') {
+				$sqlQuery .= ' ORDER BY t.date '.$_POST['order']['0']['dir'].' ';
+			}
+			elseif ($orderColumnName == '6' || $orderColumnName == 't.resolved') {
+				$sqlQuery .= ' ORDER BY t.resolved '.$_POST['order']['0']['dir'].' ';
+			}
+
 		} else {
 			$sqlQuery .= 'ORDER BY t.id DESC ';
 		}

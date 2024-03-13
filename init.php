@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'config.php';
+
 define('HOST', $host);
 define('USER', $username);
 define('PASSWORD', $password);
@@ -10,7 +11,6 @@ require 'class/Users.php';
 require 'class/Time.php';
 require 'class/Tickets.php';
 require 'class/Department.php';
-// for Purchase Form
 require 'class/Purchase.php';
 
 $database = new Database;
