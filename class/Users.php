@@ -127,7 +127,7 @@ class Users extends Database {
 		while( $user = mysqli_fetch_assoc($result) ) {		
 			$userRows = array();			
 			$status = '';
-			if($user['status'] == 1)	{
+			if($user['status'] == 1) {
 				$status = '<span class="label label-success">Active</span>';
 			} elseif($user['status'] == 0) {
 				$status = '<span class="label label-danger">Inactive</span>';

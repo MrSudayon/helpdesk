@@ -2,7 +2,7 @@ $(document).ready(function() {
 	
 	var userData = $('#listUser').DataTable({
 		"searching": false,
-		"lengthChange": false,
+		"lengthChange": true,
 		"processing":true,
 		"serverSide":true,
 		'serverMethod': 'post',
@@ -19,6 +19,7 @@ $(document).ready(function() {
 				"orderable":false,
 			},
 		],
+		"paging": true,
 		"pageLength": 10
 	});	
 
