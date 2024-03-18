@@ -19,7 +19,7 @@ $(document).ready(function() {
 				"orderable":false,
 			},
 		],
-		"paging": true,
+		"paginate": true,
 		"pageLength": 10
 	});	
 

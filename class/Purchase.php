@@ -1,12 +1,12 @@
 <?php
 
 class Purchase extends Database {
-	// private $accountsTable = 'hd_account'; 
+	private $usersTable = 'hd_users'; 
 	private $departmentsTable = 'hd_departments';
     private $ticketTable = 'hd_tickets';
 	private $ticketRepliesTable = 'hd_ticket_replies';
     private $categoryTable = 'hd_category';
-	private $purchaseTable = 'hd_purchase';
+	private $purchaseTable = 'hd_purchase_requests';
 	private $dbConnect = false;
 	public function __construct(){		
         $this->dbConnect = $this->dbConnect();
@@ -84,20 +84,34 @@ class Purchase extends Database {
 	// 	$title = $title.'<span class="answered">Answered</span>';
 	// 	return $title; 		
 	// }
-	// public function createTicket() {      
-	// 	if(!empty($_POST['subject']) && !empty($_POST['message'])) {                
-	// 		$date = new DateTime();
-	// 		$date = $date->getTimestamp();
-	// 		$uniqid = uniqid();                
-	// 		$message = strip_tags($_POST['subject']);              
-	// 		$queryInsert = "INSERT INTO ".$this->ticketTable." (uniqid, user, title, init_msg, department, date, last_reply, user_read, admin_read, resolved) 
-	// 		VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['subject']."', '".$message."', '".$_POST['department']."', '".$date."', '".$_SESSION["userid"]."', 0, 0, '".$_POST['status']."')";			
-	// 		mysqli_query($this->dbConnect, $queryInsert);			
-	// 		echo 'success ' . $uniqid;
-	// 	} else {
-	// 		echo '<div class="alert error">Please fill in all fields.</div>';
-	// 	}
-	// }	
+	public function createPurchaseReqForm($data) {
+		
+		$date = new DateTime();
+		$date = $date->getTimestamp();
+		$uniqid = uniqid();                
+		$subject = strip_tags($_POST['subject']);          
+		$company = $data['company'];
+		$department = $data['department'];
+		$endorsedby = $data['endorsedby'];
+		$payment = $data['payment'];
+		$payee = $data['cheqpayee'];
+		$dateneeded = $data['dateneeded'];
+		$amount = $data['amount'];
+
+		$queryInsert = 
+			"INSERT INTO " .$this->purchaseTable. "(uniqId, company, requestedby, department, endorsedby, date, subject, payment, payee, dateneeded, amount, status) 
+				VALUES ('".$uniqid."', '$company','".$_SESSION["userid"]."','$department','$endorsedby','$date','$subject','$payment','$payee','$dateneeded','$amount',1)";			
+		
+		mysqli_query($this->dbConnect, $queryInsert);
+		echo 'success ' . $uniqid;
+		if ($this->dbConnect->query($queryInsert) === TRUE) {
+			// echo "Purchase requested form created successfully";
+			return true;
+		} else {
+			// echo "Error: " . $queryInsert . "<br>" . $this->dbConnect->error;
+			return false;
+		}
+	}	
 	// public function getTicketDetails(){
 	// 	if($_POST['ticketId']) {	
 	// 		$sqlQuery = "
@@ -139,7 +153,15 @@ class Purchase extends Database {
         // }
 			echo '<option value="Oxychem Corp.">Oxychem Corporation</option>';           
             echo '<option value="Sauber">Sauber</option>';           
-    }	    
+    }	  
+	
+	public function getAdminUsers() {
+		$sqlQuery = "SELECT * FROM ".$this->usersTable." WHERE user_type != 'user' ";
+		$result = mysqli_query($this->dbConnect, $sqlQuery);
+        while($user = mysqli_fetch_assoc($result) ) {       
+            echo '<option value="' . $user['id'] . '">' . $user['name']  . '</option>';           
+        }
+	}
     // public function ticketInfo($id) {  		
 	// 	$sqlQuery = "SELECT t.id, t.uniqid, t.title, t.user, t.init_msg as message, t.date, t.last_reply, t.resolved, u.name as creater, d.name as department 
 	// 		FROM ".$this->ticketTable." t 

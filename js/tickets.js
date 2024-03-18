@@ -21,6 +21,7 @@ $(document).ready(function() {
 		$('#action').val('createTicket');
 		$('#save').val('Save Ticket');
 	});	
+
 	if($('#listTickets').length) {
 		var ticketData = $('#listTickets').DataTable({
 			"lengthChange": false,
@@ -39,7 +40,8 @@ $(document).ready(function() {
 					"orderable":false,
 				},
 			],
-			"pageLength": 10
+			"paginate": true,
+			"pageLength": 5
 		});			
 		$(document).on('submit','#ticketForm', function(event){
 			event.preventDefault();
