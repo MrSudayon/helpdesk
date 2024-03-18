@@ -18,19 +18,6 @@ $(document).ready(function() {
 	// 	})
 
 	// var keepModalOpen = false;
-	$('#purchaseRequest').click(function(){
-		$('#purchaseModal').modal('show');
-		$('#purchaseForm')[0].reset();
-		$('.modal-title').html("<i class='fa fa-plus'></i> Purchase Form");
-		$('#action').val('purchaseRequest');
-		$('#save').val('What');
-	});	
-	// $('#purchaseModal').on('hide.bs.modal', function (e) {
-	// 	if (keepModalOpen) {
-	// 		e.preventDefault(); // Prevent the modal from closing
-	// 		keepModalOpen = false; // Reset the flag
-	// 	}
-	// });
 	// var requestFormTemplate = $('#requestform').html();
 	// var requestFormCount = 1;
 
@@ -48,27 +35,23 @@ $(document).ready(function() {
 	// 	}
 	// });
 	
+	// $('#purchaseModal').on('hide.bs.modal', function (e) {
+	// 	if (keepModalOpen) {
+	// 		e.preventDefault(); // Prevent the modal from closing
+	// 		keepModalOpen = false; // Reset the flag
+	// 	}
+	// });
 
-	
+	$('#purchaseRequest').click(function(){
+		$('#purchaseModal').modal('show');
+		$('#purchaseForm')[0].reset();
+		$('.modal-title').html("<i class='fa fa-plus'></i> Purchase Form");
+		$('#action').val('purchaseRequest');
+		$('#save').val('What');
+	});
 
-	$(document).on('submit','#purchaseForm', function(event){
-		event.preventDefault();
-		$('#save').attr('disabled','disabled');
-		var formData = $(this).serialize();
-		$.ajax({
-			url:"purchase_action.php",
-			method:"POST",
-			data:formData,
-			success:function(data){                
-				$('#purchaseForm')[0].reset();
-				$('#purchaseModal').modal('hide');                
-				$('#save').attr('disabled', false);
-				// ticketData.ajax.reload();
-			}
-		})
-	}); 
 	if($('#listRequests').length) {
-		var ticketData = $('#listRequests').DataTable({
+		var requestData = $('#listRequests').DataTable({
 			"lengthChange": false,
 			"processing":true,
 			"serverSide":true,
@@ -81,29 +64,30 @@ $(document).ready(function() {
 			},
 			"columnDefs":[
 				{
-					"targets":[0, 7, 8, 9],
+					"targets":[0, 10, 11, 12],
 					"orderable":false,
 				},
 			],
 			"paginate": true,
 			"pageLength": 5
-		});			
-		$(document).on('submit','#ticketForm', function(event){
+		});
+		$(document).on('submit','#purchaseForm', function(event){
 			event.preventDefault();
 			$('#save').attr('disabled','disabled');
 			var formData = $(this).serialize();
 			$.ajax({
-				url:"ticket_action.php",
+				url:"purchase_action.php",
 				method:"POST",
 				data:formData,
-				success:function(data){
-					$('#ticketForm')[0].reset();
-					$('#ticketModal').modal('hide');				
+				success:function(data) {
+					$('#purchaseForm')[0].reset();
+					$('#purchaseModal').modal('hide');                
 					$('#save').attr('disabled', false);
-					ticketData.ajax.reload();
+					requestData.ajax.reload();
 				}
 			})
-		});			
+		});
+		
 		// $(document).on('click', '.update', function(){
 		// 	var ticketId = $(this).attr("id");
 		// 	var action = 'getTicketDetails';

@@ -8,11 +8,6 @@
 					<h4 class="modal-title"></h4>
 				</div>
 				<div class="modal-body">
-					<!-- <div class="form-group">
-						<label for="subject" class="control-label">Company</label>
-							<select id="company" name="company" placeholder="Company..." required>					
-							</select>	
-					</div> -->
 
 					<div class="form-group">
 						<label for="company" class="control-label">Company</label>							
@@ -85,7 +80,7 @@
 							<input type="text" name="amount" id="amount" value="" required/>
 						</div>
 					</div>
-<!-- 
+					<!-- 
 					<div class="title">Request Form</div>
 					<button id="addRequestForm" class="btn btn-primary" style="width: 100%;">+ Add form</button>
 					
@@ -132,9 +127,9 @@
 					<div class="title"></div> -->
 				</div>
 				<div class="modal-footer">
-					<input type="hidden" name="ticketId" id="ticketId" />
-					<input type="hidden" name="action" id="action" value="" />
-					<input type="submit" name="save" id="save" class="btn btn-info" value="Save" />
+					<input type="hidden" name="requestId" id="requestId" />
+					<input type="hidden" name="action1" id="action" value="" />
+					<input type="submit" name="save1" id="save" class="btn btn-info" value="Save" />
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
 			</div>
