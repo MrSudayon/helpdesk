@@ -12,7 +12,7 @@ class Purchase extends Database {
         $this->dbConnect = $this->dbConnect();
     } 
       
-	// public function showTickets(){
+	// public function showPurchaseReqForm(){
 	// 	$sqlWhere = '';	
 	// 	if(!isset($_SESSION["admin"])) {
 	// 		$sqlWhere .= " WHERE t.user = '".$_SESSION["userid"]."' ";

@@ -3,9 +3,8 @@ include 'init.php';
 if(!empty($_POST['action']) && $_POST['action'] == 'auth') {
 	$users->login();
 }
-if(!empty($_POST['action']) && $_POST['action'] == 'listTicket') {
-	// $tickets->showTickets();
-    echo "listTicket";
+if(!empty($_POST['action']) && $_POST['action'] == 'listRequests') {
+	$tickets->showPurchaseReqForm();
 }
 if(!empty($_POST['action']) && $_POST['action'] == 'purchaseRequest') { 
 	// $purchase->createPurchaseReqForm();
