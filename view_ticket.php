@@ -12,14 +12,14 @@ $user = $users->getUserInfo();
 $tickets->updateTicketReadStatus($ticketDetails['id']);
 ?>	
 
-<title>Helpdesk System</title>
+<title>Purchase Request System</title>
 <script src="js/general.js"></script>
 <script src="js/tickets.js"></script>
 <link rel="stylesheet" href="css/style.css" />
 <?php include('inc/container.php');?>
 <div class="container">
 	<div class="row home-sections">
-	<h2>Helpdesk System</h2>	
+	<h2>Purchase Request System</h2>	
 	<?php include('menus.php'); ?>		
 	</div> 
 	
@@ -42,7 +42,9 @@ $tickets->updateTicketReadStatus($ticketDetails['id']);
 					<div class="panel-body">						
 						<div class="comment-post">
 						<p>
-						<?php echo $ticketDetails['message']; ?>
+						<?php 
+							echo $ticketDetails['message'];
+						?>
 						</p>
 						</div>                 
 					</div>
@@ -62,7 +64,7 @@ $tickets->updateTicketReadStatus($ticketDetails['id']);
 						<div class="panel-heading">
 
 							<?php if($replies['user_type'] == 'admin') { ?>							
-								<span class="glyphicon glyphicon-user"></span> <?php echo $ticketDetails['department']; ?>
+								<span class="glyphicon glyphicon-user"></span> <?php echo ucfirst($ticketDetails['creater']); ?>
 							<?php } else { ?>
 								<span class="glyphicon glyphicon-user"></span> <?php echo $replies['creater']; ?>
 							<?php } ?>

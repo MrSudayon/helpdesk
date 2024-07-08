@@ -6,7 +6,7 @@ if(!$users->isLoggedIn()) {
 include('inc/header.php');
 $user = $users->getUserInfo();
 ?>
-<title>Helpdesk System</title>
+<title>Purchase Request System</title>
 <script src="js/jquery.dataTables.min.js"></script>
 <script src="js/dataTables.bootstrap.min.js"></script>		
 <link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
@@ -17,7 +17,7 @@ $user = $users->getUserInfo();
 <?php include('inc/container.php');?>
 <div class="container">	
 	<div class="row home-sections">
-	<h2>Helpdesk System</h2>	
+	<h2>Purchase Request System</h2>	
 	<?php include('menus.php'); ?>		
 	</div> 
 	<div class="">   		
@@ -38,7 +38,7 @@ $user = $users->getUserInfo();
 					<h3 class="panel-title"></h3>
 				</div>
 				<div class="col-md-12" align="right">
-					<button type="button" name="req" id="purchaseRequest" class="btn btn-success btn-xs">Purchase Request</button>
+					<!-- <button type="button" name="req" id="purchaseRequest" class="btn btn-success btn-xs">Purchase Request</button> -->
 					<button type="button" name="add" id="createTicket" class="btn btn-success btn-xs">Create Ticket</button>
 				</div>
 			</div>

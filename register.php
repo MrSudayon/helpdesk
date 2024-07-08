@@ -6,7 +6,7 @@ if($users->isLoggedIn()) {
 
 include('inc/header.php');
 ?>
-	<title>Helpdesk System</title>
+	<title>Purchase Request System</title>
 	<script type="text/javascript" src="js/register.js"></script>
 
 <?php include('inc/container.php');?>

@@ -8,88 +8,73 @@
 					<h4 class="modal-title"></h4>
 				</div>
 				<div class="modal-body">
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label for="subject" class="control-label">Company</label>
 							<select id="company" name="company" placeholder="Company..." required>					
-								<?php $purchase->getCompany(); ?> 
 							</select>	
-					</div>
+					</div> -->
+
+					<div class="form-group">
+						<label for="company" class="control-label">Company</label>							
+						<select id="company" name="company" class="form-control">					
+							<?php $purchase->getCompany(); ?> 
+						</select>						
+					</div>	
 
 					<div class="form-group">
 						<label for="department" class="control-label">Department</label>							
-						<select id="department" name="department" class="form-control" placeholder="Department...">					
+						<select id="department" name="department" class="form-control">					
 							<?php $tickets->getDepartments(); ?>
 						</select>						
-					</div>						
+					</div>			
+
 					<div class="form-group">
+						<label for="endorsedby" class="control-label">Endorsed by</label>					
+						<select id="endorsedby" name="endorsedby" class="form-control">	
+							<?php $purchase->getAdminUsers(); ?> 
+						</select>	
+					</div>
+
+					<div class="form-group">
+						<label for="subject" class="control-label">Subject</label>  					
+							<input type="text" name="subject" id="subject" class="form-control"/>	 
+					</div>
+
+					<div class="form-group">
+						<label for="date" class="control-label">Date</span>  					
+							<input type="date" name="date" id="date" class="form-control"/>	 
+					</div>
+					<!-- <div class="form-group">
 						<label for="message" class="control-label">Message</label>							
 						<textarea class="form-control" rows="5" id="message" name="message"></textarea>							
-					</div>	
-					<div class="form-group">
+					</div>	 -->
+					<!-- <div class="form-group">
 						<label for="status" class="control-label">Status</label>							
 						<label class="radio-inline">
 							<input type="radio" name="status" id="open" value="0" checked required>Open
 						</label>
-						<?php if(isset($_SESSION["admin"])) { ?>
+						<php if(isset($_SESSION["admin"])) { ?>
 							<label class="radio-inline">
 								<input type="radio" name="status" id="close" value="1" required>Close
 							</label>
-						<?php } ?>	
-					</div>
-
-					<div class="title">Details</div>
-					<div class="asset-details">
-						<div class="input-box" style="width: 100%;">
-							<!-- <label for="company" class="control-label">Company</label>		 -->
-							<span class="details">Company</span>  					
-							<select id="company" name="company" placeholder="Company..." required>					
-								<?php $purchase->getCompany(); ?> 
-							</select>	
-						</div>
-
-						<div class="input-box">
-							<span class="details">Department</span>  					
-							<select id="department" name="department" placeholder="Company..." required>	
-								<?php $purchase->getDepartments(); ?> 
-							</select>	
-						</div>
-
-						<div class="input-box">
-							<span class="details">Endorsed by</span>  					
-							<!-- <input type="text" name="endorsedby" id="endorsedby" placeholder="Endorsed by..." value=""/>	 -->
-							<select id="endorsedby" name="endorsedby" required>	
-								<?php $purchase->getAdminUsers(); ?> 
-							</select>	
-
-						</div>
-
-						<div class="input-box">
-							<span class="details">Subject</span>  					
-							<input type="text" name="subject" id="subject" placeholder="Purpose..." value="" required/>	 
-						</div>
-
-						<div class="input-box">
-							<span class="details">Date</span>  					
-							<input type="date" name="date" id="date" value="" required/>	 
-						</div>
-						
-					</div>
+						<php } ?>	
+					</div> -->
 
 					<div class="title">Form of payment</div>
 					<div class="asset-details">
 						<div class="input-box" style="width: 100%;">
-							<span class="details"></span>  	
-							<input type="radio" name="payment" id="cash" value="Cash" style="height: 10px; width: auto;" required>	 
+							<span class="details"></span>  
+							<input type="radio" name="payment" id="cash" value="Cash" style="height: 10px; width: auto;">	 
 							<label for="cash"> Cash </label>
-							<input type="radio" name="payment" id="debit" value="Auto-debit" style="height: 10px; width: auto;" required>	 
+							<input type="radio" name="payment" id="debit" value="Auto-debit" style="height: 10px; width: auto;">	 
 							<label for="debit"> Auto-debit </label>
-							<input type="radio" name="payment" id="cheque" value="Cheque" style="height: 10px; width: auto;" required>	 
+							<input type="radio" name="payment" id="cheque" value="Cheque" style="height: 10px; width: auto;">	 
 							<label for="cheque"> Cheque </label>
 						</div>
 
 						<div class="input-box">
 							<span class="details" style="width: 100%;">Cheque payee</span>  					
-							<input type="text" name="cheqpayee" id="cheqpayee" value="" required/>	 
+							<input type="text" name="cheqpayee" id="cheqpayee" value=""/>	 
 						</div>
 						<div class="input-box">	
 							<span class="details">Date needed</span>  					

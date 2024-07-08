@@ -6,7 +6,7 @@ if($users->isLoggedIn()) {
 $errorMessage = $users->login();
 include('inc/header.php');
 ?>
-<title>Helpdesk System</title>
+<title>Purchase Request System</title>
 <?php include('inc/container.php');?>
 
 <div class="container contact">
@@ -35,7 +35,7 @@ include('inc/header.php');
 						  <a href="register.php" class="link">Register</a>						  
 						</div>						
 					</div>	
-					<div style="margin-top:10px" class="form-group">                               
+					<!-- <div style="margin-top:10px" class="form-group">                               
 						<div class="col-sm-12 controls">
 							Demo accounts<br>
 						Admin: ezekiel@oxc.com<br>
@@ -44,7 +44,7 @@ include('inc/header.php');
 						User: smith@webdamn.com<br>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password:123							
 						</div>						
-					</div>	
+					</div>	 -->
 				</form>   
 			</div>                     
 		</div>  

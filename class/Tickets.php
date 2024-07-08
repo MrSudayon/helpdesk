@@ -150,7 +150,7 @@ class Tickets extends Database {
         }
     }	    
     public function ticketInfo($id) {  		
-		$sqlQuery = "SELECT t.id, t.uniqid, t.title, t.user, t.init_msg as message, t.date, t.last_reply, t.resolved, u.name as creater, d.name as department 
+		$sqlQuery = "SELECT t.id, t.uniqid, t.title, t.user as tUser, t.init_msg as message, t.date, t.last_reply, t.resolved, u.name as creater, u.user_type as userType, d.name as department 
 			FROM ".$this->ticketTable." t 
 			LEFT JOIN hd_users u ON t.user = u.id 
 			LEFT JOIN hd_departments d ON t.department = d.id 
