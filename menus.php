@@ -2,7 +2,11 @@
 	<div class="container-fluid">		
 		<ul class="nav navbar-nav menus">
 			<li id="ticket"><a href="ticket.php" class="navbar-brand">Ticket</a></li>
+<<<<<<< HEAD
 			<!-- <li id="requests"><a href="purchase_requests.php" >Purchase Form</a></li> -->
+=======
+			<li id="requests"><a href="requests.php" >Purchase Form</a></li>
+>>>>>>> dfff62337852b51e1163d0a0fcd6bc5fa61b3ba6
 			<!-- <li id="purchase"><a href="department.php"></a></li> -->
 			<?php if(isset($_SESSION["admin"])) { ?>
 				<li id="department"><a href="department.php" >Department</a></li>
