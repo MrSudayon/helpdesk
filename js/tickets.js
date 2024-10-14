@@ -71,7 +71,7 @@ $(document).ready(function() {
 					$('#ticketModal').modal('show');
 					$('#ticketId').val(data.id);
 					$('#subject').val(data.title);
-					$('#message').val(data.init_msg);
+					$('#message').val(data.tmessage);
 					if(data.gender == '0') {
 						$('#open').prop("checked", true);
 					} else if(data.gender == '1') {

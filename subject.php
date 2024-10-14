@@ -14,6 +14,7 @@ $user = $users->getUserInfo();
 	<script src="js/dataTables.bootstrap.min.js"></script>		
 	<link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
 	<script src="js/general.js"></script>
+	<script src="js/subject.js"></script>
 	<script src="js/department.js"></script>
 	<link rel="stylesheet" href="css/style.css"/>
 <?php include('inc/container.php'); ?>
@@ -30,16 +31,16 @@ $user = $users->getUserInfo();
 				<h3 class="panel-title"></h3>
 			</div>
 			<div class="col-md-2" align="right">
-				<button type="button" name="add" id="addDepartment" class="btn btn-success btn-xs">Add New</button>
+				<button type="button" name="add" id="addSubject" class="btn btn-success btn-xs">Add New</button>
 			</div>
 		</div>
 	</div>
 			
-	<table id="listDepartment" class="table table-bordered table-striped">
+	<table id="listSubject" class="table table-bordered table-striped">
 		<thead>
 			<tr>
 				<th>S/N</th>
-				<th>Department</th>					
+				<th>Subject</th>					
 				<th>Status</th>
 				<th></th>
 				<th></th>									
@@ -47,18 +48,18 @@ $user = $users->getUserInfo();
 		</thead>
 	</table>
 	
-	<div id="departmentModal" class="modal fade">
+	<div id="subjectModal" class="modal fade">
 		<div class="modal-dialog">
-			<form method="post" id="departmentForm">
+			<form method="post" id="subjectForm">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title"><i class="fa fa-plus"></i> Add Department</h4>
+						<h4 class="modal-title"><i class="fa fa-plus"></i> Add Subject</h4>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="department" class="control-label">Department</label>
-							<input type="text" class="form-control" id="department" name="department" placeholder="department" required>			
+							<label for="subject" class="control-label">Subject</label>
+							<input type="text" class="form-control" id="subject" name="subject" placeholder="subject" required>			
 						</div>
 						<div class="form-group">
 							<label for="status" class="control-label">Status</label>				
@@ -70,7 +71,7 @@ $user = $users->getUserInfo();
 						
 					</div>
 					<div class="modal-footer">
-						<input type="hidden" name="departmentId" id="departmentId" />
+						<input type="hidden" name="subjectId" id="subjectId" />
 						<input type="hidden" name="action" id="action" value="" />
 						<input type="submit" name="save" id="save" class="btn btn-info" value="Save" />
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

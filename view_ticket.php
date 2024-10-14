@@ -43,7 +43,7 @@ $tickets->updateTicketReadStatus($ticketDetails['id']);
 						<div class="comment-post">
 						<p>
 						<?php 
-							echo $ticketDetails['message'];
+							echo $ticketDetails['tmessage'];
 						?>
 						</p>
 						</div>                 

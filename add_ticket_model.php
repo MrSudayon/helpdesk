@@ -8,9 +8,12 @@
 					<h4 class="modal-title"></h4>
 				</div>
 				<div class="modal-body">
-					<div class="form-group"
+					<div class="form-group">
 						<label for="subject" class="control-label">Subject</label>
-						<input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required>			
+						<!-- <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required> -->
+						<select id="subject" name="subject" class="form-control" placeholder="Subject...">					
+							<?php $tickets->getSubjects(); ?>
+						</select>	
 					</div>
 					<div class="form-group">
 						<label for="department" class="control-label">Department</label>							
