@@ -24,6 +24,7 @@ $(document).ready(function() {
 
 	if($('#listTickets').length) {
 		var ticketData = $('#listTickets').DataTable({
+			"searching": true,
 			"lengthChange": false,
 			"processing":true,
 			"serverSide":true,
@@ -36,7 +37,7 @@ $(document).ready(function() {
 			},
 			"columnDefs":[
 				{
-					"targets":[0, 8, 9, 10],
+					"targets":[8, 9, 10],
 					"orderable":false,
 				},
 			],
@@ -68,13 +69,16 @@ $(document).ready(function() {
 				data:{ticketId:ticketId, action:action},
 				dataType:"json",
 				success:function(data){
+					console.log(data);
 					$('#ticketModal').modal('show');
 					$('#ticketId').val(data.id);
-					$('#subject').val(data.title);
-					$('#message').val(data.tmessage);
-					if(data.gender == '0') {
+					$('#name').val(data.createdfor);
+					$('#subjectName').val(data.title);
+					$('#departmentName').val(data.department);
+					$('#message').val(data.init_msg);
+					if(data.resolved == '0') {
 						$('#open').prop("checked", true);
-					} else if(data.gender == '1') {
+					} else if(data.resolved == '1') {
 						$('#close').prop("checked", true);
 					}
 					$('.modal-title').html("<i class='fa fa-plus'></i> Edit Ticket");

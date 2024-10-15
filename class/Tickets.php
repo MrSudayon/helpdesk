@@ -29,7 +29,9 @@ class Tickets extends Database {
 			LEFT JOIN hd_departments d ON t.department = d.id $sqlWhere ";
 		if(!empty($_POST["search"]["value"])){
 			$sqlQuery .= ' (uniqid LIKE "%'.$_POST["search"]["value"].'%" ';					
-			$sqlQuery .= ' OR title LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR s.name LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR t.createdfor LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR d.name LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR resolved LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR last_reply LIKE "%'.$_POST["search"]["value"].'%") ';			
 		}
@@ -38,20 +40,23 @@ class Tickets extends Database {
 			$orderColumnIndex = $_POST['order']['0']['column'];
 			$orderColumnName = $_POST['columns'][$orderColumnIndex]['data'];
 
-			if ($orderColumnName == '1' || $orderColumnName == 't.uniqid') {
+			if ($orderColumnName == '0' || $orderColumnName == 't.id') {
+				$sqlQuery .= ' ORDER BY t.id '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '1' || $orderColumnName == 't.uniqid') {
 				$sqlQuery .= ' ORDER BY t.uniqid '.$_POST['order']['0']['dir'].' ';
 			} 
 			elseif ($orderColumnName == '2' || $orderColumnName == 'title') {
-				$sqlQuery .= ' ORDER BY title '.$_POST['order']['0']['dir'].' ';
+				$sqlQuery .= ' ORDER BY s.name '.$_POST['order']['0']['dir'].' ';
 			} 
 			elseif ($orderColumnName == '3' || $orderColumnName == 'department') {
-				$sqlQuery .= ' ORDER BY department '.$_POST['order']['0']['dir'].' ';
+				$sqlQuery .= ' ORDER BY d.name '.$_POST['order']['0']['dir'].' ';
 			} 
 			elseif ($orderColumnName == '4' || $orderColumnName == 'cfor') {
-				$sqlQuery .= ' ORDER BY cfor '.$_POST['order']['0']['dir'].' ';
+				$sqlQuery .= ' ORDER BY t.createdfor '.$_POST['order']['0']['dir'].' ';
 			}
 			elseif ($orderColumnName == '5' || $orderColumnName == 'creater') {
-				$sqlQuery .= ' ORDER BY creater '.$_POST['order']['0']['dir'].' ';
+				$sqlQuery .= ' ORDER BY u.name '.$_POST['order']['0']['dir'].' ';
 			}
 			elseif ($orderColumnName == '6' || $orderColumnName == 't.date') {
 				$sqlQuery .= ' ORDER BY t.date '.$_POST['order']['0']['dir'].' ';
@@ -130,19 +135,20 @@ class Tickets extends Database {
 		);
 		echo json_encode($output);
 	}	
+	
 	public function getRepliedTitle($title) {
 		$title = $title.'<span class="answered">Answered</span>';
 		return $title; 		
 	}
 
 	public function createTicket() {      
-		if(!empty($_POST['subject']) && !empty($_POST['message'])) {                
+		if(!empty($_POST['subjectName']) && !empty($_POST['message'])) {                
 			$date = new DateTime();
 			$date = $date->getTimestamp();
 			$uniqid = uniqid();                
 			$message = strip_tags($_POST['message']);              
 			$queryInsert = "INSERT INTO ".$this->ticketTable." (uniqid, user, createdfor, title, init_msg, department, date, last_reply, user_read, admin_read, resolved) 
-			VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['name']."', '".$_POST['subject']."', '".$message."', '".$_POST['department']."', '".$date."', '".$_SESSION["userid"]."', 0, 0, '".$_POST['status']."')";			
+			VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['name']."', '".$_POST['subjectName']."', '".$message."', '".$_POST['departmentName']."', '".$date."', '".$_SESSION["userid"]."', 0, 0, '".$_POST['status']."')";			
 			mysqli_query($this->dbConnect, $queryInsert);			
 			echo 'success ' . $uniqid;
 		} else {
@@ -162,7 +168,7 @@ class Tickets extends Database {
 	public function updateTicket() {
 		if($_POST['ticketId']) {	
 			$updateQuery = "UPDATE ".$this->ticketTable." 
-			SET title = '".$_POST["subject"]."', department = '".$_POST["department"]."', init_msg = '".$_POST["message"]."', resolved = '".$_POST["status"]."'
+			SET createdfor = '".$_POST['name']."', title = '".$_POST["subjectName"]."', department = '".$_POST["departmentName"]."', init_msg = '".$_POST["message"]."', resolved = '".$_POST["status"]."'
 			WHERE id ='".$_POST["ticketId"]."'";
 			$isUpdated = mysqli_query($this->dbConnect, $updateQuery);		
 		}	

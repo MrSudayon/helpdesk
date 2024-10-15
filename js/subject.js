@@ -1,11 +1,9 @@
 $(document).ready(function() {        
 	
 	var subjectData = $('#listSubject').DataTable({
-		"searching": false,
-		"lengthChange": false,
+		"searching": true,
 		"processing":true,
 		"serverSide":true,
-		"order": [[0, 'asc']],
 		"ajax":{
 			url:"subject_action.php",
 			type:"POST",
@@ -14,26 +12,15 @@ $(document).ready(function() {
 		},
 		"columnDefs":[
 			{
-				"targets":[0, 3, 4],
+				"targets":[2,3],
 				"orderable":false,
 			},
 		],
-		"pageLength": 10
-    	// "lengthMenu": [10, 25, 50, 100],
+		"paginate": true,
+		"pageLength": 5,
+    	"lengthMenu": [3, 10, 25, 50, 100]
 	});	
 
-	// var subjectData = $('#listSubject').DataTable({
-	// 	"processing": true,
-	// 	"serverSide": true,
-	// 	"ajax": {
-	// 		url: "subject_action.php",
-	// 		type: "POST",
-	// 		data: { action: 'listSubject' }
-	// 	},
-	// 	"pageLength": 10,
-	// 	"lengthMenu": [10, 25, 50, 100],
-	// 	"order": [[0, 'asc']]
-	// });
 
 	$(document).on('click', '.update', function(){
 		var subjectId = $(this).attr("id");

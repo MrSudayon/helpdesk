@@ -14,15 +14,15 @@
 					</div>
 
 					<div class="form-group">
-						<label for="subject" class="control-label">Subject</label>
+						<label for="subjectName" class="control-label">Subject</label>
 						<!-- <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required> -->
-						<select id="subject" name="subject" class="form-control" placeholder="Subject...">					
+						<select id="subjectName" name="subjectName" class="form-control" placeholder="Subject...">					
 							<?php $tickets->getSubjects(); ?>
 						</select>	
 					</div>
 					<div class="form-group">
-						<label for="department" class="control-label">Department</label>							
-						<select id="department" name="department" class="form-control" placeholder="Department...">					
+						<label for="subjectName" class="control-label">Department</label>							
+						<select id="departmentName" name="departmentName" class="form-control" placeholder="Department...">					
 							<?php $tickets->getDepartments(); ?>
 						</select>						
 					</div>						

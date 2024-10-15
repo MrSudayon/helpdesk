@@ -39,7 +39,7 @@ $user = $users->getUserInfo();
 	<table id="listSubject" class="table table-bordered table-striped">
 		<thead>
 			<tr>
-				<th>S/N</th>
+				<!-- <th hidden>S/N</th> -->
 				<th>Subject</th>					
 				<th>Status</th>
 				<th></th>

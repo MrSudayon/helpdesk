@@ -1,7 +1,8 @@
-.ticket-title {
+
+.ticket-subject {
 	font-weight:bold;
-	font-size:20px;
-	margin-left:10px;
+	font-size:15px;
+	margin-left:5px;
 }
 .answered {
 	font-size:10px;

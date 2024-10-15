@@ -30,16 +30,18 @@ $tickets->updateTicketReadStatus($ticketDetails['id']);
 			<div class="col-md-10 col-sm-10">
 				<div class="panel panel-default arrow left">
 					<div class="panel-heading right">
-					<?php if($ticketDetails['resolved']) { ?>
-					<button type="button" class="btn btn-danger btn-sm">
-					  <span class="glyphicon glyphicon-eye-close"></span> Closed
-					</button>
-					<?php } else { ?>
-					<button type="button" class="btn btn-success btn-sm">
-					  <span class="glyphicon glyphicon-eye-open"></span> Open
-					</button>
-					<?php } ?>
-					<span class="ticket-title">Subject: <?php echo $subjectTitle['name']; ?></span>
+						<?php if($ticketDetails['resolved']) { ?>
+							<button type="button" class="btn btn-danger btn-sm">
+								<span class="glyphicon glyphicon-eye-close"></span> Closed
+							</button>
+						<?php } else { ?>
+							<button type="button" class="btn btn-success btn-sm">
+								<span class="glyphicon glyphicon-eye-open"></span> Open
+							</button>
+						<?php } ?>
+						&nbsp;&nbsp;<span class="glyphicon glyphicon-briefcase"> </span><span class="ticket-subject"><?php echo $subjectTitle['name']; ?></span>
+						&nbsp;&nbsp;|&nbsp;&nbsp;
+						<span class="glyphicon glyphicon-tag"> </span><bsp;span class="ticket-subject"><?php echo $ticketDetails['cfor']; ?></span>
 					</div>
 					<div class="panel-body">						
 						<div class="comment-post">
