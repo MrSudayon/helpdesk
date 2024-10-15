@@ -11,14 +11,14 @@ if(!empty($_POST['action']) && $_POST['action'] == 'getSubjectDetails') {
 }
 
 if(!empty($_POST['action']) && $_POST['action'] == 'addSubject') {
-	$subject->subject = $_POST["subject"];
+	$subject->subject = $_POST["subjName"];
     $subject->status = $_POST["status"];    
 	$subject->insert();
 }
 
 if(!empty($_POST['action']) && $_POST['action'] == 'updateSubject') {
 	$subject->subjectId = $_POST["subjectId"]; 
-	$subject->subject = $_POST["subject"];
+	$subject->subject = $_POST["subjName"];
     $subject->status = $_POST["status"]; 
 	$subject->update();
 }

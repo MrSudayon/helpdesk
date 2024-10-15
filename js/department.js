@@ -32,7 +32,7 @@ $(document).ready(function() {
 			success:function(data){
 				$('#departmentModal').modal('show');
 				$('#departmentId').val(data.id);
-				$('#department').val(data.name);
+				$('#departmentName').val(data.name);
 				$('#status').val(data.status);				
 				$('.modal-title').html("<i class='fa fa-plus'></i> Edit Department");
 				$('#action').val('updateDepartment');

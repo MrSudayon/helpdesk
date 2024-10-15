@@ -5,7 +5,7 @@ $(document).ready(function() {
 		"lengthChange": false,
 		"processing":true,
 		"serverSide":true,
-		"order":[],
+		"order": [[0, 'asc']],
 		"ajax":{
 			url:"subject_action.php",
 			type:"POST",
@@ -19,7 +19,21 @@ $(document).ready(function() {
 			},
 		],
 		"pageLength": 10
+    	// "lengthMenu": [10, 25, 50, 100],
 	});	
+
+	// var subjectData = $('#listSubject').DataTable({
+	// 	"processing": true,
+	// 	"serverSide": true,
+	// 	"ajax": {
+	// 		url: "subject_action.php",
+	// 		type: "POST",
+	// 		data: { action: 'listSubject' }
+	// 	},
+	// 	"pageLength": 10,
+	// 	"lengthMenu": [10, 25, 50, 100],
+	// 	"order": [[0, 'asc']]
+	// });
 
 	$(document).on('click', '.update', function(){
 		var subjectId = $(this).attr("id");
@@ -32,7 +46,7 @@ $(document).ready(function() {
 			success:function(data){
 				$('#subjectModal').modal('show');
 				$('#subjectId').val(data.id);
-				$('#subject').val(data.name);
+				$('#subjName').val(data.name);
 				$('#status').val(data.status);				
 				$('.modal-title').html("<i class='fa fa-plus'></i> Edit Subject");
 				$('#action').val('updateSubject');

@@ -15,7 +15,7 @@ $user = $users->getUserInfo();
 	<link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
 	<script src="js/general.js"></script>
 	<script src="js/subject.js"></script>
-	<script src="js/department.js"></script>
+	<!-- <script src="js/department.js"></script> -->
 	<link rel="stylesheet" href="css/style.css"/>
 <?php include('inc/container.php'); ?>
 
@@ -59,13 +59,13 @@ $user = $users->getUserInfo();
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="subject" class="control-label">Subject</label>
-							<input type="text" class="form-control" id="subject" name="subject" placeholder="subject" required>			
+							<input type="text" class="form-control" id="subjName" name="subjName" placeholder="Subject..." required>			
 						</div>
 						<div class="form-group">
 							<label for="status" class="control-label">Status</label>				
 							<select id="status" name="status" class="form-control">
-							<option value="1">Enable</option>				
-							<option value="0">Disable</option>	
+								<option value="1">Enable</option>				
+								<option value="0">Disable</option>	
 							</select>						
 						</div>						
 						

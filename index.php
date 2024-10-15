@@ -41,6 +41,7 @@ $user = $users->getUserInfo();
 					<th>S/N</th>
 					<th>Ticket ID</th>
 					<th>Subject</th>
+					<th>Requested by</th>
 					<th>Department</th>
 					<th>Created By</th>					
 					<th>Created</th>	

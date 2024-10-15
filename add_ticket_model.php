@@ -9,6 +9,11 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
+						<label for="name" class="control-label">Name</label>
+						<input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
+					</div>
+
+					<div class="form-group">
 						<label for="subject" class="control-label">Subject</label>
 						<!-- <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required> -->
 						<select id="subject" name="subject" class="form-control" placeholder="Subject...">					

@@ -58,7 +58,7 @@ $user = $users->getUserInfo();
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="department" class="control-label">Department</label>
-							<input type="text" class="form-control" id="department" name="department" placeholder="department" required>			
+							<input type="text" class="form-control" id="departmentName" name="departmentName" placeholder="Department..." required>			
 						</div>
 						<div class="form-group">
 							<label for="status" class="control-label">Status</label>				

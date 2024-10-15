@@ -11,14 +11,14 @@ if(!empty($_POST['action']) && $_POST['action'] == 'getDepartmentDetails') {
 }
 
 if(!empty($_POST['action']) && $_POST['action'] == 'addDepartment') {
-	$department->department = $_POST["department"];
+	$department->department = $_POST["departmentName"];
     $department->status = $_POST["status"];    
 	$department->insert();
 }
 
 if(!empty($_POST['action']) && $_POST['action'] == 'updateDepartment') {
 	$department->departmentId = $_POST["departmentId"]; 
-	$department->department = $_POST["department"];
+	$department->department = $_POST["departmentName"];
     $department->status = $_POST["status"]; 
 	$department->update();
 }

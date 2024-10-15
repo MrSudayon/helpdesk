@@ -12,7 +12,7 @@ $user = $users->getUserInfo();
 <link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
 <script src="js/general.js"></script>
 <script src="js/tickets.js"></script>
-<script src="js/purchase.js"></script>
+<!-- <script src="js/purchase.js"></script> -->
 <link rel="stylesheet" href="css/style.css" />
 <?php include('inc/container.php');?>
 <div class="container">	
@@ -52,6 +52,7 @@ $user = $users->getUserInfo();
 					<th>Ticket ID</th>
 					<th>Subject</th>
 					<th>Department</th>
+					<th>Requested by</th>					
 					<th>Created By</th>					
 					<th>Created</th>	
 					<th>Status</th>

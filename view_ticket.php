@@ -8,18 +8,20 @@ if(!$users->isLoggedIn()) {
 include('inc/header.php');
 $ticketDetails = $tickets->ticketInfo($_GET['id']);
 $ticketReplies = $tickets->getTicketReplies($ticketDetails['id']);
+
+$subjectTitle = $subject->getSubjectDetail($ticketDetails['title']);
 $user = $users->getUserInfo();
 $tickets->updateTicketReadStatus($ticketDetails['id']);
 ?>	
 
-<title>Purchase Request System</title>
+<title>Helpdesk System</title>
 <script src="js/general.js"></script>
 <script src="js/tickets.js"></script>
 <link rel="stylesheet" href="css/style.css" />
 <?php include('inc/container.php');?>
 <div class="container">
 	<div class="row home-sections">
-	<h2>Purchase Request System</h2>	
+	<h2>Helpdesk System</h2>	
 	<?php include('menus.php'); ?>		
 	</div> 
 	
@@ -37,7 +39,7 @@ $tickets->updateTicketReadStatus($ticketDetails['id']);
 					  <span class="glyphicon glyphicon-eye-open"></span> Open
 					</button>
 					<?php } ?>
-					<span class="ticket-title"><?php echo $ticketDetails['title']; ?></span>
+					<span class="ticket-title">Subject: <?php echo $subjectTitle['name']; ?></span>
 					</div>
 					<div class="panel-body">						
 						<div class="comment-post">

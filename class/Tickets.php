@@ -22,7 +22,7 @@ class Tickets extends Database {
 		} 		
 		$time = new time;
 
-		$sqlQuery = "SELECT t.id, t.uniqid, s.name as title, t.init_msg as tmessage, t.date, t.last_reply, t.resolved, u.name as creater, d.name as department, u.user_type, t.user, t.user_read, t.admin_read
+		$sqlQuery = "SELECT t.id, t.uniqid, s.name as title, t.createdfor as cfor, t.init_msg as tmessage, t.date, t.last_reply, t.resolved, u.name as creater, d.name as department, u.user_type, t.user, t.user_read, t.admin_read
 			FROM hd_tickets t 
 			LEFT JOIN hd_users u ON t.user = u.id 
 			LEFT JOIN hd_subjects s ON t.title = s.id  
@@ -47,22 +47,25 @@ class Tickets extends Database {
 			elseif ($orderColumnName == '3' || $orderColumnName == 'department') {
 				$sqlQuery .= ' ORDER BY department '.$_POST['order']['0']['dir'].' ';
 			} 
-			elseif ($orderColumnName == '4' || $orderColumnName == 'creater') {
+			elseif ($orderColumnName == '4' || $orderColumnName == 'cfor') {
+				$sqlQuery .= ' ORDER BY cfor '.$_POST['order']['0']['dir'].' ';
+			}
+			elseif ($orderColumnName == '5' || $orderColumnName == 'creater') {
 				$sqlQuery .= ' ORDER BY creater '.$_POST['order']['0']['dir'].' ';
 			}
-			elseif ($orderColumnName == '5' || $orderColumnName == 't.date') {
+			elseif ($orderColumnName == '6' || $orderColumnName == 't.date') {
 				$sqlQuery .= ' ORDER BY t.date '.$_POST['order']['0']['dir'].' ';
 			}
-			elseif ($orderColumnName == '6' || $orderColumnName == 't.resolved') {
+			elseif ($orderColumnName == '7' || $orderColumnName == 't.resolved') {
 				$sqlQuery .= ' ORDER BY t.resolved '.$_POST['order']['0']['dir'].' ';
 			}
 
 		} else {
 			$sqlQuery .= 'ORDER BY t.id DESC ';
 		}
-		if($_POST["length"] != -1){
-			$sqlQuery .= 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
-		}	
+		// if($_POST["length"] != -1){
+		// 	$sqlQuery .= 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
+		// }	
 
 		function formatDateOrDaysAgo($dateString) {
 			// Convert the string date to a timestamp
@@ -108,6 +111,7 @@ class Tickets extends Database {
 			$ticketRows[] = $ticket['uniqid'];
 			$ticketRows[] = $title;
 			$ticketRows[] = $ticket['department'];
+			$ticketRows[] = $ticket['cfor']; 			
 			$ticketRows[] = $ticket['creater']; 			
 			// $ticketRows[] = $time->ago($ticket['date']);
 			$ticketRows[] = formatDateOrDaysAgo($ticket['date']);
@@ -130,63 +134,21 @@ class Tickets extends Database {
 		$title = $title.'<span class="answered">Answered</span>';
 		return $title; 		
 	}
-	public function createTicket() {
-		if (!empty($_POST['subject']) && !empty($_POST['message'])) {
-			// Generate timestamp and unique ID
-			$date = (new DateTime())->getTimestamp();
-			$uniqid = uniqid();
-	
-			// Sanitize the input
-			$message = strip_tags($_POST['message']);
-			$subject = strip_tags($_POST['subject']);
-			$department = strip_tags($_POST['department']);
-			$status = intval($_POST['status']); // Ensure status is an integer
-	
-			// Use prepared statements to prevent SQL injection
-			$queryInsert = "
-				INSERT INTO " . $this->ticketTable . " 
-				(uniqid, user, title, init_msg, department, date, last_reply, user_read, admin_read, resolved) 
-				VALUES (?, ?, ?, ?, ?, ?, ?, 0, 0, ?)
-			";
-	
-			$stmt = $this->dbConnect->prepare($queryInsert);
-			$stmt->bind_param(
-				"sssssiis", 
-				$uniqid, 
-				$_SESSION["userid"], 
-				$subject, 
-				$message, 
-				$department, 
-				$date, 
-				$_SESSION["userid"], 
-				$status
-			);
-	
-			if ($stmt->execute()) {
-				echo 'success ' . $uniqid;
-			} else {
-				echo '<div class="alert error">Error creating ticket. Please try again.</div>';
-			}
-	
-			$stmt->close();
+
+	public function createTicket() {      
+		if(!empty($_POST['subject']) && !empty($_POST['message'])) {                
+			$date = new DateTime();
+			$date = $date->getTimestamp();
+			$uniqid = uniqid();                
+			$message = strip_tags($_POST['message']);              
+			$queryInsert = "INSERT INTO ".$this->ticketTable." (uniqid, user, createdfor, title, init_msg, department, date, last_reply, user_read, admin_read, resolved) 
+			VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['name']."', '".$_POST['subject']."', '".$message."', '".$_POST['department']."', '".$date."', '".$_SESSION["userid"]."', 0, 0, '".$_POST['status']."')";			
+			mysqli_query($this->dbConnect, $queryInsert);			
+			echo 'success ' . $uniqid;
 		} else {
 			echo '<div class="alert error">Please fill in all fields.</div>';
 		}
-	}
-	// public function createTicket() {      
-	// 	if(!empty($_POST['subject']) && !empty($_POST['message'])) {                
-	// 		$date = new DateTime();
-	// 		$date = $date->getTimestamp();
-	// 		$uniqid = uniqid();                
-	// 		$message = strip_tags($_POST['message']);              
-	// 		$queryInsert = "INSERT INTO ".$this->ticketTable." (uniqid, user, title, init_msg, department, date, last_reply, user_read, admin_read, resolved) 
-	// 		VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['subject']."', '".$message."', '".$_POST['department']."', '".$date."', '".$_SESSION["userid"]."', 0, 0, '".$_POST['status']."')";			
-	// 		mysqli_query($this->dbConnect, $queryInsert);			
-	// 		echo 'success ' . $uniqid;
-	// 	} else {
-	// 		echo '<div class="alert error">Please fill in all fields.</div>';
-	// 	}
-	// }	
+	}	
 	public function getTicketDetails(){
 		if($_POST['ticketId']) {	
 			$sqlQuery = "
@@ -214,7 +176,8 @@ class Tickets extends Database {
 		}
 	}	
 	public function getDepartments() {       
-		$sqlQuery = "SELECT * FROM ".$this->departmentsTable;
+		$sqlQuery = "SELECT * FROM ".$this->departmentsTable." 
+					WHERE status=1";
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
 		while($department = mysqli_fetch_assoc($result) ) {       
             echo '<option value="' . $department['id'] . '">' . $department['name']  . '</option>';           
@@ -222,16 +185,18 @@ class Tickets extends Database {
     }	    
 	// Subjects Category
 	public function getSubjects() {       
-		$sqlQuery = "SELECT * FROM ".$this->subjectsTable;
+		$sqlQuery = "SELECT * FROM ".$this->subjectsTable."
+					WHERE status=1";
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
 		while($subject = mysqli_fetch_assoc($result) ) {       
             echo '<option value="' . $subject['id'] . '">' . $subject['name']  . '</option>';           
         }
     }	
     public function ticketInfo($id) {  		
-		$sqlQuery = "SELECT t.id, t.uniqid, t.title, t.user as tUser, t.init_msg as tmessage, t.date, t.last_reply, t.resolved, u.name as creater, u.user_type as userType, d.name as department 
+		$sqlQuery = "SELECT t.id, t.uniqid, t.title, t.user as tUser, t.createdFor as cfor, t.init_msg as tmessage, t.date, t.last_reply, t.resolved, u.name as creater, u.user_type as userType, d.name as department 
 			FROM ".$this->ticketTable." t 
 			LEFT JOIN hd_users u ON t.user = u.id 
+			LEFT JOIN hd_subjects s ON t.title = s.id 
 			LEFT JOIN hd_departments d ON t.department = d.id 
 			WHERE t.uniqid = '".$id."'";	
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
@@ -256,6 +221,7 @@ class Tickets extends Database {
 			FROM ".$this->ticketRepliesTable." r
 			LEFT JOIN ".$this->ticketTable." t ON r.ticket_id = t.id
 			LEFT JOIN hd_users u ON r.user = u.id 
+			LEFT JOIN hd_subjects s ON t.title = s.id 
 			LEFT JOIN hd_departments d ON t.department = d.id 
 			WHERE r.ticket_id = '".$id."'";	
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
