@@ -104,7 +104,7 @@ class Tickets extends Database {
 			if ($days > 7) {
 				return date('m-d-Y', $timestampInt); // Adjust the date format as needed
 			} else {
-				return $days . ' days ago';
+				return $days . ' day/s ago';
 			}
 		}
 
