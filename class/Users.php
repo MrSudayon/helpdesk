@@ -83,7 +83,7 @@ class Users extends Database {
     }
 	
 	
-	public function listUser(){
+	public function listUser1(){
 		
 		$sqlQuery = "SELECT * FROM ".$this->userTable;
 			
@@ -163,6 +163,92 @@ class Users extends Database {
 		);
 		echo json_encode($output);
 	}	
+
+	public function listUser() {
+		$start = $_POST['start'] ?? 0;  // Start index for pagination
+		$length = $_POST['length'] ?? 10;  // Number of records per page
+	
+		// Query to get total number of records without filters
+		$totalQuery = "SELECT COUNT(*) AS total FROM " . $this->userTable;
+		$totalResult = mysqli_query($this->dbConnect, $totalQuery);
+		$totalRecords = mysqli_fetch_assoc($totalResult)['total'];
+	
+		// Build the main query with search filter if applicable
+		$sqlQuery = "SELECT * FROM " . $this->userTable;
+	
+		if (!empty($_POST["search"]["value"])) {
+			$sqlQuery .= ' WHERE id LIKE "%' . $_POST["search"]["value"] . '%" ';
+			$sqlQuery .= ' OR name LIKE "%' . $_POST["search"]["value"] . '%" ';
+			$sqlQuery .= ' OR email LIKE "%' . $_POST["search"]["value"] . '%" ';
+			$sqlQuery .= ' OR create_date LIKE "%' . $_POST["search"]["value"] . '%" ';
+			$sqlQuery .= ' OR user_type LIKE "%' . $_POST["search"]["value"] . '%" ';
+			$sqlQuery .= ' OR status LIKE "%' . $_POST["search"]["value"] . '%" ';
+		}
+	
+		// Execute the filtered query to get the number of filtered records
+		$filteredResult = mysqli_query($this->dbConnect, $sqlQuery);
+		$filteredRecords = mysqli_num_rows($filteredResult);
+	
+		// Add ORDER BY clause for sorting
+		if(!empty($_POST["order"])){
+
+			$orderColumnIndex = $_POST['order']['0']['column'];
+			$orderColumnName = $_POST['columns'][$orderColumnIndex]['data'];
+
+			if ($orderColumnName == '1' || $orderColumnName == 'name') {
+				$sqlQuery .= ' ORDER BY name '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '2' || $orderColumnName == 'status') {
+				$sqlQuery .= ' ORDER BY email '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '3' || $orderColumnName == 'status') {
+				$sqlQuery .= ' ORDER BY create_date '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '4' || $orderColumnName == 'status') {
+				$sqlQuery .= ' ORDER BY user_type '.$_POST['order']['0']['dir'].' ';
+			} 
+			elseif ($orderColumnName == '5' || $orderColumnName == 'status') {
+				$sqlQuery .= ' ORDER BY status '.$_POST['order']['0']['dir'].' ';
+			} 
+
+		} else {
+			$sqlQuery .= ' ORDER BY status DESC ';
+		}
+	
+		// Add LIMIT clause for pagination
+		$sqlQuery .= " LIMIT $start, $length";
+	
+		// Execute the final query
+		$result = mysqli_query($this->dbConnect, $sqlQuery);
+		$userData = array();
+	
+		while ($user = mysqli_fetch_assoc($result)) {
+			$status = ($user['status'] == 1)
+				? '<span class="label label-success">Enabled</span>'
+				: '<span class="label label-danger">Disabled</span>';
+	
+			$userData[] = array(
+				$user['id'],
+				$user['name'],
+				$user['email'],
+				$user['create_date'],
+				$user['user_type'],
+				$status,
+				'<button type="button" name="update" id="' . $user["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
+				'<button type="button" name="delete" id="' . $user["id"] . '" class="btn btn-danger btn-xs delete">Delete</button>'
+			);
+		}
+	
+		// Prepare the JSON response for DataTables
+		$output = array(
+			"draw" => intval($_POST["draw"]),
+			"recordsTotal" => $totalRecords,
+			"recordsFiltered" => $filteredRecords,
+			"data" => $userData
+		);
+	
+		echo json_encode($output);
+	}
 	
 	
 	public function getUserDetails(){		

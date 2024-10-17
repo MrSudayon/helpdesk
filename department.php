@@ -38,7 +38,7 @@ $user = $users->getUserInfo();
 	<table id="listDepartment" class="table table-bordered table-striped">
 		<thead>
 			<tr>
-				<th>S/N</th>
+				<!-- <th>S/N</th> -->
 				<th>Department</th>					
 				<th>Status</th>
 				<th></th>

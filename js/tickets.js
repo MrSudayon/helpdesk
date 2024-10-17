@@ -22,28 +22,56 @@ $(document).ready(function() {
 		$('#save').val('Save Ticket');
 	});	
 
-	if($('#listTickets').length) {
+
+	// if($('#listTickets').length) {
+	// ($('#listTickets').length) {
+	// 	var ticketData = $('#listTickets').DataTable({
+	// 		"searching": true,
+	// 		"lengthChange": false,
+	// 		"processing":true,
+	// 		"serverSide":true,
+	// 		"order":[],
+	// 		"ajax":{
+	// 			url:"ticket_action.php",
+	// 			type:"POST",
+	// 			data:{action:'listTicket'},
+	// 			dataType:"json"
+	// 		},
+	// 		"columnDefs":[
+	// 			{
+	// 				"targets":[8, 9, 10],
+	// 				"orderable":false,
+	// 			},
+	// 		],
+	// 		"paginate": true,
+	// 		"pageLength": 5
+	// 	});			
+
+
+
+	if ($('#listTickets').length) {
 		var ticketData = $('#listTickets').DataTable({
 			"searching": true,
-			"lengthChange": false,
-			"processing":true,
-			"serverSide":true,
-			"order":[],
-			"ajax":{
-				url:"ticket_action.php",
-				type:"POST",
-				data:{action:'listTicket'},
-				dataType:"json"
+			"lengthChange": true,  // Enables the page length dropdown
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				url: "ticket_action.php",
+				type: "POST",
+				data: { action: 'listTicket' },
+				dataType: "json"
 			},
-			"columnDefs":[
+			"columnDefs": [
 				{
-					"targets":[8, 9, 10],
-					"orderable":false,
+					"targets": [8, 9, 10],
+					"orderable": false,  // Prevents ordering on these columns
 				},
 			],
 			"paginate": true,
-			"pageLength": 5
-		});			
+			"pageLength": 10,  // Default number of rows per page
+			"lengthMenu": [10, 25, 50, 100],  // Options for the user to select
+		});
 		$(document).on('submit','#ticketForm', function(event){
 			event.preventDefault();
 			$('#save').attr('disabled','disabled');

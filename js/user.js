@@ -1,17 +1,37 @@
 $(document).ready(function() {        
 	
+	// var userData = $('#listUser').DataTable({
+	// 	"searching": false,
+	// 	"lengthChange": true,
+	// 	"processing":true,
+	// 	"serverSide":true,
+	// 	'serverMethod': 'post',
+	// 	"order":[],
+	// 	"ajax":{
+	// 		url:"user_action.php",
+	// 		type:"POST",
+	// 		data:{action:'listUser'},
+	// 		dataType:"json",
+	// 	},
+	// 	"columnDefs":[
+	// 		{
+	// 			"targets":[0, 6, 7],
+	// 			"orderable":false,
+	// 		},
+	// 	],
+	// 	"paginate": true,
+	// 	"pageLength": 10
+	// });	
+
 	var userData = $('#listUser').DataTable({
-		"searching": false,
-		"lengthChange": true,
+		"searching": true,
 		"processing":true,
 		"serverSide":true,
-		'serverMethod': 'post',
-		"order":[],
 		"ajax":{
 			url:"user_action.php",
 			type:"POST",
 			data:{action:'listUser'},
-			dataType:"json",
+			dataType:"json"
 		},
 		"columnDefs":[
 			{
@@ -20,7 +40,8 @@ $(document).ready(function() {
 			},
 		],
 		"paginate": true,
-		"pageLength": 10
+		"pageLength": 10,
+    	"lengthMenu": [10, 25, 50, 100]
 	});	
 
 	$(document).on('click', '.update', function(){

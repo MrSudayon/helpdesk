@@ -17,8 +17,8 @@ $(document).ready(function() {
 			},
 		],
 		"paginate": true,
-		"pageLength": 5,
-    	"lengthMenu": [3, 10, 25, 50, 100]
+		"pageLength": 10,
+    	"lengthMenu": [10, 25, 50, 100]
 	});	
 
 

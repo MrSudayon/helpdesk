@@ -11,7 +11,15 @@ class Tickets extends Database {
     } 
 	
 	public function showTickets(){
+
+		$start = $_POST['start'] ?? 0;  // Start index for pagination
+		$length = $_POST['length'] ?? 10;  // Number of records per page
 		$sqlWhere = '';	
+
+		$totalQuery = "SELECT COUNT(*) AS total FROM " . $this->ticketTable;
+		$totalResult = mysqli_query($this->dbConnect, $totalQuery);
+		$totalRecords = mysqli_fetch_assoc($totalResult)['total'];
+
 		if(!isset($_SESSION["admin"])) {
 			$sqlWhere .= " WHERE t.user = '".$_SESSION["userid"]."' ";
 			if(!empty($_POST["search"]["value"])){
@@ -27,6 +35,9 @@ class Tickets extends Database {
 			LEFT JOIN hd_users u ON t.user = u.id 
 			LEFT JOIN hd_subjects s ON t.title = s.id  
 			LEFT JOIN hd_departments d ON t.department = d.id $sqlWhere ";
+
+
+
 		if(!empty($_POST["search"]["value"])){
 			$sqlQuery .= ' (uniqid LIKE "%'.$_POST["search"]["value"].'%" ';					
 			$sqlQuery .= ' OR s.name LIKE "%'.$_POST["search"]["value"].'%" ';
@@ -35,6 +46,10 @@ class Tickets extends Database {
 			$sqlQuery .= ' OR resolved LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR last_reply LIKE "%'.$_POST["search"]["value"].'%") ';			
 		}
+
+		$filteredResult = mysqli_query($this->dbConnect, $sqlQuery);
+		$filteredRecords = mysqli_num_rows($filteredResult);
+
 		if(!empty($_POST["order"])){
 			
 			$orderColumnIndex = $_POST['order']['0']['column'];
@@ -68,9 +83,9 @@ class Tickets extends Database {
 		} else {
 			$sqlQuery .= 'ORDER BY t.id DESC ';
 		}
-		// if($_POST["length"] != -1){
-		// 	$sqlQuery .= 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
-		// }	
+		
+		// Add LIMIT clause for pagination
+		$sqlQuery .= " LIMIT $start, $length";
 
 		function formatDateOrDaysAgo($dateString) {
 			// Convert the string date to a timestamp
@@ -94,16 +109,12 @@ class Tickets extends Database {
 		}
 
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
-		$numRows = mysqli_num_rows($result);
 		$ticketData = array();	
-		while( $ticket = mysqli_fetch_assoc($result) ) {		
-			$ticketRows = array();			
-			$status = '';
-			if($ticket['resolved'] == 0)	{
-				$status = '<span class="label label-success">Open</span>';
-			} else if($ticket['resolved'] == 1) {
-				$status = '<span class="label label-danger">Closed</span>';
-			}	
+
+		while ($ticket = mysqli_fetch_assoc($result)) {
+			$status = ($ticket['resolved'] == 0)
+				? '<span class="label label-success">Open</span>'
+				: '<span class="label label-danger">Closed</span>';
 			$title = $ticket['title'];
 			if((isset($_SESSION["admin"]) && !$ticket['admin_read'] && $ticket['last_reply'] != $_SESSION["userid"]) || (!isset($_SESSION["admin"]) && !$ticket['user_read'] && $ticket['last_reply'] != $ticket['user'])) {
 				$title = $this->getRepliedTitle($ticket['title']);			
@@ -112,25 +123,26 @@ class Tickets extends Database {
 			if(!isset($_SESSION["admin"])) {
 				$disbaled = 'disabled';
 			}
-			$ticketRows[] = $ticket['id'];
-			$ticketRows[] = $ticket['uniqid'];
-			$ticketRows[] = $title;
-			$ticketRows[] = $ticket['department'];
-			$ticketRows[] = $ticket['cfor']; 			
-			$ticketRows[] = $ticket['creater']; 			
-			// $ticketRows[] = $time->ago($ticket['date']);
-			$ticketRows[] = formatDateOrDaysAgo($ticket['date']);
-			// $ticketRows[] = date('Y-m-d', (int)$ticket['date']);
-			$ticketRows[] = $status;
-			$ticketRows[] = '<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>';	
-			$ticketRows[] = '<button type="button" name="update" id="'.$ticket["id"].'" class="btn btn-warning btn-xs update" '.$disbaled.'>Edit</button>';
-			$ticketRows[] = '<button type="button" name="delete" id="'.$ticket["id"].'" class="btn btn-danger btn-xs delete"  '.$disbaled.'>Close</button>';
-			$ticketData[] = $ticketRows;
+
+			$ticketData[] = array(
+				$ticket['id'],
+				$ticket['uniqid'],
+				$title,
+				$ticket['department'],
+				$ticket['cfor'],
+				$ticket['creater'],
+				formatDateOrDaysAgo($ticket['date']),
+				$status,
+				'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
+				'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
+				'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
+			);
 		}
+		// Prepare the JSON response for DataTables
 		$output = array(
 			"draw"				=>	intval($_POST["draw"]),
-			"recordsTotal"  	=>  $numRows,
-			"recordsFiltered" 	=> 	$numRows,
+			"recordsTotal" 		=>  $totalRecords,
+			"recordsFiltered" 	=>  $filteredRecords,
 			"data"    			=> 	$ticketData
 		);
 		echo json_encode($output);

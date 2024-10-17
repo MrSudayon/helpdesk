@@ -1,11 +1,30 @@
 $(document).ready(function() {        
 	
+	// var departmentData = $('#listDepartment').DataTable({
+	// 	"searching": false,
+	// 	"lengthChange": false,
+	// 	"processing":true,
+	// 	"serverSide":true,
+	// 	"order":[],
+	// 	"ajax":{
+	// 		url:"department_action.php",
+	// 		type:"POST",
+	// 		data:{action:'listDepartment'},
+	// 		dataType:"json"
+	// 	},
+	// 	"columnDefs":[
+	// 		{
+	// 			"targets":[0, 3, 4],
+	// 			"orderable":false,
+	// 		},
+	// 	],
+	// 	"pageLength": 10
+	// });	
+
 	var departmentData = $('#listDepartment').DataTable({
-		"searching": false,
-		"lengthChange": false,
+		"searching": true,
 		"processing":true,
 		"serverSide":true,
-		"order":[],
 		"ajax":{
 			url:"department_action.php",
 			type:"POST",
@@ -14,12 +33,15 @@ $(document).ready(function() {
 		},
 		"columnDefs":[
 			{
-				"targets":[0, 3, 4],
+				"targets":[2,3],
 				"orderable":false,
 			},
 		],
-		"pageLength": 10
+		"paginate": true,
+		"pageLength": 10,
+    	"lengthMenu": [10, 25, 50, 100]
 	});	
+
 
 	$(document).on('click', '.update', function(){
 		var departmentId = $(this).attr("id");
