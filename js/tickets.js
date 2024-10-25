@@ -64,7 +64,7 @@ $(document).ready(function() {
 			},
 			"columnDefs": [
 				{
-					"targets": [8, 9, 10],
+					"targets": [9, 10, 11],
 					"orderable": false,  // Prevents ordering on these columns
 				},
 			],

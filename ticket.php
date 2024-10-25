@@ -56,6 +56,7 @@ $user = $users->getUserInfo();
 					<th>Created By</th>					
 					<th>Created</th>	
 					<th>Status</th>
+					<th>Resolved</th>
 					<th></th>
 					<th></th>
 					<th></th>					

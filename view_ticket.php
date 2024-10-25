@@ -68,7 +68,9 @@ $tickets->updateTicketReadStatus($ticketDetails['id']);
 						<div class="panel-heading">
 
 							<?php if($replies['user_type'] == 'admin') { ?>							
-								<span class="glyphicon glyphicon-user"></span> <?php echo ucfirst($ticketDetails['creater']); ?>
+								<!-- <span class="glyphicon glyphicon-user"></span> ?php echo ucfirst($ticketDetails['creater']); ?> -->
+								<span class="glyphicon glyphicon-user"></span> <?php echo ucfirst($replies['creater']); ?>
+
 							<?php } else { ?>
 								<span class="glyphicon glyphicon-user"></span> <?php echo $replies['creater']; ?>
 							<?php } ?>

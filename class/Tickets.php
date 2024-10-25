@@ -28,9 +28,9 @@ class Tickets extends Database {
 		} else if(isset($_SESSION["admin"]) && !empty($_POST["search"]["value"])) {
 			$sqlWhere .= " WHERE ";
 		} 		
-		$time = new time;
+		
 
-		$sqlQuery = "SELECT t.id, t.uniqid, s.name as title, t.createdfor as cfor, t.init_msg as tmessage, t.date, t.last_reply, t.resolved, u.name as creater, d.name as department, u.user_type, t.user, t.user_read, t.admin_read
+		$sqlQuery = "SELECT t.id, t.uniqid, s.name as title, t.createdfor as cfor, t.init_msg as tmessage, t.date, t.dateresolved, t.last_reply, t.resolved, u.name as creater, d.name as department, u.user_type, t.user, t.user_read, t.admin_read
 			FROM hd_tickets t 
 			LEFT JOIN hd_users u ON t.user = u.id 
 			LEFT JOIN hd_subjects s ON t.title = s.id  
@@ -43,8 +43,11 @@ class Tickets extends Database {
 			$sqlQuery .= ' OR s.name LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR t.createdfor LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR d.name LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR u.name LIKE "%'.$_POST["search"]["value"].'%" ';
 			$sqlQuery .= ' OR resolved LIKE "%'.$_POST["search"]["value"].'%" ';
-			$sqlQuery .= ' OR last_reply LIKE "%'.$_POST["search"]["value"].'%") ';			
+			$sqlQuery .= ' OR last_reply LIKE "%'.$_POST["search"]["value"].'%" ';		
+			$sqlQuery .= ' OR t.date LIKE "%'.$_POST["search"]["value"].'%" ';
+			$sqlQuery .= ' OR t.dateresolved LIKE "%'.$_POST["search"]["value"].'%") ';			
 		}
 
 		$filteredResult = mysqli_query($this->dbConnect, $sqlQuery);
@@ -79,9 +82,12 @@ class Tickets extends Database {
 			elseif ($orderColumnName == '7' || $orderColumnName == 't.resolved') {
 				$sqlQuery .= ' ORDER BY t.resolved '.$_POST['order']['0']['dir'].' ';
 			}
+			elseif ($orderColumnName == '8' || $orderColumnName == 't.dateresolved') {
+				$sqlQuery .= ' ORDER BY t.dateresolved '.$_POST['order']['0']['dir'].' ';
+			}
 
 		} else {
-			$sqlQuery .= 'ORDER BY t.id DESC ';
+			$sqlQuery .= 'ORDER BY t.resolved ASC ';
 		}
 		
 		// Add LIMIT clause for pagination
@@ -92,19 +98,25 @@ class Tickets extends Database {
 			$timestampInt = (int)$dateString;
 			$timestampString = $dateString;
 			$now = time();
+			$time = new time;
 		
 			// date('Y-m-d', (int)$ticket['date']);
 			// Calculate the difference in seconds
-			$diff = $now - $timestampString;
-		
-			// Convert to days
-			$days = floor($diff / (60 * 60 * 24));
-		
-			// If more than 7 days ago, show the actual date
-			if ($days > 7) {
-				return date('m-d-Y', $timestampInt); // Adjust the date format as needed
+			if($timestampString == 'On Progress') {
+				return 'On Progress';
 			} else {
-				return $days . ' day/s ago';
+				$diff = $now - $timestampString;
+				// Convert to days
+				$days = floor($diff / (60 * 60 * 24));
+			
+				// If more than 7 days ago, show the actual date
+				if ($days < 1) {
+					return $time->ago($timestampString);
+				} elseif ($days > 7) {
+					return date('m-d-Y', $timestampInt); // Adjust the date format as needed
+				} else {
+					return $days . ' day/s ago';
+				} 
 			}
 		}
 
@@ -116,9 +128,12 @@ class Tickets extends Database {
 				? '<span class="label label-success">Open</span>'
 				: '<span class="label label-danger">Closed</span>';
 			$title = $ticket['title'];
-			if((isset($_SESSION["admin"]) && !$ticket['admin_read'] && $ticket['last_reply'] != $_SESSION["userid"]) || (!isset($_SESSION["admin"]) && !$ticket['user_read'] && $ticket['last_reply'] != $ticket['user'])) {
+			if((isset($_SESSION["admin"]) && !$ticket['admin_read'] && $ticket['last_reply'] != $_SESSION["userid"]) 
+			|| (!isset($_SESSION["admin"]) && !$ticket['user_read'] && $ticket['last_reply'] != $ticket['user'])) {
 				$title = $this->getRepliedTitle($ticket['title']);			
 			}
+		
+
 			$disbaled = '';
 			if(!isset($_SESSION["admin"])) {
 				$disbaled = 'disabled';
@@ -133,6 +148,8 @@ class Tickets extends Database {
 				$ticket['creater'],
 				formatDateOrDaysAgo($ticket['date']),
 				$status,
+				// $ticket['dateresolved'],
+				formatDateOrDaysAgo($ticket['dateresolved']),
 				'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
 				'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
 				'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
@@ -159,8 +176,12 @@ class Tickets extends Database {
 			$date = $date->getTimestamp();
 			$uniqid = uniqid();                
 			$message = strip_tags($_POST['message']);              
-			$queryInsert = "INSERT INTO ".$this->ticketTable." (uniqid, user, createdfor, title, init_msg, department, date, last_reply, user_read, admin_read, resolved) 
-			VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['name']."', '".$_POST['subjectName']."', '".$message."', '".$_POST['departmentName']."', '".$date."', '".$_SESSION["userid"]."', 0, 0, '".$_POST['status']."')";			
+			
+			$queryInsert = "INSERT INTO ".$this->ticketTable." (uniqid, user, createdfor, title, init_msg, department, date, dateresolved, last_reply, user_read, admin_read, resolved) 
+			VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['name']."', '".$_POST['subjectName']."', '".$message."', '".$_POST['departmentName']."', '".$date."', 'On Progress', 0, 0, 0, '".$_POST['status']."')";		
+			
+			// $queryInsert = "INSERT INTO ".$this->ticketTable." (uniqid, user, createdfor, title, init_msg, department, date, dateresolved, last_reply, user_read, admin_read, resolved) 
+			// VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['name']."', '".$_POST['subjectName']."', '".$message."', '".$_POST['departmentName']."', '".$date."', 'On Progress', '".$_SESSION["userid"]."', 0, 0, '".$_POST['status']."')";			
 			mysqli_query($this->dbConnect, $queryInsert);			
 			echo 'success ' . $uniqid;
 		} else {
@@ -179,16 +200,27 @@ class Tickets extends Database {
 	}
 	public function updateTicket() {
 		if($_POST['ticketId']) {	
-			$updateQuery = "UPDATE ".$this->ticketTable." 
-			SET createdfor = '".$_POST['name']."', title = '".$_POST["subjectName"]."', department = '".$_POST["departmentName"]."', init_msg = '".$_POST["message"]."', resolved = '".$_POST["status"]."'
+			$date = new DateTime();
+			$date = $date->getTimestamp();
+			if($_POST["status"] == 0) {
+				$isresolved = 'On Progress';
+			} else {
+				$isresolved = $date;
+			}
+			
+			$updateQuery = "UPDATE ".$this->ticketTable."
+			SET createdfor = '".$_POST['name']."', title = '".$_POST["subjectName"]."', department = '".$_POST["departmentName"]."', init_msg = '".$_POST["message"]."', resolved = '".$_POST["status"]."', dateresolved = '".$isresolved."'
 			WHERE id ='".$_POST["ticketId"]."'";
 			$isUpdated = mysqli_query($this->dbConnect, $updateQuery);		
 		}	
 	}		
 	public function closeTicket(){
 		if($_POST["ticketId"]) {
+			$date = new DateTime();
+			$date = $date->getTimestamp();
+			
 			$sqlDelete = "UPDATE ".$this->ticketTable." 
-				SET resolved = '1'
+				SET resolved = '1', dateresolved = '".$date."'
 				WHERE id = '".$_POST["ticketId"]."'";		
 			mysqli_query($this->dbConnect, $sqlDelete);		
 		}
@@ -211,7 +243,7 @@ class Tickets extends Database {
         }
     }	
     public function ticketInfo($id) {  		
-		$sqlQuery = "SELECT t.id, t.uniqid, t.title, t.user as tUser, t.createdFor as cfor, t.init_msg as tmessage, t.date, t.last_reply, t.resolved, u.name as creater, u.user_type as userType, d.name as department 
+		$sqlQuery = "SELECT t.id, t.uniqid, t.title, t.user as tUser, t.createdFor as cfor, t.init_msg as tmessage, t.date, t.dateresolved, t.last_reply, t.resolved, u.name as creater, u.user_type as userType, d.name as department 
 			FROM ".$this->ticketTable." t 
 			LEFT JOIN hd_users u ON t.user = u.id 
 			LEFT JOIN hd_subjects s ON t.title = s.id 
