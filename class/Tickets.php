@@ -93,32 +93,42 @@ class Tickets extends Database {
 		// Add LIMIT clause for pagination
 		$sqlQuery .= " LIMIT $start, $length";
 
+
 		function formatDateOrDaysAgo($dateString) {
-			// Convert the string date to a timestamp
-			$timestampInt = (int)$dateString;
-			$timestampString = $dateString;
-			$now = time();
-			$time = new time;
-		
-			// date('Y-m-d', (int)$ticket['date']);
-			// Calculate the difference in seconds
-			if($timestampString == 'On Progress') {
+			// Check if the dateString is the placeholder "On Progress"
+			if ($dateString === 'On Progress') {
 				return 'On Progress';
-			} else {
-				$diff = $now - $timestampString;
-				// Convert to days
-				$days = floor($diff / (60 * 60 * 24));
+			}
+		
+			// Convert the date string to an integer timestamp
+			$timestampInt = (int)$dateString;
 			
-				// If more than 7 days ago, show the actual date
-				if ($days < 1) {
-					return $time->ago($timestampString);
-				} elseif ($days > 7) {
-					return date('m-d-Y', $timestampInt); // Adjust the date format as needed
-				} else {
-					return $days . ' day/s ago';
-				} 
+			// Initialize a DateTime object in the GMT+8 timezone
+			$timestampDate = (new DateTime())->setTimestamp($timestampInt)->setTimezone(new DateTimeZone('GMT+8')); // Adjust to GMT+8
+
+			// Calculate the difference in seconds from the current time
+			$now = new DateTime("now", new DateTimeZone('GMT+8'));
+			$diffInSeconds = $now->getTimestamp() - $timestampInt;
+		
+			// Convert the difference to days
+			$days = floor($diffInSeconds / (60 * 60 * 24));
+			
+			// If the timestamp is within today, display time only
+			if ($days < 1) {
+				return '<b>Today</b> at ' . $timestampDate->format('H:i:s ');
+				
+			} 
+			// If the timestamp is within 7 days, show how many days ago
+			elseif ($days <= 7) {
+				return $days . ' day/s ago';
+			} 
+			// Otherwise, return the full date and time
+			else {
+				// return $timestampDate->format('m-d-Y H:i:s');
+				return $timestampDate->format('m-d-Y');
 			}
 		}
+
 
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
 		$ticketData = array();	
