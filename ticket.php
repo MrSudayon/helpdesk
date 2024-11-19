@@ -50,7 +50,7 @@ $user = $users->getUserInfo();
 				<tr>
 					<th>S/N</th>
 					<th>Ticket ID</th>
-					<th>Subject</th>
+					<th style="width: 100%;">Subject</th>
 					<th>Department</th>
 					<th>Requested by</th>					
 					<th>Created By</th>					

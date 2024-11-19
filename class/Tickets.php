@@ -87,7 +87,7 @@ class Tickets extends Database {
 			}
 
 		} else {
-			$sqlQuery .= 'ORDER BY t.resolved ASC ';
+			$sqlQuery .= 'ORDER BY t.resolved ASC, t.date DESC';
 		}
 		
 		// Add LIMIT clause for pagination
@@ -115,7 +115,7 @@ class Tickets extends Database {
 			
 			// If the timestamp is within today, display time only
 			if ($days < 1) {
-				return '<b>Today</b> at ' . $timestampDate->format('H:i:s ');
+				return $timestampDate->format('M-d') . ' at ' . $timestampDate->format('h:i A');
 				
 			} 
 			// If the timestamp is within 7 days, show how many days ago
@@ -214,12 +214,13 @@ class Tickets extends Database {
 			$date = $date->getTimestamp();
 			if($_POST["status"] == 0) {
 				$isresolved = 'On Progress';
+				$newDate = $date;
 			} else {
 				$isresolved = $date;
 			}
 			
 			$updateQuery = "UPDATE ".$this->ticketTable."
-			SET createdfor = '".$_POST['name']."', title = '".$_POST["subjectName"]."', department = '".$_POST["departmentName"]."', init_msg = '".$_POST["message"]."', resolved = '".$_POST["status"]."', dateresolved = '".$isresolved."'
+			SET createdfor = '".$_POST['name']."', title = '".$_POST["subjectName"]."', department = '".$_POST["departmentName"]."', date = '".$newDate."', init_msg = '".$_POST["message"]."', resolved = '".$_POST["status"]."', dateresolved = '".$isresolved."'
 			WHERE id ='".$_POST["ticketId"]."'";
 			$isUpdated = mysqli_query($this->dbConnect, $updateQuery);		
 		}	
