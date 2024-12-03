@@ -87,10 +87,9 @@ class Tickets extends Database {
 			}
 
 		} else {
-			$sqlQuery .= 'ORDER BY t.resolved ASC ';
+			$sqlQuery .= 'ORDER BY t.resolved ASC, t.date DESC';
 		}
 		
-		// Add LIMIT clause for pagination
 		$sqlQuery .= " LIMIT $start, $length";
 
 
@@ -115,7 +114,7 @@ class Tickets extends Database {
 			
 			// If the timestamp is within today, display time only
 			if ($days < 1) {
-				return '<b>Today</b> at ' . $timestampDate->format('H:i:s ');
+				return $timestampDate->format('M-d') . ' at ' . $timestampDate->format('h:i A');
 				
 			} 
 			// If the timestamp is within 7 days, show how many days ago
@@ -147,23 +146,51 @@ class Tickets extends Database {
 			$disbaled = '';
 			if(!isset($_SESSION["admin"])) {
 				$disbaled = 'disabled';
+				$ticketData[] = array(
+					$ticket['id'],
+					$ticket['uniqid'],
+					$title,
+					$ticket['department'],
+					$ticket['creater'],
+					formatDateOrDaysAgo($ticket['date']),
+					$status,
+					formatDateOrDaysAgo($ticket['dateresolved']),
+					'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
+					'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
+					'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
+				);
+			} else {
+				$ticketData[] = array(
+					$ticket['id'],
+					$ticket['uniqid'],
+					$title,
+					$ticket['department'],
+					$ticket['cfor'],
+					$ticket['creater'],
+					formatDateOrDaysAgo($ticket['date']),
+					$status,
+					formatDateOrDaysAgo($ticket['dateresolved']),
+					'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
+					'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
+					'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
+				);
 			}
-
-			$ticketData[] = array(
-				$ticket['id'],
-				$ticket['uniqid'],
-				$title,
-				$ticket['department'],
-				$ticket['cfor'],
-				$ticket['creater'],
-				formatDateOrDaysAgo($ticket['date']),
-				$status,
-				// $ticket['dateresolved'],
-				formatDateOrDaysAgo($ticket['dateresolved']),
-				'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
-				'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
-				'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
-			);
+			
+			// $ticketData[] = array(
+			// 	$ticket['id'],
+			// 	$ticket['uniqid'],
+			// 	$title,
+			// 	$ticket['department'],
+			// 	$ticket['cfor'],
+			// 	$ticket['creater'],
+			// 	formatDateOrDaysAgo($ticket['date']),
+			// 	$status,
+			// 	// $ticket['dateresolved'],
+			// 	formatDateOrDaysAgo($ticket['dateresolved']),
+			// 	'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
+			// 	'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
+			// 	'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
+			// );
 		}
 		// Prepare the JSON response for DataTables
 		$output = array(
@@ -214,12 +241,13 @@ class Tickets extends Database {
 			$date = $date->getTimestamp();
 			if($_POST["status"] == 0) {
 				$isresolved = 'On Progress';
+				$newDate = $date;
 			} else {
 				$isresolved = $date;
 			}
 			
 			$updateQuery = "UPDATE ".$this->ticketTable."
-			SET createdfor = '".$_POST['name']."', title = '".$_POST["subjectName"]."', department = '".$_POST["departmentName"]."', init_msg = '".$_POST["message"]."', resolved = '".$_POST["status"]."', dateresolved = '".$isresolved."'
+			SET createdfor = '".$_POST['name']."', title = '".$_POST["subjectName"]."', department = '".$_POST["departmentName"]."', date = '".$newDate."', init_msg = '".$_POST["message"]."', resolved = '".$_POST["status"]."', dateresolved = '".$isresolved."'
 			WHERE id ='".$_POST["ticketId"]."'";
 			$isUpdated = mysqli_query($this->dbConnect, $updateQuery);		
 		}	

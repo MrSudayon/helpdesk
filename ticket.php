@@ -5,13 +5,14 @@ if(!$users->isLoggedIn()) {
 }
 include('inc/header.php');
 $user = $users->getUserInfo();
+
 ?>
 <title>Helpdesk System</title>
 <script src="js/jquery.dataTables.min.js"></script>
 <script src="js/dataTables.bootstrap.min.js"></script>		
 <link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
 <script src="js/general.js"></script>
-<script src="js/tickets.js"></script>
+<!-- <script src="js/tickets.js"></script> -->
 <!-- <script src="js/purchase.js"></script> -->
 <link rel="stylesheet" href="css/style.css" />
 <?php include('inc/container.php');?>
@@ -50,9 +51,11 @@ $user = $users->getUserInfo();
 				<tr>
 					<th>S/N</th>
 					<th>Ticket ID</th>
-					<th>Subject</th>
+					<th style="width: 100%;">Subject</th>
 					<th>Department</th>
-					<th>Requested by</th>					
+					<?php if(isset($_SESSION["admin"])) { ?>
+						<th>Requested by</th>		
+					<?php } ?>
 					<th>Created By</th>					
 					<th>Created</th>	
 					<th>Status</th>
@@ -64,6 +67,11 @@ $user = $users->getUserInfo();
 			</thead>
 		</table>
 	</div>
+	<script>
+		// Expose session role to JavaScript
+		window.sessionRole = "<?php echo $user["user_type"]; ?>";
+	</script>
+	<script src="js/tickets.js"></script>
 	<?php include('add_ticket_model.php'); ?>
 	 <!-- include('add_purchase_model.php');  -->
 </div>	

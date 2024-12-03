@@ -27,7 +27,7 @@ include('inc/header.php');
 
 					<div style="margin-bottom: 25px" class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-						<input type="email" class="form-control" id="email" name="email" placeholder="email" style="background:white;" required>                                        
+						<input type="email" class="form-control" id="email" name="email" placeholder="username" style="background:white;" required>                                        
 					</div>                                
 
 					<input type="hidden" id="role" name="role" value="user">                                        

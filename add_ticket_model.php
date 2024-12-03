@@ -8,11 +8,16 @@
 					<h4 class="modal-title"></h4>
 				</div>
 				<div class="modal-body">
+					<?php if(isset($_SESSION["admin"])) { ?>
 					<div class="form-group">
 						<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
 					</div>
-
+					<?php } else { ?>
+					<div class="form-group"> 
+						<input type="hidden" class="form-control" id="name" name="name" value="<?php echo $_SESSION["user_name"]; ?>" required>
+					</div>
+					<?php } ?>
 					<div class="form-group">
 						<label for="subjectName" class="control-label">Subject</label>
 						<!-- <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required> -->

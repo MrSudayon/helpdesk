@@ -48,8 +48,13 @@ $(document).ready(function() {
 	// 	});			
 
 
-
 	if ($('#listTickets').length) {
+		console.log(window.sessionRole)
+		if(window.sessionRole == 'user') {
+			var Targets = [8, 9, 10]
+		} else {
+			var Targets = [9, 10, 11]
+		}
 		var ticketData = $('#listTickets').DataTable({
 			"searching": true,
 			"lengthChange": true,  // Enables the page length dropdown
@@ -64,7 +69,7 @@ $(document).ready(function() {
 			},
 			"columnDefs": [
 				{
-					"targets": [9, 10, 11],
+					"targets": [Targets],
 					"orderable": false,  // Prevents ordering on these columns
 				},
 			],

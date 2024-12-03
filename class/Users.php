@@ -26,6 +26,7 @@ class Users extends Database {
 				$userDetails = mysqli_fetch_assoc($resultSet);
 				$_SESSION["userid"] = $userDetails['id'];
 				$_SESSION["user_name"] = $userDetails['name'];
+				$_SESSION["user_type"] = $userDetails['user_type'];
 				if($userDetails['user_type'] == 'admin') {
 					$_SESSION["admin"] = 1;
 				}
@@ -41,6 +42,7 @@ class Users extends Database {
 	public function registerUser() { // Registers user role only
 		 
 		if($_POST["name"] && $_POST["email"]) {
+
 			$name = $_POST["name"];
 			$email = $_POST["email"];
 			$role = $_POST["role"];
@@ -48,20 +50,31 @@ class Users extends Database {
 			$confirm = $_POST["cpass"];  
 
 			$name = strip_tags($name);			
-			$email = strip_tags($email);			
+			$email = strip_tags($email);	
 
-			if($password == $confirm) {
-				$password = md5($password);	
+			$selectUser = "SELECT * FROM ".$this->userTable." WHERE name = ? AND email = ?";
+			$stmt = $this->dbConnect->prepare($selectUser);
+			$stmt->bind_param("ss", $name, $email);
+			$stmt->execute();
+			$result = $stmt->get_result();
 
-				$queryInsert = "
-					INSERT INTO ".$this->userTable." (name, email, password, user_type, status) VALUES(
-					'$name', '$email', '$password', '$role','1')";				
-				mysqli_query($this->dbConnect, $queryInsert);	
-				
-				echo "Registered Successfully";
+			if ($result->num_rows > 0) {
+				// Record exists
+				echo "Record already exists!";
 			} else {
-				echo "Password does not match";
-			}
+				if($password == $confirm) {
+					$password = md5($password);	
+	
+					$queryInsert = "
+						INSERT INTO ".$this->userTable." (name, email, password, user_type, status) VALUES(
+						'$name', '$email', '$password', '$role','1')";				
+					mysqli_query($this->dbConnect, $queryInsert);	
+					
+					echo "Registered Successfully";
+				} else {
+					echo "Password does not match";
+				}
+			} 
 		}
 	}
 
