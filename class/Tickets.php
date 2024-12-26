@@ -85,6 +85,8 @@ class Tickets extends Database {
 			elseif ($orderColumnName == '8' || $orderColumnName == 't.dateresolved') {
 				$sqlQuery .= ' ORDER BY t.dateresolved '.$_POST['order']['0']['dir'].' ';
 			}
+			
+			
 
 		} else {
 			$sqlQuery .= 'ORDER BY t.resolved ASC, t.date DESC';
@@ -128,21 +130,55 @@ class Tickets extends Database {
 			}
 		}
 
+		function duration($start, $end) {
+			if ($start === 'On Progress' || $end === 'On Progress') {
+				return 'On Progress';
+			}
+		
+			// Convert timestamps to DateTime objects with timezone
+			try {
+				$timestampStart = (new DateTime())->setTimestamp((int)$start)->setTimezone(new DateTimeZone('Asia/Manila'));
+				$timestampEnd = (new DateTime())->setTimestamp((int)$end)->setTimezone(new DateTimeZone('Asia/Manila'));
+			} catch (Exception $e) {
+				return 'Invalid Timestamps';
+			}
+		
+			// Calculate duration
+			$interval = $timestampStart->diff($timestampEnd);
+		
+			// Build the format conditionally
+			$format = '';
+			if ($interval->d > 0) {
+				$format .= '%dd '; // Add days only if greater than 0
+			}
+			$format .= '%dh %dm'; // Always include hours and minutes
+		
+			// Return the formatted string
+			return sprintf(
+				$format,
+				$interval->d,
+				$interval->h,
+				$interval->i
+			);
+		}
+
 
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
 		$ticketData = array();	
 
 		while ($ticket = mysqli_fetch_assoc($result)) {
+
 			$status = ($ticket['resolved'] == 0)
 				? '<span class="label label-success">Open</span>'
 				: '<span class="label label-danger">Closed</span>';
 			$title = $ticket['title'];
+
 			if((isset($_SESSION["admin"]) && !$ticket['admin_read'] && $ticket['last_reply'] != $_SESSION["userid"]) 
 			|| (!isset($_SESSION["admin"]) && !$ticket['user_read'] && $ticket['last_reply'] != $ticket['user'])) {
 				$title = $this->getRepliedTitle($ticket['title']);			
 			}
-		
-
+			
+			$texts = 'ste';
 			$disbaled = '';
 			if(!isset($_SESSION["admin"])) {
 				$disbaled = 'disabled';
@@ -154,7 +190,8 @@ class Tickets extends Database {
 					$ticket['creater'],
 					formatDateOrDaysAgo($ticket['date']),
 					$status,
-					formatDateOrDaysAgo($ticket['dateresolved']),
+					// formatDateOrDaysAgo($ticket['dateresolved']),
+					duration($ticket['date'], $ticket['dateresolved']),
 					'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
 					'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
 					'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
@@ -169,7 +206,8 @@ class Tickets extends Database {
 					$ticket['creater'],
 					formatDateOrDaysAgo($ticket['date']),
 					$status,
-					formatDateOrDaysAgo($ticket['dateresolved']),
+					// formatDateOrDaysAgo($ticket['dateresolved']),
+					duration($ticket['date'], $ticket['dateresolved']),
 					'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
 					'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
 					'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'

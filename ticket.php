@@ -59,7 +59,8 @@ $user = $users->getUserInfo();
 					<th>Created By</th>					
 					<th>Created</th>	
 					<th>Status</th>
-					<th>Resolved</th>
+					<!-- <th>Resolved</th> -->
+					<th>Duration</th>
 					<th></th>
 					<th></th>
 					<th></th>					
