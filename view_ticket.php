@@ -14,14 +14,14 @@ $user = $users->getUserInfo();
 $tickets->updateTicketReadStatus($ticketDetails['id']);
 ?>	
 
-<title>Helpdesk System</title>
+<title>Helpdesk</title>
 <script src="js/general.js"></script>
 <script src="js/tickets.js"></script>
 <link rel="stylesheet" href="css/style.css" />
 <?php include('inc/container.php');?>
 <div class="container">
 	<div class="row home-sections">
-	<h2>Helpdesk System</h2>	
+	<h2>Helpdesk</h2>	
 	<?php include('menus.php'); ?>		
 	</div> 
 	

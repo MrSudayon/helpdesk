@@ -8,7 +8,7 @@ if(!$users->isLoggedIn()) {
 include('inc/header.php');
 $user = $users->getUserInfo();
 ?>
-	<title>Helpdesk System</title>
+	<title>Helpdesk</title>
 
 	<script src="js/jquery.dataTables.min.js"></script>
 	<script src="js/dataTables.bootstrap.min.js"></script>		
@@ -20,7 +20,7 @@ $user = $users->getUserInfo();
 
 <div class="container">	
 	<div class="row home-sections">
-	<h2>Helpdesk System</h2>	
+	<h2>Helpdesk</h2>	
 	<?php include('menus.php'); ?>		
 	</div> 
 	
@@ -39,7 +39,7 @@ $user = $users->getUserInfo();
 		<thead>
 			<tr>
 				<!-- <th>S/N</th> -->
-				<th>Department</th>					
+				<th>Division</th>					
 				<th>Status</th>
 				<th></th>
 				<th></th>									
@@ -57,7 +57,7 @@ $user = $users->getUserInfo();
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="department" class="control-label">Department</label>
+							<label for="department" class="control-label">Division</label>
 							<input type="text" class="form-control" id="departmentName" name="departmentName" placeholder="Department..." required>			
 						</div>
 						<div class="form-group">

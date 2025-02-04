@@ -26,8 +26,8 @@
 						</select>	
 					</div>
 					<div class="form-group">
-						<label for="subjectName" class="control-label">Department</label>							
-						<select id="departmentName" name="departmentName" class="form-control" placeholder="Department...">					
+						<label for="subjectName" class="control-label">Division</label>							
+						<select id="departmentName" name="departmentName" class="form-control" placeholder="Division...">					
 							<?php $tickets->getDepartments(); ?>
 						</select>						
 					</div>						

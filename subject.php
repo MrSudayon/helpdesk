@@ -8,7 +8,7 @@ if(!$users->isLoggedIn()) {
 include('inc/header.php');
 $user = $users->getUserInfo();
 ?>
-	<title>Helpdesk System</title>
+	<title>Helpdesk</title>
 
 	<script src="js/jquery.dataTables.min.js"></script>
 	<script src="js/dataTables.bootstrap.min.js"></script>		
@@ -21,7 +21,7 @@ $user = $users->getUserInfo();
 
 <div class="container">	
 	<div class="row home-sections">
-	<h2>Helpdesk System</h2>	
+	<h2>Helpdesk</h2>	
 	<?php include('menus.php'); ?>		
 	</div> 
 	

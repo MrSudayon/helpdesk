@@ -9,7 +9,7 @@ include('inc/header.php');
 
 $user = $users->getUserInfo();
 ?>
-	<title>Helpdesk System</title>
+	<title>Helpdesk</title>
 
 	<script src="js/jquery.dataTables.min.js"></script>
 	<script src="js/dataTables.bootstrap.min.js"></script>		
@@ -21,7 +21,7 @@ $user = $users->getUserInfo();
 
 <div class="container">	
 	<div class="row home-sections">
-	<h2>Helpdesk System</h2>	
+	<h2>Helpdesk</h2>	
 	
 	<?php include('menus.php'); ?>		
 	</div> 
@@ -42,7 +42,7 @@ $user = $users->getUserInfo();
 			<tr>
 				<th>S/N</th>
 				<th>Name</th>					
-				<th>Email</th>
+				<th>Username</th>
 				<th>Created</th>
 				<th>Role</th>
 				<th>Status</th>
@@ -67,8 +67,8 @@ $user = $users->getUserInfo();
 						</div>
 						
 						<div class="form-group"
-							<label for="username" class="control-label">Email*</label>
-							<input type="email" class="form-control" id="email" name="email" placeholder="Email" required>			
+							<label for="username" class="control-label">Username*</label>
+							<input type="text" class="form-control" id="email" name="email" placeholder="Email" required>			
 						</div>
 						
 						<div class="form-group">

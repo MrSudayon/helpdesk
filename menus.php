@@ -6,7 +6,7 @@
 			<!-- <li id="purchase"><a href="department.php"></a></li> -->
 			<?php if(isset($_SESSION["admin"])) { ?>
 				<li id="subject"><a href="subject.php" >Subject</a></li>
-				<li id="department"><a href="department.php" >Department</a></li>
+				<li id="department"><a href="department.php" >Division</a></li>
 				<li id="user"><a href="user.php" >Users</a></li>				
 			<?php } ?>						
 		</ul>
