@@ -5,7 +5,6 @@ if(!$users->isLoggedIn()) {
 }
 include('inc/header.php');
 $user = $users->getUserInfo();
-
 ?>
 <title>Helpdesk</title>
 <script src="js/jquery.dataTables.min.js"></script>

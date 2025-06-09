@@ -1,5 +1,4 @@
 <?php
-
 class Tickets extends Database {  
     private $ticketTable = 'hd_tickets';
 	private $ticketRepliesTable = 'hd_ticket_replies';
@@ -203,7 +202,6 @@ class Tickets extends Database {
 					$ticket['creater'],
 					formatDateOrDaysAgo($ticket['date']),
 					$status,
-					// formatDateOrDaysAgo($ticket['dateresolved']),
 					duration($ticket['date'], $ticket['dateresolved']),
 					'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
 					'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
@@ -219,29 +217,13 @@ class Tickets extends Database {
 					$ticket['creater'],
 					formatDateOrDaysAgo($ticket['date']),
 					$status,
-					// formatDateOrDaysAgo($ticket['dateresolved']),
 					duration($ticket['date'], $ticket['dateresolved']),
 					'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
 					'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
 					'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
 				);
 			}
-			
-			// $ticketData[] = array(
-			// 	$ticket['id'],
-			// 	$ticket['uniqid'],
-			// 	$title,
-			// 	$ticket['department'],
-			// 	$ticket['cfor'],
-			// 	$ticket['creater'],
-			// 	formatDateOrDaysAgo($ticket['date']),
-			// 	$status,
-			// 	// $ticket['dateresolved'],
-			// 	formatDateOrDaysAgo($ticket['dateresolved']),
-			// 	'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
-			// 	'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
-			// 	'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
-			// );
+
 		}
 		// Prepare the JSON response for DataTables
 		$output = array(
@@ -259,6 +241,7 @@ class Tickets extends Database {
 	}
 
 	public function createTicket() {
+
 		if (!empty($_POST['subjectName']) && !empty($_POST['message'])) {
 			$date = (new DateTime())->getTimestamp();
 			$uniqid = uniqid();
@@ -270,50 +253,56 @@ class Tickets extends Database {
 			VALUES('$uniqid', '{$_SESSION["userid"]}', '{$_POST['name']}', '{$_POST['subjectName']}', 
 			'$ticketMessage', '{$_POST['departmentName']}', '$date', 'On Progress', 0, 0, 0, '{$_POST['status']}')";
 
-			mysqli_query($this->dbConnect, $queryInsert);
+			$result = mysqli_query($this->dbConnect, $queryInsert);
 
-			// 📧 Send Email Notification
-			require 'vendor/autoload.php'; // If using Composer
+			if($result) {
+				$ticketDetails = $this->ticketInfo($uniqid);
 
-			$mail = new PHPMailer\PHPMailer\PHPMailer(true);
+				$user = $ticketDetails['creater'];
+				$subject = $ticketDetails['subject'];
+				$department = $ticketDetails['department'];
 
-			$mail->SMTPDebug = 2; // Verbose output
-			$mail->Debugoutput = 'error_log'; // Send debug to error_log
-			try {
-				$mail->isSMTP();
-				$mail->SMTPDebug = 2;
-				$mail->Host       = 'smtp.gmail.com';        // or your provider
-				$mail->SMTPAuth   = true;
-				$mail->Username   = 'sudayonfernando01@gmail.com';  // must be real
-				$mail->Password   = 'ivfn tofh iych hkdd';     // Gmail: use App Password
-				$mail->SMTPSecure = 'tls';
-				$mail->Port       = 587;
+				// 📧 Send Email Notification
+				require 'vendor/autoload.php'; // If using Composer
 
-				$mail->setFrom('fpsudayon@oxc-ph.com', 'Ticket System');
-                $mail->addAddress('fpsudayon@oxc-ph.com', 'FPSudayon'); // ✅ Required!
-                // $mail->addAddress('ebsantos@oxc-ph.com', 'EBSantos'); // ✅ Required!
+				$mail = new PHPMailer\PHPMailer\PHPMailer(true);
+	
+				$mail->SMTPDebug = 2; // Verbose output
+				$mail->Debugoutput = 'error_log'; // Send debug to error_log
+
+				try {
+					$mail->isSMTP();
+					$mail->isHTML(true);
+					$mail->SMTPDebug = 2;
+					$mail->Host       = 'smtp.gmail.com';   
+					$mail->SMTPAuth   = true;
+					$mail->Username   = 'sudayonfernando01@gmail.com';
+					$mail->Password   = 'ivfn tofh iych hkdd';    
+					$mail->SMTPSecure = 'tls';
+					$mail->Port       = 587;
+
+					$mail->setFrom('fpsudayon@oxc-phdepartment.com', 'Ticket System');
+					$mail->addAddress('fpsudayon@oxc-ph.com', 'FPSudayon'); 
+					$mail->addAddress('ebsantos@oxc-ph.com', 'EBSantos');  
 
 
-				$mail->Subject = "New Ticket: " . htmlspecialchars($_POST['subjectName']);
-				$mail->Body = <<<EOD
-				<h2>A new ticket has been submitted!</h2>
+					$mail->Subject = "New Ticket: " . $subject; 
+					$mail->Body = "<h3>A new ticket has been submitted!</h3>
+						Ticket ID: <i><strong>$uniqid</strong></i><br>
+						From: <strong>$user</strong><br>
+						Subject: <strong>$subject</strong><br>
+						Message: <strong>$ticketMessage</strong>
+						<br><br>
+						Department: <strong>$department</strong>
+					";
+					$mail->send();
+				} catch (Exception $e) {
+					error_log("Mailer Error: {$mail->$e}");
+				}
 
-				Ticket ID: $uniqid
-				From: {$_SESSION["name"]}
-				Subject: {$_POST['subjectName']}
-				<b>Message:<b>
-				$ticketMessage
-
-				Department: {$_POST['departmentName']}
-				Status: {$_POST['status']}
-				EOD;
-
-				$mail->send();
-			} catch (Exception $e) {
-				error_log("Mailer Error: {$mail->ErrorInfo}");
+				echo 'success ' . $uniqid;
 			}
-
-			echo 'success ' . $uniqid;
+			
 
 		} else {
 			echo '<div class="alert error">Please fill in all fields.</div>';
@@ -402,7 +391,7 @@ class Tickets extends Database {
     }	
 
     public function ticketInfo($id) {  		
-		$sqlQuery = "SELECT t.id, u.id AS uId, t.uniqid, t.title, t.user as tUser, t.createdFor as cfor, t.init_msg as tmessage, t.date, t.dateresolved, t.last_reply, t.resolved, u.name as creater, u.user_type as userType, d.name as department 
+		$sqlQuery = "SELECT t.id, u.id AS uId, t.uniqid, t.title, t.user as tUser, t.createdFor as cfor, t.init_msg as tmessage, t.date, t.dateresolved, t.last_reply, t.resolved, u.name as creater, u.user_type as userType, s.name as subject, d.name as department 
 			FROM ".$this->ticketTable." t 
 			LEFT JOIN hd_users u ON t.user = u.id 
 			LEFT JOIN hd_subjects s ON t.title = s.id 
@@ -412,6 +401,7 @@ class Tickets extends Database {
         $tickets = mysqli_fetch_assoc($result);
         return $tickets;        
     }    
+
 	public function saveTicketReplies () {
 		if($_POST['message']) {
 			$date = new DateTime();

@@ -12,78 +12,7 @@ class Purchase extends Database {
         $this->dbConnect = $this->dbConnect();
     } 
       
-	public function showPurchaseReqForm(){
-	// 	$sqlWhere = '';	
-	// 	if(!isset($_SESSION["admin"])) {
-	// 		$sqlWhere .= " WHERE t.user = '".$_SESSION["userid"]."' ";
-	// 		if(!empty($_POST["search"]["value"])){
-	// 			$sqlWhere .= " and ";
-	// 		}
-	// 	} else if(isset($_SESSION["admin"]) && !empty($_POST["search"]["value"])) {
-	// 		$sqlWhere .= " WHERE ";
-	// 	} 		
-	// 	$time = new time;  			 
-	// 	$sqlQuery = "SELECT t.id, t.uniqid, t.title, t.init_msg as message, t.date, t.last_reply, t.resolved, u.name as creater, d.name as department, u.user_type, t.user, t.user_read, t.admin_read
-	// 		FROM hd_tickets t 
-	// 		LEFT JOIN hd_users u ON t.user = u.id 
-	// 		LEFT JOIN hd_departments d ON t.department = d.id $sqlWhere ";
-	// 	if(!empty($_POST["search"]["value"])){
-	// 		$sqlQuery .= ' (uniqid LIKE "%'.$_POST["search"]["value"].'%" ';					
-	// 		$sqlQuery .= ' OR title LIKE "%'.$_POST["search"]["value"].'%" ';
-	// 		$sqlQuery .= ' OR resolved LIKE "%'.$_POST["search"]["value"].'%" ';
-	// 		$sqlQuery .= ' OR last_reply LIKE "%'.$_POST["search"]["value"].'%") ';			
-	// 	}
-	// 	if(!empty($_POST["order"])){
-	// 		$sqlQuery .= 'ORDER BY '.$_POST['order']['0']['column'].' '.$_POST['order']['0']['dir'].' ';
-	// 	} else {
-	// 		$sqlQuery .= 'ORDER BY t.id DESC ';
-	// 	}
-	// 	if($_POST["length"] != -1){
-	// 		$sqlQuery .= 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
-	// 	}	
-	// 	$result = mysqli_query($this->dbConnect, $sqlQuery);
-	// 	$numRows = mysqli_num_rows($result);
-	// 	$ticketData = array();	
-	// 	while( $ticket = mysqli_fetch_assoc($result) ) {		
-	// 		$ticketRows = array();			
-	// 		$status = '';
-	// 		if($ticket['resolved'] == 0)	{
-	// 			$status = '<span class="label label-success">Open</span>';
-	// 		} else if($ticket['resolved'] == 1) {
-	// 			$status = '<span class="label label-danger">Closed</span>';
-	// 		}	
-	// 		$title = $ticket['title'];
-	// 		if((isset($_SESSION["admin"]) && !$ticket['admin_read'] && $ticket['last_reply'] != $_SESSION["userid"]) || (!isset($_SESSION["admin"]) && !$ticket['user_read'] && $ticket['last_reply'] != $ticket['user'])) {
-	// 			$title = $this->getRepliedTitle($ticket['title']);			
-	// 		}
-	// 		$disbaled = '';
-	// 		if(!isset($_SESSION["admin"])) {
-	// 			$disbaled = 'disabled';
-	// 		}			
-	// 		$ticketRows[] = $ticket['id'];
-	// 		$ticketRows[] = $ticket['uniqid'];
-	// 		$ticketRows[] = $title;
-	// 		$ticketRows[] = $ticket['department'];
-	// 		$ticketRows[] = $ticket['creater']; 			
-	// 		$ticketRows[] = $time->ago($ticket['date']);
-	// 		$ticketRows[] = $status;
-	// 		$ticketRows[] = '<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>';	
-	// 		$ticketRows[] = '<button type="button" name="update" id="'.$ticket["id"].'" class="btn btn-warning btn-xs update" '.$disbaled.'>Edit</button>';
-	// 		$ticketRows[] = '<button type="button" name="delete" id="'.$ticket["id"].'" class="btn btn-danger btn-xs delete"  '.$disbaled.'>Close</button>';
-	// 		$ticketData[] = $ticketRows;
-	// 	}
-	// 	$output = array(
-	// 		"draw"				=>	intval($_POST["draw"]),
-	// 		"recordsTotal"  	=>  $numRows,
-	// 		"recordsFiltered" 	=> 	$numRows,
-	// 		"data"    			=> 	$ticketData
-	// 	);
-	// 	echo json_encode($output);
-	// }	
-	// public function getRepliedTitle($title) {
-	// 	$title = $title.'<span class="answered">Answered</span>';
-	// 	return $title; 		
-	}
+	
 	public function createPurchaseReqForm($data) {
 		
 		$date = new DateTime();
