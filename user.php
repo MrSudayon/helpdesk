@@ -21,8 +21,7 @@ $user = $users->getUserInfo();
 
 <div class="container">	
 	<div class="row home-sections">
-	<h2>Helpdesk</h2>	
-	
+	<img src="assets/Logo.png" style="height: 30px; margin: 20px 0;"></img>
 	<?php include('menus.php'); ?>		
 	</div> 
 	
@@ -62,13 +61,13 @@ $user = $users->getUserInfo();
 					</div>
 					<div class="modal-body">
 						<div class="form-group"
-							<label for="username" class="control-label">Name*</label>
-							<input type="text" class="form-control" id="userName" name="userName" placeholder="User name" required>			
+							<label for="userName" class="control-label">Name*</label>
+							<input type="text" class="form-control" id="userName" name="userName" placeholder="User name" autocomplete="off" required>			
 						</div>
 						
 						<div class="form-group"
-							<label for="username" class="control-label">Username*</label>
-							<input type="text" class="form-control" id="email" name="email" placeholder="Email" required>			
+							<label for="email" class="control-label">Username*</label>
+							<input type="text" class="form-control" id="email" name="email" placeholder="Email" autocomplete="off" required>			
 						</div>
 						
 						<div class="form-group">

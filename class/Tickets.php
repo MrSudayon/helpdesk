@@ -325,6 +325,7 @@ class Tickets extends Database {
 	// 		echo '<div class="alert error">Please fill in all fields.</div>';
 	// 	}
 	// }	
+	
 	public function getTicketDetails(){
 		if($_POST['ticketId']) {	
 			$sqlQuery = "
@@ -349,7 +350,7 @@ class Tickets extends Database {
 			$updateQuery = "UPDATE ".$this->ticketTable."
 			SET createdfor = '".$_POST['name']."', title = '".$_POST["subjectName"]."', department = '".$_POST["departmentName"]."', date = '".$newDate."', init_msg = '".$_POST["message"]."', resolved = '".$_POST["status"]."', dateresolved = '".$isresolved."'
 			WHERE id ='".$_POST["ticketId"]."'";
-			$isUpdated = mysqli_query($this->dbConnect, $updateQuery);		
+			$isUpdated = mysqli_query($this->dbConnect, $updateQuery);
 		}	
 	}		
 	public function closeTicket(){
@@ -361,6 +362,10 @@ class Tickets extends Database {
 				SET resolved = '1', dateresolved = '".$date."'
 				WHERE id = '".$_POST["ticketId"]."'";		
 			mysqli_query($this->dbConnect, $sqlDelete);		
+
+			// notify user in regards with their ticket
+			// re-implement policy to use their corporate email @oxc-ph
+			
 		}
 	}	
 	public function getDepartments() {       
@@ -422,27 +427,6 @@ class Tickets extends Database {
 				SET last_reply = '".$_SESSION["userid"]."', user_read = '0', admin_read = '0' 
 				WHERE id = '".$_POST['ticketId']."'";				
 			mysqli_query($this->dbConnect, $updateTicket);
-			
-			// Email user $ticketDetails['cfor'] when replied
-			// Condition if users email exists, ignore if not
-			$ticketDetails = $this->ticketInfo($_POST['ticketId']);
-			// $userDetails = $this->getUserInfo($ticketDetails['cfor']);
-			// get the userId of the ticket owner/user
-			$userDetails = $users->getInformation($ticketDetails['cfor']);
-
-			if ($userDetails['email']) {
-				$to = $userDetails['email'];
-				$subject = 'Ticket Replied';
-				$message = 'Your ticket has been replied. Please login to view the reply.';
-				$headers = 'From:
-				'.$userDetails['email'].'' . "\r\n" .
-				'Reply-To: '.$userDetails['email'].'' . "\r\n" .
-				'X-Mailer: PHP/' . phpversion();
-				mail($to, $subject, $message, $headers);
-			} else {
-				echo "yess progress";
-				exit();
-			}
 		} 
 	}	
 	public function getTicketReplies($id) {  		

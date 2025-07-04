@@ -14,7 +14,7 @@ include('inc/header.php');
 	<h2>Register</h2>	
 	<div class="col-md-6">                    
 		<div class="panel panel-info">
-			<div class="panel-heading" style="background:#00796B;color:white;">
+			<div class="panel-heading" style="background:#647484;color:white;font-weight:bold;">
 				<div class="panel-title">Register</div>                        
 			</div> 
 			<div style="padding-top:30px" class="panel-body" >
@@ -22,12 +22,12 @@ include('inc/header.php');
 				<form id="registerform" class="form-horizontal" role="form" method="POST">              
                     <div style="margin-bottom: 25px" class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-						<input type="text" class="form-control" id="name" name="name" placeholder="Fullname" style="background:white;" required>                                        
+						<input type="text" class="form-control" id="name" name="name" placeholder="Fullname" style="background:white;" autocomplete="off" required>                                        
 					</div>     
 
 					<div style="margin-bottom: 25px" class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-						<input type="text" class="form-control" id="email" name="email" placeholder="username" style="background:white;" required>                                        
+						<input type="text" class="form-control" id="email" name="email" placeholder="username" style="background:white;" autocomplete="off" required>                                        
 					</div>                                
 
 					<input type="hidden" id="role" name="role" value="user">                                        

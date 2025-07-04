@@ -2,6 +2,7 @@
 class Users extends Database { 
 	private $userTable = 'hd_users';
 	private $dbConnect = false;
+	
 	public function __construct(){		
         $this->dbConnect = $this->dbConnect();
     }	
@@ -30,7 +31,7 @@ class Users extends Database {
 				if($userDetails['user_type'] == 'admin') {
 					$_SESSION["admin"] = 1;
 				}
-				header("location: ticket.php"); 		
+				header("location: introduction.php"); 		
 			} else {		
 				$errorMessage = "Invalid login!";		 
 			}

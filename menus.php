@@ -1,12 +1,14 @@
-<nav class="navbar navbar-inverse" style="background:#00796B;color:#f6f8f9;font-weight:bold;">
+<!-- <nav class="navbar navbar-inverse" style="background:#00796B;color:#f6f8f9;font-weight:bold;"> -->
+<nav class="navbar navbar-inverse" style="background:#647484;color:white;font-weight:bold;">
 	<div class="container-fluid">		
 		<ul class="nav navbar-nav menus">
-			<li id="ticket"><a href="ticket.php" class="navbar-brand">Ticket</a></li>
-			<!-- <li id="requests"><a href="purchase_requests.php" >Purchase Form</a></li> -->
-			<!-- <li id="purchase"><a href="department.php"></a></li> -->
+			<li id="introduction"><a href="introduction.php" class="navbar-brand">Intro</a></li>
+			<li id="tutorial"><a href="tutorial.php">Tutorials</a></li>
+
+			<li id="ticket"><a href="ticket.php">Ticket</a></li>
 			<?php if(isset($_SESSION["admin"])) { ?>
 				<li id="subject"><a href="subject.php" >Subject</a></li>
-				<li id="department"><a href="department.php" >Division</a></li>
+				<li id="department"><a href="department.php" >Department</a></li>
 				<li id="user"><a href="user.php" >Users</a></li>				
 			<?php } ?>						
 		</ul>

@@ -1,28 +1,5 @@
 $(document).ready(function() {        
 	
-	// var userData = $('#listUser').DataTable({
-	// 	"searching": false,
-	// 	"lengthChange": true,
-	// 	"processing":true,
-	// 	"serverSide":true,
-	// 	'serverMethod': 'post',
-	// 	"order":[],
-	// 	"ajax":{
-	// 		url:"user_action.php",
-	// 		type:"POST",
-	// 		data:{action:'listUser'},
-	// 		dataType:"json",
-	// 	},
-	// 	"columnDefs":[
-	// 		{
-	// 			"targets":[0, 6, 7],
-	// 			"orderable":false,
-	// 		},
-	// 	],
-	// 	"paginate": true,
-	// 	"pageLength": 10
-	// });	
-
 	var userData = $('#listUser').DataTable({
 		"searching": true,
 		"processing":true,

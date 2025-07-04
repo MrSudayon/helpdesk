@@ -11,13 +11,10 @@ $user = $users->getUserInfo();
 <script src="js/dataTables.bootstrap.min.js"></script>		
 <link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
 <script src="js/general.js"></script>
-<!-- <script src="js/tickets.js"></script> -->
-<!-- <script src="js/purchase.js"></script> -->
 <link rel="stylesheet" href="css/style.css" />
-<?php include('inc/container.php');?>
 <div class="container">	
 	<div class="row home-sections">
-	<h2>Helpdesk</h2>	
+	<img src="assets/Logo.png" style="height: 30px; margin: 20px 0;"></img>
 	<?php include('menus.php'); ?>		
 	</div> 
 	<div class="">   		
@@ -43,7 +40,6 @@ $user = $users->getUserInfo();
 				</div>
 			</div>
 		</div>
-		
 
 		<table id="listTickets" class="table table-bordered table-striped">	
 			<thead>
@@ -58,7 +54,6 @@ $user = $users->getUserInfo();
 					<th>Created By</th>					
 					<th>Created</th>	
 					<th>Status</th>
-					<!-- <th>Resolved</th> -->
 					<th>Duration</th>
 					<th></th>
 					<th></th>

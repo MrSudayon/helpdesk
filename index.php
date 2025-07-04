@@ -3,7 +3,7 @@ include 'init.php';
 if(!$users->isLoggedIn()) {
 	header("Location: login.php");	
 } else {
-	header("Location: ticket.php");	
+	header("Location: introduction.php");	
 }
 include('inc/header.php');
 $user = $users->getUserInfo();

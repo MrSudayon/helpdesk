@@ -23,31 +23,6 @@ $(document).ready(function() {
 	});	
 
 
-	// if($('#listTickets').length) {
-	// ($('#listTickets').length) {
-	// 	var ticketData = $('#listTickets').DataTable({
-	// 		"searching": true,
-	// 		"lengthChange": false,
-	// 		"processing":true,
-	// 		"serverSide":true,
-	// 		"order":[],
-	// 		"ajax":{
-	// 			url:"ticket_action.php",
-	// 			type:"POST",
-	// 			data:{action:'listTicket'},
-	// 			dataType:"json"
-	// 		},
-	// 		"columnDefs":[
-	// 			{
-	// 				"targets":[8, 9, 10],
-	// 				"orderable":false,
-	// 			},
-	// 		],
-	// 		"paginate": true,
-	// 		"pageLength": 5
-	// 	});			
-
-
 	if ($('#listTickets').length) {
 		console.log(window.sessionRole)
 		if(window.sessionRole == 'user') {
@@ -69,7 +44,7 @@ $(document).ready(function() {
 			},
 			"columnDefs": [
 				{
-					"targets": [Targets],
+					"targets": Targets,
 					"orderable": false,  // Prevents ordering on these columns
 				},
 			],
