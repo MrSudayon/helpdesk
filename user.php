@@ -5,6 +5,15 @@ if(!$users->isLoggedIn()) {
 	header("Location: login.php");	
 }
 
+if (isset($_SESSION['LAST_ACTIVITY']) && 
+    (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php"); // redirect to login
+    exit();
+}
+$_SESSION['LAST_ACTIVITY'] = time();
+
 include('inc/header.php');
 
 $user = $users->getUserInfo();
@@ -21,8 +30,7 @@ $user = $users->getUserInfo();
 
 <div class="container">	
 	<div class="row home-sections">
-	<h2>Helpdesk</h2>	
-	
+	<img src="assets/Logo.png" style="height: 30px; margin: 20px 0;"></img>
 	<?php include('menus.php'); ?>		
 	</div> 
 	
@@ -43,6 +51,7 @@ $user = $users->getUserInfo();
 				<th>S/N</th>
 				<th>Name</th>					
 				<th>Username</th>
+				<th>Department</th>
 				<th>Created</th>
 				<th>Role</th>
 				<th>Status</th>
@@ -62,22 +71,27 @@ $user = $users->getUserInfo();
 					</div>
 					<div class="modal-body">
 						<div class="form-group"
-							<label for="username" class="control-label">Name*</label>
-							<input type="text" class="form-control" id="userName" name="userName" placeholder="User name" required>			
+							<label for="userName" class="control-label">Name*</label>
+							<input type="text" class="form-control" id="userName" name="userName" placeholder="User name" autocomplete="off" required>			
 						</div>
 						
 						<div class="form-group"
-							<label for="username" class="control-label">Username*</label>
-							<input type="text" class="form-control" id="email" name="email" placeholder="Email" required>			
+							<label for="email" class="control-label">Username*</label>
+							<input type="text" class="form-control" id="email" name="email" placeholder="Email" autocomplete="off" required>			
 						</div>
 						
 						<div class="form-group">
-							<label for="status" class="control-label">Role</label>				
+							<label for="departmentName" class="control-label">Department</label>				
+							<select id="departmentName" name="departmentName" class="form-control" placeholder="Division...">					
+								<?php $tickets->getDepartments(); ?>
+							</select>							
+						</div>	
+
+						<div class="form-group">
+							<label for="role" class="control-label">Role</label>				
 							<select id="role" name="role" class="form-control">
 								<option value="admin">Admin</option>				
 								<option value="user">Member</option>	
-								<!-- <option value="approver1">2nd Approver</option>	
-								<option value="approver2">Final Approver</option>	 -->
 							</select>						
 						</div>	
 						

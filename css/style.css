@@ -1,4 +1,3 @@
-
 .ticket-subject {
 	font-weight:bold;
 	font-size:15px;
@@ -55,7 +54,7 @@ input[type=radio],
     bottom: 0;
     height: 2px;
     width: 100%;
-    background: green;
+    background: yellow;
 }
 .title {
     margin-top: 0px;
@@ -71,4 +70,21 @@ input[type=radio],
 }
 .count {
     text-align: center;
+}
+
+
+/* Introduction */
+.mainSubject {
+    font-size: 2.5em;
+}
+.subject {
+    font-size: 1.5em;
+}
+.lists li {
+    word-spacing: 1px;
+    margin: 20px 10px;
+}
+#courtesy {
+    font-size: 12px;
+    font-style: italic;
 }

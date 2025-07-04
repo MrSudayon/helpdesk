@@ -20,8 +20,8 @@ $user = $users->getUserInfo();
 
 <div class="container">	
 	<div class="row home-sections">
-	<h2>Helpdesk</h2>	
-	<?php include('menus.php'); ?>		
+		<img src="assets/Logo.png" style="height: 30px; margin: 20px 0;"></img>	
+		<?php include('menus.php'); ?>		
 	</div> 
 	
 	<div class="panel-heading">
@@ -57,7 +57,7 @@ $user = $users->getUserInfo();
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="department" class="control-label">Division</label>
+							<label for="departmentName" class="control-label">Division</label>
 							<input type="text" class="form-control" id="departmentName" name="departmentName" placeholder="Department..." required>			
 						</div>
 						<div class="form-group">
