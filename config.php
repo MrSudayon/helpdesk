@@ -2,4 +2,4 @@
 $host = "localhost";
 $username = "root";
 $password = "";
-$database = "helpdesk_system";
+$database = "helpdesk";

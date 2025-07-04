@@ -13,6 +13,7 @@ if(!empty($_POST['action']) && $_POST['action'] == 'getUserDetails') {
 if(!empty($_POST['action']) && $_POST['action'] == 'addUser') {
 	$users->userName = $_POST["userName"];
 	$users->email = $_POST["email"];
+	$users->department = $_POST["departmentName"];
 	$users->role = $_POST["role"];
 	$users->newPassword = $_POST["newPassword"];
     $users->status = $_POST["status"];   
@@ -23,6 +24,7 @@ if(!empty($_POST['action']) && $_POST['action'] == 'updateUser') {
 	$users->updateUserId = $_POST["userId"]; 
 	$users->userName = $_POST["userName"];
 	$users->email = $_POST["email"];
+	$users->department = $_POST["departmentName"];
 	$users->role = $_POST["role"];
 	$users->newPassword = $_POST["newPassword"];
     $users->status = $_POST["status"]; 

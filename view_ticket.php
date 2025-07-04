@@ -106,9 +106,8 @@ $tickets->updateTicketReadStatus($ticketDetails['id']);
 				</div>
 			</article> 
 			<input type="hidden" name="ticketId" id="ticketId" value="<?php echo $ticketDetails['id']; ?>" />	
-			<input type="hidden" name="action" id="action" value="saveTicketReplies" />			
+			<input type="hidden" name="action" id="action" value="saveTicketReplies"/>			
 		</form>
 	</section>	
-	<?php include('add_ticket_model.php'); ?>
 </div>
 <?php include('inc/footer.php');?>

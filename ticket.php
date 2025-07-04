@@ -3,22 +3,28 @@ include 'init.php';
 if(!$users->isLoggedIn()) {
 	header("Location: login.php");	
 }
+if (isset($_SESSION['LAST_ACTIVITY']) && 
+    (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php"); // redirect to login
+    exit();
+}
+$_SESSION['LAST_ACTIVITY'] = time();
+
 include('inc/header.php');
 $user = $users->getUserInfo();
-
+$ticket = $tickets->getTicketDetails();
 ?>
 <title>Helpdesk</title>
 <script src="js/jquery.dataTables.min.js"></script>
 <script src="js/dataTables.bootstrap.min.js"></script>		
 <link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
 <script src="js/general.js"></script>
-<!-- <script src="js/tickets.js"></script> -->
-<!-- <script src="js/purchase.js"></script> -->
 <link rel="stylesheet" href="css/style.css" />
-<?php include('inc/container.php');?>
 <div class="container">	
 	<div class="row home-sections">
-	<h2>Helpdesk</h2>	
+	<img src="assets/Logo.png" style="height: 30px; margin: 20px 0;"></img>
 	<?php include('menus.php'); ?>		
 	</div> 
 	<div class="">   		
@@ -30,7 +36,6 @@ $user = $users->getUserInfo();
 			<div class="count">Open Tickets: <h1><?php echo $database->openTicketCount(); ?></h1></div>
 			<div class="count">Closed Tickets: <h1><?php echo $database->closedTicketCount(); ?></h1></div>
 			<?php } ?>
-			
 		</div>
 			
 		<div class="panel-heading">
@@ -44,8 +49,10 @@ $user = $users->getUserInfo();
 				</div>
 			</div>
 		</div>
-		
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/master
 		<table id="listTickets" class="table table-bordered table-striped">	
 			<thead>
 				<tr>
@@ -59,7 +66,6 @@ $user = $users->getUserInfo();
 					<th>Created By</th>					
 					<th>Created</th>	
 					<th>Status</th>
-					<!-- <th>Resolved</th> -->
 					<th>Duration</th>
 					<th></th>
 					<th></th>
@@ -70,6 +76,8 @@ $user = $users->getUserInfo();
 	</div>
 	<script>
 		// Expose session role to JavaScript
+		window.sessionId = "<?php echo $user["id"]; ?>";
+		window.department = "<?php echo $user["department"]; ?>";
 		window.sessionRole = "<?php echo $user["user_type"]; ?>";
 	</script>
 	<script src="js/tickets.js"></script>

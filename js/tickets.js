@@ -1,18 +1,43 @@
 $(document).ready(function() {     
+
     $(document).on('submit','#ticketReply', function(event){
 		event.preventDefault();
 		$('#reply').attr('disabled','disabled');
 		var formData = $(this).serialize();
 		$.ajax({
-			url:"ticket_action.php",
-			method:"POST",
-			data:formData,
-			success:function(data){				
-				$('#ticketReply')[0].reset();
+			url: "ticket_action.php",
+			method: "POST",
+			data: formData,
+			dataType: "json", // enforce JSON
+			success: function(data) {
+				if(data.status === "success") {
+					$('#ticketReply')[0].reset();
+					$('#reply').attr('disabled', false);
+					location.reload();
+				} else {
+					alert("Error: " + data.message);
+					$('#reply').attr('disabled', false);
+				}
+			},
+			error: function(xhr, status, error) {
+				console.error("AJAX Error:", status, error);
+				console.error(xhr.responseText);
 				$('#reply').attr('disabled', false);
-				location.reload();
 			}
-		})
+		});
+		// $.ajax({
+		// 	url:"ticket_action.php",
+		// 	method:"POST",
+		// 	data:formData,
+			
+		// 	success:function(data){				
+		// 		console.log(data);
+		// 		$('#ticketReply')[0].reset();
+		// 		$('#reply').attr('disabled', false);
+		// 		location.reload();
+		// 	}
+		// })
+		
 	});		
 	$('#createTicket').click(function(){
 		$('#ticketModal').modal('show');
@@ -23,32 +48,9 @@ $(document).ready(function() {
 	});	
 
 
-	// if($('#listTickets').length) {
-	// ($('#listTickets').length) {
-	// 	var ticketData = $('#listTickets').DataTable({
-	// 		"searching": true,
-	// 		"lengthChange": false,
-	// 		"processing":true,
-	// 		"serverSide":true,
-	// 		"order":[],
-	// 		"ajax":{
-	// 			url:"ticket_action.php",
-	// 			type:"POST",
-	// 			data:{action:'listTicket'},
-	// 			dataType:"json"
-	// 		},
-	// 		"columnDefs":[
-	// 			{
-	// 				"targets":[8, 9, 10],
-	// 				"orderable":false,
-	// 			},
-	// 		],
-	// 		"paginate": true,
-	// 		"pageLength": 5
-	// 	});			
-
-
 	if ($('#listTickets').length) {
+		console.log(window.sessionId)
+		console.log(window.department)
 		console.log(window.sessionRole)
 		if(window.sessionRole == 'user') {
 			var Targets = [8, 9, 10]
@@ -69,7 +71,7 @@ $(document).ready(function() {
 			},
 			"columnDefs": [
 				{
-					"targets": [Targets],
+					"targets": Targets,
 					"orderable": false,  // Prevents ordering on these columns
 				},
 			],
@@ -86,6 +88,8 @@ $(document).ready(function() {
 				method:"POST",
 				data:formData,
 				success:function(data){
+					console.log(data);
+
 					$('#ticketForm')[0].reset();
 					$('#ticketModal').modal('hide');				
 					$('#save').attr('disabled', false);
@@ -105,7 +109,7 @@ $(document).ready(function() {
 					console.log(data);
 					$('#ticketModal').modal('show');
 					$('#ticketId').val(data.id);
-					$('#name').val(data.createdfor);
+					$('#name').val(data.user);
 					$('#subjectName').val(data.title);
 					$('#departmentName').val(data.department);
 					$('#message').val(data.init_msg);

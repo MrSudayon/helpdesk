@@ -1,5 +1,7 @@
 <?php
 session_start();
+$timeout_duration = 3600;
+
 include 'config.php';
 
 define('HOST', $host);

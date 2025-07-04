@@ -3,8 +3,18 @@ include 'init.php';
 if(!$users->isLoggedIn()) {
 	header("Location: login.php");	
 } else {
-	header("Location: ticket.php");	
+	header("Location: introduction.php");	
 }
+
+if (isset($_SESSION['LAST_ACTIVITY']) && 
+    (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php"); // redirect to login
+    exit();
+}
+$_SESSION['LAST_ACTIVITY'] = time();
+
 include('inc/header.php');
 $user = $users->getUserInfo();
 ?>
@@ -18,7 +28,7 @@ $user = $users->getUserInfo();
 <?php include('inc/container.php');?>
 <div class="container">	
 	<div class="row home-sections">
-	<h2>Helpdesk</h2>	
+	<h2>Helpdesk index</h2>	
 	<?php include('menus.php'); ?>		
 	</div> 
 	<div class="">   		

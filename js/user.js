@@ -1,28 +1,5 @@
 $(document).ready(function() {        
 	
-	// var userData = $('#listUser').DataTable({
-	// 	"searching": false,
-	// 	"lengthChange": true,
-	// 	"processing":true,
-	// 	"serverSide":true,
-	// 	'serverMethod': 'post',
-	// 	"order":[],
-	// 	"ajax":{
-	// 		url:"user_action.php",
-	// 		type:"POST",
-	// 		data:{action:'listUser'},
-	// 		dataType:"json",
-	// 	},
-	// 	"columnDefs":[
-	// 		{
-	// 			"targets":[0, 6, 7],
-	// 			"orderable":false,
-	// 		},
-	// 	],
-	// 	"paginate": true,
-	// 	"pageLength": 10
-	// });	
-
 	var userData = $('#listUser').DataTable({
 		"searching": true,
 		"processing":true,
@@ -35,7 +12,7 @@ $(document).ready(function() {
 		},
 		"columnDefs":[
 			{
-				"targets":[0, 6, 7],
+				"targets":[0, 7, 8],
 				"orderable":false,
 			},
 		],
@@ -57,6 +34,7 @@ $(document).ready(function() {
 				$('#userId').val(data.id);
 				$('#userName').val(data.name);
 				$('#email').val(data.email);
+				$('#departmentName').val(data.department);
 				$('#role').val(data.user_type);
 				$('#status').val(data.status);				
 				$('.modal-title').html("<i class='fa fa-plus'></i> Edit User");

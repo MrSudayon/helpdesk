@@ -1,11 +1,12 @@
 <?php
-
 class Tickets extends Database {  
     private $ticketTable = 'hd_tickets';
 	private $ticketRepliesTable = 'hd_ticket_replies';
 	private $departmentsTable = 'hd_departments';
 	private $subjectsTable = 'hd_subjects';
+	private $usersTable = 'hd_users';
 	private $dbConnect = false;
+	
 	public function __construct(){		
         $this->dbConnect = $this->dbConnect();
     } 
@@ -131,35 +132,46 @@ class Tickets extends Database {
 		}
 
 		function duration($start, $end) {
-			if ($start === 'On Progress' || $end === 'On Progress') {
+		
+			if($end != 'On Progress') {
+				// Convert timestamps to DateTime objects with timezone
+				try {
+					$timestampStart = (new DateTime())->setTimestamp((int)$start)->setTimezone(new DateTimeZone('GMT+8'));
+					$timestampEnd = (new DateTime())->setTimestamp((int)$end)->setTimezone(new DateTimeZone('GMT+8'));
+				} catch (Exception $e) {
+					return 'Invalid Timestamps';
+				}
+				
+				// Ensure correct order for past duration
+				if ($start > $end) {
+					$interval = $timestampEnd->diff($timestampStart); // Swap for correct past duration
+					$past = true;
+				} else {
+					$interval = $timestampStart->diff($timestampEnd);
+					$past = false;
+				}
+				
+				// Build format conditionally
+				$format = '';
+				if ($interval->y > 0) {
+					$format .= '%yY ';
+				}
+				if ($interval->m > 0) {
+					$format .= '%mM ';
+				}
+				if ($interval->d > 0) {
+					$format .= '%dD ';
+				}
+				$format .= '%hH %iM'; // Always include hours and minutes
+				
+				// Format the output
+				$duration = sprintf($interval->format($format));
+				
+				// Add "ago" if it's in the past
+				return $past ? $duration . ' ago' : $duration;
+			} else {
 				return 'On Progress';
 			}
-		
-			// Convert timestamps to DateTime objects with timezone
-			try {
-				$timestampStart = (new DateTime())->setTimestamp((int)$start)->setTimezone(new DateTimeZone('Asia/Manila'));
-				$timestampEnd = (new DateTime())->setTimestamp((int)$end)->setTimezone(new DateTimeZone('Asia/Manila'));
-			} catch (Exception $e) {
-				return 'Invalid Timestamps';
-			}
-		
-			// Calculate duration
-			$interval = $timestampStart->diff($timestampEnd);
-		
-			// Build the format conditionally
-			$format = '';
-			if ($interval->d > 0) {
-				$format .= '%dd '; // Add days only if greater than 0
-			}
-			$format .= '%dh %dm'; // Always include hours and minutes
-		
-			// Return the formatted string
-			return sprintf(
-				$format,
-				$interval->d,
-				$interval->h,
-				$interval->i
-			);
 		}
 
 
@@ -190,7 +202,6 @@ class Tickets extends Database {
 					$ticket['creater'],
 					formatDateOrDaysAgo($ticket['date']),
 					$status,
-					// formatDateOrDaysAgo($ticket['dateresolved']),
 					duration($ticket['date'], $ticket['dateresolved']),
 					'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
 					'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
@@ -206,29 +217,13 @@ class Tickets extends Database {
 					$ticket['creater'],
 					formatDateOrDaysAgo($ticket['date']),
 					$status,
-					// formatDateOrDaysAgo($ticket['dateresolved']),
 					duration($ticket['date'], $ticket['dateresolved']),
 					'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
 					'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
 					'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
 				);
 			}
-			
-			// $ticketData[] = array(
-			// 	$ticket['id'],
-			// 	$ticket['uniqid'],
-			// 	$title,
-			// 	$ticket['department'],
-			// 	$ticket['cfor'],
-			// 	$ticket['creater'],
-			// 	formatDateOrDaysAgo($ticket['date']),
-			// 	$status,
-			// 	// $ticket['dateresolved'],
-			// 	formatDateOrDaysAgo($ticket['dateresolved']),
-			// 	'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
-			// 	'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
-			// 	'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
-			// );
+
 		}
 		// Prepare the JSON response for DataTables
 		$output = array(
@@ -245,24 +240,117 @@ class Tickets extends Database {
 		return $title; 		
 	}
 
-	public function createTicket() {      
-		if(!empty($_POST['subjectName']) && !empty($_POST['message'])) {                
-			$date = new DateTime();
-			$date = $date->getTimestamp();
-			$uniqid = uniqid();                
-			$message = strip_tags($_POST['message']);              
+	public function createTicket() {
+
+		if (!empty($_POST['subjectName']) && !empty($_POST['message'])) {
+			$date = (new DateTime('now', new DateTimeZone('GMT+8')))->getTimestamp();
+			$uniqid = uniqid();
+			$ticketMessage = mysqli_real_escape_string($this->dbConnect, $_POST['message']);
+			$userId = $_SESSION["userid"];
+			$name = $_POST["name"];
+			$subjId = $_POST["subjectName"];
+			$deptId = $_POST["departmentName"];
+			$resolved = $_POST["status"];
+
+			// Insert ticket to DB
+			$queryInsert = "INSERT INTO {$this->ticketTable} 
+				(uniqid, user, createdfor, title, init_msg, department, date, dateresolved, last_reply, user_read, admin_read, resolved) 
+				VALUES(?,?,?,?,?,?,?, 'On Progress', 0 ,0 ,0, ?)";
+
+			$result = mysqli_prepare($this->dbConnect, $queryInsert);
+			mysqli_stmt_bind_param(
+				$result,
+				"sisisiii", // corrected type string
+				$uniqid,      // s
+				$userId,      // i
+				$name,        // s
+				$subjId,      // i
+				$ticketMessage, // s
+				$deptId,      // i
+				$date,        // i
+				$resolved     // i
+			);
+			mysqli_stmt_execute($result);
+			mysqli_stmt_close($result);
+
+			// $queryInsert = "INSERT INTO {$this->ticketTable} 
+			// 	(uniqid, user, createdfor, title, init_msg, department, date, dateresolved, last_reply, user_read, admin_read, resolved)
+			// 	VALUES('$uniqid', '{$_SESSION["userid"]}', '{$_POST['name']}', '{$_POST['subjectName']}', 
+			// 	'$ticketMessage', '{$_POST['departmentName']}', '$date', 'On Progress', 0, 0, 0, '{$_POST['status']}')";
+		
+			// $result = mysqli_query($this->dbConnect, $queryInsert);
+
+			if($result) {
+				$ticketDetails = $this->ticketInfo($uniqid);
+
+				$user = $ticketDetails['creater'];
+				$subject = $ticketDetails['subject'];
+				$department = $ticketDetails['department'];
+
+				// 📧 Send Email Notification
+				require 'vendor/autoload.php'; // If using Composer
+
+				$mail = new PHPMailer\PHPMailer\PHPMailer(true);
+	
+				$mail->SMTPDebug = 2; // Verbose output
+				$mail->Debugoutput = 'error_log'; // Send debug to error_log
+
+				try {
+					$mail->isSMTP();
+					$mail->isHTML(true);
+					$mail->SMTPDebug = 2;
+					$mail->Host       = 'smtp.gmail.com';   
+					$mail->SMTPAuth   = true;
+					$mail->Username   = 'sudayonfernando01@gmail.com';
+					$mail->Password   = 'ivfn tofh iych hkdd';    
+					$mail->SMTPSecure = 'tls';
+					$mail->Port       = 587;
+
+					$mail->setFrom('fpsudayon@oxc-phdepartment.com', 'Ticket System');
+					$mail->addAddress('fpsudayon@oxc-ph.com', 'FPSudayon'); 
+					$mail->addAddress('ebsantos@oxc-ph.com', 'EBSantos');  
+
+
+					$mail->Subject = "New Ticket: " . $subject; 
+					$mail->Body = "<h3>A new ticket has been submitted!</h3>
+						Ticket ID: <i><strong>$uniqid</strong></i><br>
+						From: <strong>$user</strong><br>
+						Subject: <strong>$subject</strong><br>
+						Message: <strong>$ticketMessage</strong>
+						<br><br>
+						Department: <strong>$department</strong>
+					";
+					$mail->send();
+				} catch (Exception $e) {
+					error_log("Mailer Error: {$mail->$e}");
+				}
+
+				echo 'success ' . $uniqid;
+			}
 			
-			$queryInsert = "INSERT INTO ".$this->ticketTable." (uniqid, user, createdfor, title, init_msg, department, date, dateresolved, last_reply, user_read, admin_read, resolved) 
-			VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['name']."', '".$_POST['subjectName']."', '".$message."', '".$_POST['departmentName']."', '".$date."', 'On Progress', 0, 0, 0, '".$_POST['status']."')";		
-			
-			// $queryInsert = "INSERT INTO ".$this->ticketTable." (uniqid, user, createdfor, title, init_msg, department, date, dateresolved, last_reply, user_read, admin_read, resolved) 
-			// VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['name']."', '".$_POST['subjectName']."', '".$message."', '".$_POST['departmentName']."', '".$date."', 'On Progress', '".$_SESSION["userid"]."', 0, 0, '".$_POST['status']."')";			
-			mysqli_query($this->dbConnect, $queryInsert);			
-			echo 'success ' . $uniqid;
+
 		} else {
 			echo '<div class="alert error">Please fill in all fields.</div>';
 		}
-	}	
+	}
+
+	// public function createTicket() {      
+	// 	if(!empty($_POST['subjectName']) && !empty($_POST['message'])) {                
+	// 		$date = new DateTime();
+	// 		$date = $date->getTimestamp();
+	// 		$uniqid = uniqid();                
+	// 		$ticketMessage = mysqli_real_escape_string($this->dbConnect, $_POST['message']);
+			
+	// 		$queryInsert = "INSERT INTO ".$this->ticketTable." (uniqid, user, createdfor, title, init_msg, department, date, dateresolved, last_reply, user_read, admin_read, resolved) 
+	// 		VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['name']."', '".$_POST['subjectName']."', '".$ticketMessage."', '".$_POST['departmentName']."', '".$date."', 'On Progress', 0, 0, 0, '".$_POST['status']."')";		
+				
+	// 		mysqli_query($this->dbConnect, $queryInsert);			
+	// 		echo 'success ' . $uniqid;
+	// 	} else {
+	// 		echo '<div class="alert error">Please fill in all fields.</div>';
+	// 	}
+	// }	
+	
 	public function getTicketDetails(){
 		if($_POST['ticketId']) {	
 			$sqlQuery = "
@@ -275,7 +363,7 @@ class Tickets extends Database {
 	}
 	public function updateTicket() {
 		if($_POST['ticketId']) {	
-			$date = new DateTime();
+			$date = (new DateTime('now', new DateTimeZone('GMT+8')))->getTimestamp();
 			$date = $date->getTimestamp();
 			if($_POST["status"] == 0) {
 				$isresolved = 'On Progress';
@@ -287,23 +375,27 @@ class Tickets extends Database {
 			$updateQuery = "UPDATE ".$this->ticketTable."
 			SET createdfor = '".$_POST['name']."', title = '".$_POST["subjectName"]."', department = '".$_POST["departmentName"]."', date = '".$newDate."', init_msg = '".$_POST["message"]."', resolved = '".$_POST["status"]."', dateresolved = '".$isresolved."'
 			WHERE id ='".$_POST["ticketId"]."'";
-			$isUpdated = mysqli_query($this->dbConnect, $updateQuery);		
+			$isUpdated = mysqli_query($this->dbConnect, $updateQuery);
 		}	
 	}		
 	public function closeTicket(){
 		if($_POST["ticketId"]) {
-			$date = new DateTime();
+			$date = (new DateTime('now', new DateTimeZone('GMT+8')))->getTimestamp();
 			$date = $date->getTimestamp();
 			
 			$sqlDelete = "UPDATE ".$this->ticketTable." 
 				SET resolved = '1', dateresolved = '".$date."'
 				WHERE id = '".$_POST["ticketId"]."'";		
 			mysqli_query($this->dbConnect, $sqlDelete);		
+
+			// notify user in regards with their ticket
+			// re-implement policy to use their corporate email @oxc-ph
+			
 		}
 	}	
 	public function getDepartments() {       
 		$sqlQuery = "SELECT * FROM ".$this->departmentsTable." 
-					WHERE status=1";
+					WHERE status=1 ORDER BY name ASC";
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
 		while($department = mysqli_fetch_assoc($result) ) {       
             echo '<option value="' . $department['id'] . '">' . $department['name']  . '</option>';           
@@ -312,14 +404,24 @@ class Tickets extends Database {
 	// Subjects Category
 	public function getSubjects() {       
 		$sqlQuery = "SELECT * FROM ".$this->subjectsTable."
-					WHERE status=1";
+					WHERE status=1 ORDER BY name ASC";
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
 		while($subject = mysqli_fetch_assoc($result) ) {       
             echo '<option value="' . $subject['id'] . '">' . $subject['name']  . '</option>';           
         }
     }	
+	// Get user names
+	public function getUsers() {       
+		$sqlQuery = "SELECT * FROM ".$this->usersTable."
+					WHERE status=1 AND user_type='user' ORDER BY name ASC";
+		$result = mysqli_query($this->dbConnect, $sqlQuery);
+		while($user = mysqli_fetch_assoc($result) ) {       
+            echo '<option value="' . $user['id'] . '">' . $user['name']  . '</option>';           
+        }
+    }	
+
     public function ticketInfo($id) {  		
-		$sqlQuery = "SELECT t.id, t.uniqid, t.title, t.user as tUser, t.createdFor as cfor, t.init_msg as tmessage, t.date, t.dateresolved, t.last_reply, t.resolved, u.name as creater, u.user_type as userType, d.name as department 
+		$sqlQuery = "SELECT t.id, u.id AS uId, t.uniqid, t.title, t.user as tUser, t.createdFor as cfor, t.init_msg as tmessage, t.date, t.dateresolved, t.last_reply, t.resolved, u.name as creater, u.user_type as userType, s.name as subject, d.name as department 
 			FROM ".$this->ticketTable." t 
 			LEFT JOIN hd_users u ON t.user = u.id 
 			LEFT JOIN hd_subjects s ON t.title = s.id 
@@ -329,19 +431,56 @@ class Tickets extends Database {
         $tickets = mysqli_fetch_assoc($result);
         return $tickets;        
     }    
-	public function saveTicketReplies () {
-		if($_POST['message']) {
-			$date = new DateTime();
-			$date = $date->getTimestamp();
-			$queryInsert = "INSERT INTO ".$this->ticketRepliesTable." (user, text, ticket_id, date) 
-				VALUES('".$_SESSION["userid"]."', '".$_POST['message']."', '".$_POST['ticketId']."', '".$date."')";
-			mysqli_query($this->dbConnect, $queryInsert);				
+
+	public function saveTicketReplies() {
+		if (!empty($_POST['message']) && !empty($_POST['ticketId'])) {
+			$date = (new DateTime())->getTimestamp();
+			$ticketReply = $_POST['message'];
+			$ticketId = (int)$_POST['ticketId'];
+			$userId = (int)$_SESSION["userid"];
+
+			// $queryInsert = "INSERT INTO hd_ticket_replies (user, text, ticket_id, date, user_read) 
+			// 				VALUES ('".$userId."', '".$_POST["message"]."', '".$_POST["ticketId"]."','".$date."', 0)";
+
+			$queryInsert = "INSERT INTO {$this->ticketRepliesTable} (user, text, ticket_id, date, user_read)
+							VALUES (?,?,?,?,0)"; 
+							
+			$insstmt = mysqli_prepare($this->dbConnect, $queryInsert);
+			mysqli_stmt_bind_param($insstmt, "isis", $userId, $ticketReply, $ticketId, $date);
+			mysqli_stmt_execute($insstmt);
+			mysqli_stmt_close($insstmt);
+			// if (!mysqli_query($this->dbConnect, $queryInsert)) {
+			// 	error_log("MySQL Error: " . mysqli_error($this->dbConnect));
+			// 	exit;
+			// }
+
+			$updateTicket = "UPDATE {$this->ticketTable} 
+                         SET last_reply = ?, user_read = 0, admin_read = 0 
+                         WHERE id = ?";
+			$updstmt = mysqli_prepare($this->dbConnect, $updateTicket);
+			mysqli_stmt_bind_param($updstmt, "ii", $userId, $ticketId);
+			mysqli_stmt_execute($updstmt);
+			mysqli_stmt_close($updstmt);
+			
+<<<<<<< HEAD
 			$updateTicket = "UPDATE ".$this->ticketTable." 
 				SET last_reply = '".$_SESSION["userid"]."', user_read = '0', admin_read = '0' 
 				WHERE id = '".$_POST['ticketId']."'";				
 			mysqli_query($this->dbConnect, $updateTicket);
 		} 
 	}	
+=======
+			$response = [
+				"date" => $date,
+				"message" => $ticketReply,
+				"ticketId" => $ticketId,
+				"userId" => $userId,
+				"status" => "success"
+			];
+			echo json_encode($response);
+		}	
+	}
+>>>>>>> refs/remotes/origin/master
 	public function getTicketReplies($id) {  		
 		$sqlQuery = "SELECT r.id, r.text as message, r.date, u.name as creater, d.name as department, u.user_type  
 			FROM ".$this->ticketRepliesTable." r

@@ -1,0 +1,15 @@
+{
+    "name": "andong/helpdesk",
+    "description": "helpdesk system with email notification",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Fernandong",
+            "email": "sudayonfernando01@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "phpmailer/phpmailer": "^6.10"
+    }
+}

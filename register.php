@@ -6,7 +6,7 @@ if($users->isLoggedIn()) {
 
 include('inc/header.php');
 ?>
-	<title>Purchase Request System</title>
+	<title>Helpdesk</title>
 	<script type="text/javascript" src="js/register.js"></script>
 
 <?php include('inc/container.php');?>
@@ -14,7 +14,7 @@ include('inc/header.php');
 	<h2>Register</h2>	
 	<div class="col-md-6">                    
 		<div class="panel panel-info">
-			<div class="panel-heading" style="background:#00796B;color:white;">
+			<div class="panel-heading" style="background:#647484;color:white;font-weight:bold;">
 				<div class="panel-title">Register</div>                        
 			</div> 
 			<div style="padding-top:30px" class="panel-body" >
@@ -22,13 +22,24 @@ include('inc/header.php');
 				<form id="registerform" class="form-horizontal" role="form" method="POST">              
                     <div style="margin-bottom: 25px" class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-						<input type="text" class="form-control" id="name" name="name" placeholder="Fullname" style="background:white;" required>                                        
+						<input type="text" class="form-control" id="name" name="name" placeholder="Fullname" style="background:white;" autocomplete="off" required>                                        
 					</div>     
 
 					<div style="margin-bottom: 25px" class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-						<input type="text" class="form-control" id="email" name="email" placeholder="username" style="background:white;" required>                                        
+<<<<<<< HEAD
+						<input type="text" class="form-control" id="email" name="email" placeholder="username" style="background:white;" autocomplete="off" required>                                        
+=======
+						<input type="text" class="form-control" id="email" name="email" placeholder="your-email@oxc-ph.com" style="background:white;" autocomplete="off" required>                                        
+>>>>>>> refs/remotes/origin/master
 					</div>                                
+
+					<div style="margin-bottom: 25px" class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>		
+						<select id="departmentName" name="departmentName" class="form-control" placeholder="Division...">					
+							<?php $tickets->getDepartments(); ?>
+						</select>							
+					</div>	
 
 					<input type="hidden" id="role" name="role" value="user">                                        
 

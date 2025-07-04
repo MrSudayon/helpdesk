@@ -22,7 +22,11 @@
 					</div>	
 
 					<div class="form-group">
+<<<<<<< HEAD
 						<label for="department" class="control-label">Department</label>							
+=======
+						<label for="department" class="control-label">Division</label>							
+>>>>>>> master
 						<select id="department" name="department" class="form-control">					
 							<?php $tickets->getDepartments(); ?>
 						</select>						
