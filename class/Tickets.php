@@ -273,13 +273,6 @@ class Tickets extends Database {
 			mysqli_stmt_execute($result);
 			mysqli_stmt_close($result);
 
-			// $queryInsert = "INSERT INTO {$this->ticketTable} 
-			// 	(uniqid, user, createdfor, title, init_msg, department, date, dateresolved, last_reply, user_read, admin_read, resolved)
-			// 	VALUES('$uniqid', '{$_SESSION["userid"]}', '{$_POST['name']}', '{$_POST['subjectName']}', 
-			// 	'$ticketMessage', '{$_POST['departmentName']}', '$date', 'On Progress', 0, 0, 0, '{$_POST['status']}')";
-		
-			// $result = mysqli_query($this->dbConnect, $queryInsert);
-
 			if($result) {
 				$ticketDetails = $this->ticketInfo($uniqid);
 
@@ -333,23 +326,6 @@ class Tickets extends Database {
 			echo '<div class="alert error">Please fill in all fields.</div>';
 		}
 	}
-
-	// public function createTicket() {      
-	// 	if(!empty($_POST['subjectName']) && !empty($_POST['message'])) {                
-	// 		$date = new DateTime();
-	// 		$date = $date->getTimestamp();
-	// 		$uniqid = uniqid();                
-	// 		$ticketMessage = mysqli_real_escape_string($this->dbConnect, $_POST['message']);
-			
-	// 		$queryInsert = "INSERT INTO ".$this->ticketTable." (uniqid, user, createdfor, title, init_msg, department, date, dateresolved, last_reply, user_read, admin_read, resolved) 
-	// 		VALUES('".$uniqid."', '".$_SESSION["userid"]."', '".$_POST['name']."', '".$_POST['subjectName']."', '".$ticketMessage."', '".$_POST['departmentName']."', '".$date."', 'On Progress', 0, 0, 0, '".$_POST['status']."')";		
-				
-	// 		mysqli_query($this->dbConnect, $queryInsert);			
-	// 		echo 'success ' . $uniqid;
-	// 	} else {
-	// 		echo '<div class="alert error">Please fill in all fields.</div>';
-	// 	}
-	// }	
 	
 	public function getTicketDetails(){
 		if($_POST['ticketId']) {	
@@ -416,7 +392,7 @@ class Tickets extends Database {
 					WHERE status=1 AND user_type='user' ORDER BY name ASC";
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
 		while($user = mysqli_fetch_assoc($result) ) {       
-            echo '<option value="' . $user['id'] . '">' . $user['name']  . '</option>';           
+            echo '<option value="' . $user['name'] . '">' . $user['name']  . '</option>';           
         }
     }	
 
@@ -439,9 +415,6 @@ class Tickets extends Database {
 			$ticketId = (int)$_POST['ticketId'];
 			$userId = (int)$_SESSION["userid"];
 
-			// $queryInsert = "INSERT INTO hd_ticket_replies (user, text, ticket_id, date, user_read) 
-			// 				VALUES ('".$userId."', '".$_POST["message"]."', '".$_POST["ticketId"]."','".$date."', 0)";
-
 			$queryInsert = "INSERT INTO {$this->ticketRepliesTable} (user, text, ticket_id, date, user_read)
 							VALUES (?,?,?,?,0)"; 
 							
@@ -449,10 +422,6 @@ class Tickets extends Database {
 			mysqli_stmt_bind_param($insstmt, "isis", $userId, $ticketReply, $ticketId, $date);
 			mysqli_stmt_execute($insstmt);
 			mysqli_stmt_close($insstmt);
-			// if (!mysqli_query($this->dbConnect, $queryInsert)) {
-			// 	error_log("MySQL Error: " . mysqli_error($this->dbConnect));
-			// 	exit;
-			// }
 
 			$updateTicket = "UPDATE {$this->ticketTable} 
                          SET last_reply = ?, user_read = 0, admin_read = 0 
