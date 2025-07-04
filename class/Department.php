@@ -147,7 +147,9 @@ class Department extends Database {
 			$result = mysqli_query($this->dbConnect, $sqlQuery);	
 			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 			echo json_encode($row);
+			return $row;
 		}		
+		// return NULL;
 	}
 	
 	public function insert() {      

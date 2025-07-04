@@ -5,6 +5,16 @@ if(!$users->isLoggedIn()) {
 } else {
 	header("Location: introduction.php");	
 }
+
+if (isset($_SESSION['LAST_ACTIVITY']) && 
+    (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php"); // redirect to login
+    exit();
+}
+$_SESSION['LAST_ACTIVITY'] = time();
+
 include('inc/header.php');
 $user = $users->getUserInfo();
 ?>

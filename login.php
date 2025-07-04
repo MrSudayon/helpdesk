@@ -43,8 +43,13 @@ include('inc/header.php');
 </div>	
 <div class="mainSubject">Helpdesk Guide</div>
 	<ol class="lists">
+<<<<<<< HEAD
 		<li><b>How do I create an account?:</b> Creating account on helpdesk system is simple, upon accessing the URL of the helpdesk you will see the text ‘Register’ beside ‘Login’ button, you’ll be redirected on register form which you need to fill up with your account details etc.</li>
 		<li><b>Forgotten username or password:</b> Much better to reach out on IT Department or Helpdesk administrator for further concerns of the specified account. Forgot password is an upcoming feature for password resetting.</li>
+=======
+		<li><b>How do I create an account?:</b> Creating an account on the Helpdesk system is simple. Upon accessing the Helpdesk, click the ‘Register’ link beside the ‘Login’ button. You will be redirected to the registration form, where you can fill in your account details to get started.</li>
+		<li><b>Forgotten username or password:</b> If you forget your username or password, please contact the IT Department or Helpdesk Administrator for assistance. A ‘Forgot Password’ feature for self-service password resets is coming soon to enhance your convenience.</li>
+>>>>>>> refs/remotes/origin/master
 		<li><b>How do I know the status of the ticket?:</b> On your dashboard upon logging in to your account, you will see the status of your created Tickets if its already closed or fixed, also you can view your specific ticket to see the support’s reply or suggestion in regards with concern.</li>
 		<!-- <li><b>Urgency/Prioritization of the ticket:</b> TBA</li> -->
 	</ol>

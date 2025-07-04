@@ -4,6 +4,7 @@ function submitData(action) {
             action: action,
             name: $('#name').val(),
             email: $('#email').val(),
+            department: $('#departmentName').val(),
             role: $('#role').val(),
             pass: $('#password').val(),
             cpass: $('#cpassword').val(),

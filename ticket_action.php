@@ -1,5 +1,6 @@
 <?php
 include 'init.php';
+
 if(!empty($_POST['action']) && $_POST['action'] == 'auth') {
 	$users->login();
 }

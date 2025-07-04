@@ -3,8 +3,18 @@ include 'init.php';
 if(!$users->isLoggedIn()) {
 	header("Location: login.php");	
 }
+if (isset($_SESSION['LAST_ACTIVITY']) && 
+    (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php"); // redirect to login
+    exit();
+}
+$_SESSION['LAST_ACTIVITY'] = time();
+
 include('inc/header.php');
 $user = $users->getUserInfo();
+$ticket = $tickets->getTicketDetails();
 ?>
 <title>Helpdesk</title>
 <script src="js/jquery.dataTables.min.js"></script>
@@ -26,7 +36,6 @@ $user = $users->getUserInfo();
 			<div class="count">Open Tickets: <h1><?php echo $database->openTicketCount(); ?></h1></div>
 			<div class="count">Closed Tickets: <h1><?php echo $database->closedTicketCount(); ?></h1></div>
 			<?php } ?>
-			
 		</div>
 			
 		<div class="panel-heading">
@@ -40,7 +49,10 @@ $user = $users->getUserInfo();
 				</div>
 			</div>
 		</div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/master
 		<table id="listTickets" class="table table-bordered table-striped">	
 			<thead>
 				<tr>
@@ -64,6 +76,8 @@ $user = $users->getUserInfo();
 	</div>
 	<script>
 		// Expose session role to JavaScript
+		window.sessionId = "<?php echo $user["id"]; ?>";
+		window.department = "<?php echo $user["department"]; ?>";
 		window.sessionRole = "<?php echo $user["user_type"]; ?>";
 	</script>
 	<script src="js/tickets.js"></script>

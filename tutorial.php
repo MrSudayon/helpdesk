@@ -28,6 +28,18 @@ if(!$users->isLoggedIn()) {
 	header("Location: login.php");	
 }
 
+<<<<<<< HEAD
+=======
+if (isset($_SESSION['LAST_ACTIVITY']) && 
+    (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php"); // redirect to login
+    exit();
+}
+$_SESSION['LAST_ACTIVITY'] = time();
+
+>>>>>>> refs/remotes/origin/master
 include('inc/header.php');
 $user = $users->getUserInfo();
 ?>
@@ -49,6 +61,7 @@ $user = $users->getUserInfo();
 	</div> 
 
     <div class="mainSubject">What is Microsoft 365 for Business?</div>
+<<<<<<< HEAD
 	<video width="80%" controls>
 		<source src="assets/videos/Microsoft 365.mp4" type="video/mp4">
 		<source src="assets/videos/Microsoft 365.mp4" type="video/ogg">
@@ -56,6 +69,9 @@ $user = $users->getUserInfo();
 	</video>
 	<p id="courtesy">Video courtesy of <a href="https://support.microsoft.com/en-US/microsoft-365" target="_blank">Microsoft 365</a>.</p>
 	<!-- <br> -->
+=======
+	<div><div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;"><iframe src="https://cdn.iframe.ly/api/iframe?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DjugBQqE_2sM%26list%3DPLXPr7gfUMmKxiPKpMocZRkA-AUDI9N1RB&key=925108d922be940af814f71907a7df4b" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen scrolling="no" allow="accelerometer *; clipboard-write *; encrypted-media *; gyroscope *; picture-in-picture *; web-share *;"></iframe></div><a href="https://embedcodesgenerator.com/tools/youtube-embed-code?gad_source=1&gad_campaignid=22458335448&gbraid=0AAAAA_LxlSiub2yKPKBSZj56VKF4_Nnx2&gclid=Cj0KCQjw1JjDBhDjARIsABlM2Su-cv28vaHwtWxFFKR4mN1TeDWORcD67nKaFm7klwkGQY2_CIP3k6kaAur-EALw_wcB" rel="noopener" target="_blank" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">youtube embed code</a></div>
+>>>>>>> refs/remotes/origin/master
 	<p>With Microsoft 365 for business, connect employees to the people, information, and content they need to do their best work, from any device.</p>
 	<p>Depending on your subscription plan, the benefits of your Microsoft 365 for business subscription may include:</p>
 	<ul class="lists">
@@ -74,9 +90,14 @@ $user = $users->getUserInfo();
 	<br><br>
 	<div class="mainSubject">Get started with Microsoft Teams</div>
 		<p>Microsoft Teams is a collaboration app built for hybrid work so you and your team stay informed, organized, and connected — all in one place.</p>
+<<<<<<< HEAD
 	<video width="80%" controls>
 		<source src="assets/videos/TeamsBasics.mp4" type="video/mp4">
 		<source src="assets/videos/TeamsBasics.mp4" type="video/ogg">
+=======
+	<video width="80%" preload="auto" controls>
+		<source src="assets/videos/TeamsBasics.mp4" type="video/mp4">
+>>>>>>> refs/remotes/origin/master
 		Your browser does not support HTML video.
 	</video>
 	<p id="courtesy">Video courtesy of <a href="https://support.microsoft.com/en-US/microsoft-365" target="_blank">Microsoft 365</a>.</p>
@@ -138,7 +159,11 @@ $user = $users->getUserInfo();
 		<br>
 	<div class="subject">For Web:</div>
 	<p>Access, manage, and share your files directly from your browser with the OneDrive for Web tutorial, perfect for on-the-go users.</p>
+<<<<<<< HEAD
 	<video width="80%" controls>
+=======
+	<video width="80%" preload="auto" controls>
+>>>>>>> refs/remotes/origin/master
 		<source src="assets/videos/OneDriveforweb.mp4" type="video/mp4">
 		<source src="assets/videos/OneDriveforweb.mp4" type="video/ogg">
 		Your browser does not support HTML video.

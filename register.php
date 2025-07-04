@@ -6,7 +6,7 @@ if($users->isLoggedIn()) {
 
 include('inc/header.php');
 ?>
-	<title>Purchase Request System</title>
+	<title>Helpdesk</title>
 	<script type="text/javascript" src="js/register.js"></script>
 
 <?php include('inc/container.php');?>
@@ -27,8 +27,19 @@ include('inc/header.php');
 
 					<div style="margin-bottom: 25px" class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+<<<<<<< HEAD
 						<input type="text" class="form-control" id="email" name="email" placeholder="username" style="background:white;" autocomplete="off" required>                                        
+=======
+						<input type="text" class="form-control" id="email" name="email" placeholder="your-email@oxc-ph.com" style="background:white;" autocomplete="off" required>                                        
+>>>>>>> refs/remotes/origin/master
 					</div>                                
+
+					<div style="margin-bottom: 25px" class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>		
+						<select id="departmentName" name="departmentName" class="form-control" placeholder="Division...">					
+							<?php $tickets->getDepartments(); ?>
+						</select>							
+					</div>	
 
 					<input type="hidden" id="role" name="role" value="user">                                        
 

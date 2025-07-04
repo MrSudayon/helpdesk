@@ -1,5 +1,6 @@
 <!--
 Page changes for this feature:
+<<<<<<< HEAD
 introduction.php
 tutorial.php
 menus.php
@@ -23,6 +24,38 @@ subject.php
 department.php
 login.php
 register.php
+=======
+introduction.php#
+tutorial.php#
+menus.php
+general.js#
+style.css#
+Users.php#
+user.js#
+user.php#
+index.php#
+
+
+fixed bug on:
+tickets.js#
+add_ticket_model.php#
+ticket.php #
+subject.php#
+department.php#
+login.php#
+register.php#
+
+Pages changes for user account/department feature:
+user_action.php#
+Users.php#
+user.php#
+user.js#
+Tickets.php#
+ticket.php#
+menus.php
+register.js#
+register.php#
+>>>>>>> refs/remotes/origin/master
 -->
 
 <?php 
@@ -32,9 +65,27 @@ if(!$users->isLoggedIn()) {
 	header("Location: login.php");	
 }
 
+<<<<<<< HEAD
 include('inc/header.php');
 $user = $users->getUserInfo();
 ?>
+=======
+if (isset($_SESSION['LAST_ACTIVITY']) && 
+    (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php"); // redirect to login
+    exit();
+}
+
+$_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
+
+include('inc/header.php');
+$user = $users->getUserInfo();
+?>
+
+
+>>>>>>> refs/remotes/origin/master
 	<title>Helpdesk</title>
 
 	<script src="js/jquery.dataTables.min.js"></script>

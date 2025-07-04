@@ -12,7 +12,7 @@ $(document).ready(function() {
 		},
 		"columnDefs":[
 			{
-				"targets":[0, 6, 7],
+				"targets":[0, 7, 8],
 				"orderable":false,
 			},
 		],
@@ -34,6 +34,7 @@ $(document).ready(function() {
 				$('#userId').val(data.id);
 				$('#userName').val(data.name);
 				$('#email').val(data.email);
+				$('#departmentName').val(data.department);
 				$('#role').val(data.user_type);
 				$('#status').val(data.status);				
 				$('.modal-title').html("<i class='fa fa-plus'></i> Edit User");

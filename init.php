@@ -1,5 +1,13 @@
 <?php
 session_start();
+$timeout_duration = 3600;
+
+// introduction.php
+// tutorial.php
+// tickets.php
+// user.php
+// Users.php 
+
 include 'config.php';
 
 define('HOST', $host);
