@@ -49,10 +49,6 @@ $ticket = $tickets->getTicketDetails();
 				</div>
 			</div>
 		</div>
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/remotes/origin/master
 		<table id="listTickets" class="table table-bordered table-striped">	
 			<thead>
 				<tr>

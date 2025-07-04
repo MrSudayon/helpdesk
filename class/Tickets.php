@@ -462,14 +462,6 @@ class Tickets extends Database {
 			mysqli_stmt_execute($updstmt);
 			mysqli_stmt_close($updstmt);
 			
-<<<<<<< HEAD
-			$updateTicket = "UPDATE ".$this->ticketTable." 
-				SET last_reply = '".$_SESSION["userid"]."', user_read = '0', admin_read = '0' 
-				WHERE id = '".$_POST['ticketId']."'";				
-			mysqli_query($this->dbConnect, $updateTicket);
-		} 
-	}	
-=======
 			$response = [
 				"date" => $date,
 				"message" => $ticketReply,
@@ -480,7 +472,6 @@ class Tickets extends Database {
 			echo json_encode($response);
 		}	
 	}
->>>>>>> refs/remotes/origin/master
 	public function getTicketReplies($id) {  		
 		$sqlQuery = "SELECT r.id, r.text as message, r.date, u.name as creater, d.name as department, u.user_type  
 			FROM ".$this->ticketRepliesTable." r
