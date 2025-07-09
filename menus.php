@@ -2,7 +2,7 @@
 <nav class="navbar navbar-inverse" style="background:#647484;color:white;font-weight:bold;">
 	<div class="container-fluid">		
 		<ul class="nav navbar-nav menus">
-			<li id="introduction"><a href="introduction.php" class="navbar-brand">Intro</a></li>
+			<li id="introduction"><a href="introduction.php" class="navbar-brand">Home</a></li>
 			<li id="tutorial"><a href="tutorial.php">Tutorials</a></li>
 
 			<li id="ticket"><a href="ticket.php">Ticket</a></li>

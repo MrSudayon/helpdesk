@@ -21,11 +21,7 @@ $user = $users->getUserInfo();
 
 <div class="container">	
 	<div class="row home-sections">
-<<<<<<< HEAD
-	<h2>Helpdesk</h2>	
-=======
 	<img src="assets/Logo.png" style="height: 30px; margin: 20px 0;"></img>
->>>>>>> master
 	<?php include('menus.php'); ?>		
 	</div> 
 	
@@ -62,11 +58,7 @@ $user = $users->getUserInfo();
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-<<<<<<< HEAD
-							<label for="subject" class="control-label">Subject</label>
-=======
 							<label for="subjName" class="control-label">Subject</label>
->>>>>>> master
 							<input type="text" class="form-control" id="subjName" name="subjName" placeholder="Subject..." required>			
 						</div>
 						<div class="form-group">

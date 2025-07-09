@@ -1,4 +1,7 @@
 <?php
+// 📧 Send Email Notification
+require 'vendor/autoload.php'; // If using Composer
+
 class Tickets extends Database {  
     private $ticketTable = 'hd_tickets';
 	private $ticketRepliesTable = 'hd_ticket_replies';
@@ -6,7 +9,7 @@ class Tickets extends Database {
 	private $subjectsTable = 'hd_subjects';
 	private $usersTable = 'hd_users';
 	private $dbConnect = false;
-	
+
 	public function __construct(){		
         $this->dbConnect = $this->dbConnect();
     } 
@@ -205,7 +208,7 @@ class Tickets extends Database {
 					duration($ticket['date'], $ticket['dateresolved']),
 					'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
 					'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
-					'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
+					'<button type="button" name="delete" subject = "' . $ticket['title'] . '" uniqid = "' . $ticket['uniqid'] . '" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
 				);
 			} else {
 				$ticketData[] = array(
@@ -220,7 +223,7 @@ class Tickets extends Database {
 					duration($ticket['date'], $ticket['dateresolved']),
 					'<a href="view_ticket.php?id='.$ticket["uniqid"].'" class="btn btn-success btn-xs update">View Ticket</a>',
 					'<button type="button" name="update" id="' . $ticket["id"] . '" class="btn btn-warning btn-xs update">Edit</button>',
-					'<button type="button" name="delete" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
+					'<button type="button" name="delete" subject = "' . $ticket['title'] . '" uniqid = "' . $ticket['uniqid'] . '" id="' . $ticket["id"] . '" class="btn btn-danger btn-xs delete">Close</button>'
 				);
 			}
 
@@ -245,7 +248,8 @@ class Tickets extends Database {
 		if (!empty($_POST['subjectName']) && !empty($_POST['message'])) {
 			$date = (new DateTime('now', new DateTimeZone('GMT+8')))->getTimestamp();
 			$uniqid = uniqid();
-			$ticketMessage = mysqli_real_escape_string($this->dbConnect, $_POST['message']);
+			$message = str_replace(array("\r", "\n"), ' ', $_POST['message']);
+			$ticketMessage = mysqli_real_escape_string($this->dbConnect, $message);
 			$userId = $_SESSION["userid"];
 			$name = $_POST["name"];
 			$subjId = $_POST["subjectName"];
@@ -280,11 +284,10 @@ class Tickets extends Database {
 				$subject = $ticketDetails['subject'];
 				$department = $ticketDetails['department'];
 
-				// 📧 Send Email Notification
-				require 'vendor/autoload.php'; // If using Composer
-
+				
+				// Email
 				$mail = new PHPMailer\PHPMailer\PHPMailer(true);
-	
+				
 				$mail->SMTPDebug = 2; // Verbose output
 				$mail->Debugoutput = 'error_log'; // Send debug to error_log
 
@@ -337,6 +340,7 @@ class Tickets extends Database {
 			echo json_encode($row);
 		}
 	}
+
 	public function updateTicket() {
 		if($_POST['ticketId']) {	
 			$date = (new DateTime('now', new DateTimeZone('GMT+8')))->getTimestamp();
@@ -357,15 +361,56 @@ class Tickets extends Database {
 	public function closeTicket(){
 		if($_POST["ticketId"]) {
 			$date = (new DateTime('now', new DateTimeZone('GMT+8')))->getTimestamp();
-			$date = $date->getTimestamp();
+			$ticketId = $_POST['ticketId'];
+			$uniqId = $_POST['uniqId'];
+			$title = $_POST['title'];
+			// $date = time();
 			
 			$sqlDelete = "UPDATE ".$this->ticketTable." 
 				SET resolved = '1', dateresolved = '".$date."'
-				WHERE id = '".$_POST["ticketId"]."'";		
-			mysqli_query($this->dbConnect, $sqlDelete);		
+				WHERE id = '".$ticketId."'";		
+			$result = mysqli_query($this->dbConnect, $sqlDelete);
 
-			// notify user in regards with their ticket
-			// re-implement policy to use their corporate email @oxc-ph
+
+			if($result) {
+				// notify user in regards with their ticket
+				// re-implement policy to use their corporate email @oxc-ph
+				// $email = ;
+				$clientEmail = "@oxc-ph.com";
+				
+				// Email
+				$mail = new PHPMailer\PHPMailer\PHPMailer(true);
+				$mail->SMTPDebug = 2; // Verbose output
+				$mail->Debugoutput = 'error_log'; // Send debug to error_log
+
+				try {
+					$mail->isSMTP();
+					$mail->isHTML(true);
+					$mail->SMTPDebug = 2;
+					$mail->Host       = 'smtp.gmail.com';
+					$mail->SMTPAuth   = true;
+					$mail->Username   = 'sudayonfernando01@gmail.com';
+					$mail->Password   = 'ivfn tofh iych hkdd';    
+					$mail->SMTPSecure = 'tls';
+					$mail->Port       = 587;
+
+					$mail->setFrom('fpsudayon@oxc-ph.com', 'Ticket System');
+					$mail->addAddress($clientEmail, 'clientEmail'); 
+					$mail->addAddress('fpsudayon@oxc-ph.com', 'fpsudayon'); 
+
+					$mail->Subject = "Ticket " . $uniqId . " resolved"; 
+					$mail->Body = "Good day!<br><br>
+					We are reaching out to let you know that your helpdesk ticket with subject: ".$title."  has been resolved.<br>
+					If you believe further assistance is needed or have additional concerns regarding this ticket, please feel free to reply to this email or create a new ticket through the Helpdesk portal.<br>
+					Best regards,
+					";
+					$mail->send();
+				} catch (Exception $e) {
+					error_log("Mailer Error: {$mail->$e}");
+				}
+
+				echo 'success ' . $uniqId;
+			}
 			
 		}
 	}	

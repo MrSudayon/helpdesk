@@ -72,10 +72,11 @@ $user = $users->getUserInfo();
 		<?php include('menus.php'); ?>		
 	</div> 
 
-    <p>Welcome to the Oxychem Help Desk!<br>
-We’re here to support you with any technical concerns or general inquiries.
-Reach us anytime via email at it-team@oxc-ph.com, or submit a ticket.<br><br>
-Your ease is our priority—let’s solve it together!</p>
+    <h3>Welcome to the Oxychem Help Desk!</h3>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We’re here to support you with any technical concerns or general inquiries.
+Reach us anytime via email at it-team@oxc-ph.com, or submit a ticket.<br>
+Your ease is our priority—let’s solve it together!</p><br>
     <div class="mainSubject"> Helpdesk Flowchart </div>
 
     <br>

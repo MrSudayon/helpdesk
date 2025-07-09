@@ -195,11 +195,19 @@ class Users extends Database {
 	public function listUser() {
 		$start = $_POST['start'] ?? 0;  // Start index for pagination
 		$length = $_POST['length'] ?? 10;  // Number of records per page
+		$sqlWhere = '';	
 	
 		// Query to get total number of records without filters
 		$totalQuery = "SELECT COUNT(*) AS total FROM " . $this->userTable;
 		$totalResult = mysqli_query($this->dbConnect, $totalQuery);
 		$totalRecords = mysqli_fetch_assoc($totalResult)['total'];
+
+		if(!isset($_SESSION["admin"])) {
+			$sqlWhere .= " WHERE u.id = '".$_SESSION["userid"]."' ";
+			if(!empty($_POST["search"]["value"])){
+				$sqlWhere .= " and ";
+			}
+		}
 	
 		// Build the main query with search filter if applicable
 		$sqlQuery = "SELECT u.id as uId, u.email as uEmail, create_date, u.name as uName, u.department, user_type, u.status, d.id, d.name as deptName 
@@ -207,13 +215,12 @@ class Users extends Database {
 				LEFT JOIN hd_departments d ON u.department = d.id ";
 	
 		if (!empty($_POST["search"]["value"])) {
-			$sqlQuery .= ' WHERE id LIKE "%' . $_POST["search"]["value"] . '%" ';
-			$sqlQuery .= ' OR name LIKE "%' . $_POST["search"]["value"] . '%" ';
-			$sqlQuery .= ' OR email LIKE "%' . $_POST["search"]["value"] . '%" ';
-			$sqlQuery .= ' OR department LIKE "%' . $_POST["search"]["value"] . '%" ';
-			$sqlQuery .= ' OR create_date LIKE "%' . $_POST["search"]["value"] . '%" ';
+			$sqlQuery .= 'WHERE (u.email LIKE "%' . $_POST["search"]["value"] . '%" ';
+			$sqlQuery .= ' OR u.id LIKE "%' . $_POST["search"]["value"] . '%" ';
+			$sqlQuery .= ' OR u.name LIKE "%' . $_POST["search"]["value"] . '%" ';
+			$sqlQuery .= ' OR d.name LIKE "%' . $_POST["search"]["value"] . '%" ';
 			$sqlQuery .= ' OR user_type LIKE "%' . $_POST["search"]["value"] . '%" ';
-			$sqlQuery .= ' OR status LIKE "%' . $_POST["search"]["value"] . '%" ';
+			$sqlQuery .= ' OR u.status LIKE "%' . $_POST["search"]["value"] . '%" )';
 		}
 	
 		// Execute the filtered query to get the number of filtered records
@@ -227,7 +234,7 @@ class Users extends Database {
 			$orderColumnName = $_POST['columns'][$orderColumnIndex]['data'];
 
 			if ($orderColumnName == '1' || $orderColumnName == 'name') {
-				$sqlQuery .= ' ORDER BY name '.$_POST['order']['0']['dir'].' ';
+				$sqlQuery .= ' ORDER BY u.name '.$_POST['order']['0']['dir'].' ';
 			} 
 			elseif ($orderColumnName == '2' || $orderColumnName == 'email') {
 				$sqlQuery .= ' ORDER BY email '.$_POST['order']['0']['dir'].' ';
