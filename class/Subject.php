@@ -80,26 +80,45 @@ class Subject extends Database {
 	}
 
 	public function getSubjectDetail($id) {
-		$sqlQuery = "
-				SELECT id, name, status 
-				FROM ".$this->subjectsTable." 
-				WHERE id = '".$id."'";
-		$result = mysqli_query($this->dbConnect, $sqlQuery);	
-		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+		$stmt = $this->dbConnect->prepare("
+			SELECT id, name, status 
+			FROM ".$this->subjectsTable." 
+			WHERE id = ?
+		");
+		$stmt->bind_param("i", $id);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$row = $result->fetch_assoc();
 		return $row;
 	}
-		
+
 	public function getSubjectDetails() {
-		if($this->subjectId) {
-			$sqlQuery = "
-				SELECT id, name, status 
-				FROM ".$this->subjectsTable." 
-				WHERE id = '".$this->subjectId."'";
-			$result = mysqli_query($this->dbConnect, $sqlQuery);	
-			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-			echo json_encode($row);
-		}		
+		if ($this->subjectId) {
+			$subject = $this->getSubjectDetail($this->subjectId);
+			echo json_encode($subject);
+		}
 	}
+	// public function getSubjectDetail($id) {
+	// 	$sqlQuery = "
+	// 			SELECT id, name, status 
+	// 			FROM ".$this->subjectsTable." 
+	// 			WHERE id = '".$id."'";
+	// 	$result = mysqli_query($this->dbConnect, $sqlQuery);	
+	// 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	// 	return $row;
+	// }
+		
+	// public function getSubjectDetails() {
+	// 	if($this->subjectId) {
+	// 		$sqlQuery = "
+	// 			SELECT id, name, status 
+	// 			FROM ".$this->subjectsTable." 
+	// 			WHERE id = '".$this->subjectId."'";
+	// 		$result = mysqli_query($this->dbConnect, $sqlQuery);	
+	// 		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	// 		echo json_encode($row);
+	// 	}		
+	// }
 	
 	public function insert() {
 		if($this->subject) {		              

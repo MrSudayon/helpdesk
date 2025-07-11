@@ -106,10 +106,10 @@ $(document).ready(function() {
 				data:{ticketId:ticketId, action:action},
 				dataType:"json",
 				success:function(data){
-					console.log(data);
+					// console.log(data);
 					$('#ticketModal').modal('show');
 					$('#ticketId').val(data.id);
-					$('#name').val(data.name);
+					$('#name').val(data.createdfor);
 					$('#subjectName').val(data.title);
 					$('#departmentName').val(data.department);
 					$('#message').val(data.init_msg);
@@ -126,18 +126,23 @@ $(document).ready(function() {
 		});			
 		$(document).on('click', '.delete', function(){
 			var ticketId = $(this).attr("id");		
-			var uniqId = $(this).attr("uniqid");		
-			var title = $(this).attr("subject");		
 			var action = "closeTicket";
 		
 			if(confirm("Are you sure you want to close this ticket?")) {
-				console.log(uniqId);
-				console.log(title);
+
 				$.ajax({
 					url:"ticket_action.php",
 					method:"POST",
-					data:{ticketId:ticketId, title:title, uniqId:uniqId, action:action},
-					success:function(data) {					
+					// data:{ticketId:ticketId, title:title, uniqId:uniqId, action:action},
+					data:{ticketId:ticketId, action:action},
+					dataType: "json",
+					success:function(data) {		
+						// console.log(data)
+						Swal.fire({
+							icon: 'success',
+							title: 'Ticket Closed',
+							text: 'Ticket: ' + data.uniqId + ' with subject "' + data.subject + '" has been closed successfully.',
+						});
 						ticketData.ajax.reload();
 					}
 				})

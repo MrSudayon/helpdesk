@@ -76,6 +76,7 @@ $ticket = $tickets->getTicketDetails();
 		window.department = "<?php echo $user["department"]; ?>";
 		window.sessionRole = "<?php echo $user["user_type"]; ?>";
 	</script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="js/tickets.js"></script>
 	<?php include('add_ticket_model.php'); ?>
 	 <!-- include('add_purchase_model.php');  -->

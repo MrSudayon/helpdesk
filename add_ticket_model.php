@@ -21,6 +21,7 @@
 						<input type="hidden" class="form-control" id="name" name="name" value="<?php echo $_SESSION["user_name"]; ?>" required>
 					</div>
 					<?php } ?>
+					
 					<div class="form-group">
 						<label for="subjectName" class="control-label">Subject</label>
 						<!-- <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required> -->

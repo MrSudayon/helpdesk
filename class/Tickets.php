@@ -9,10 +9,12 @@ class Tickets extends Database {
 	private $subjectsTable = 'hd_subjects';
 	private $usersTable = 'hd_users';
 	private $dbConnect = false;
+	private $user;
 
 	public function __construct(){		
         $this->dbConnect = $this->dbConnect();
-    } 
+		$this->user = new Users();
+	} 
 	
 	public function showTickets(){
 
@@ -344,7 +346,10 @@ class Tickets extends Database {
 	public function updateTicket() {
 		if($_POST['ticketId']) {	
 			$date = (new DateTime('now', new DateTimeZone('GMT+8')))->getTimestamp();
-			$date = $date->getTimestamp();
+			$date = time();
+			$message = str_replace(array("\r", "\n"), ' ', $_POST['message']);
+			$ticketMessage = mysqli_real_escape_string($this->dbConnect, $message);
+
 			if($_POST["status"] == 0) {
 				$isresolved = 'On Progress';
 				$newDate = $date;
@@ -353,40 +358,56 @@ class Tickets extends Database {
 			}
 			
 			$updateQuery = "UPDATE ".$this->ticketTable."
-			SET createdfor = '".$_POST['name']."', title = '".$_POST["subjectName"]."', department = '".$_POST["departmentName"]."', date = '".$newDate."', init_msg = '".$_POST["message"]."', resolved = '".$_POST["status"]."', dateresolved = '".$isresolved."'
+			SET createdfor = '".$_POST['name']."', title = '".$_POST["subjectName"]."', department = '".$_POST["departmentName"]."', date = '".$newDate."', init_msg = '".$ticketMessage."', resolved = '".$_POST["status"]."', dateresolved = '".$isresolved."'
 			WHERE id ='".$_POST["ticketId"]."'";
-			$isUpdated = mysqli_query($this->dbConnect, $updateQuery);
-		}	
+			mysqli_query($this->dbConnect, $updateQuery);
+		}
 	}		
 	public function closeTicket(){
+		$subject = new Subject();
 		if($_POST["ticketId"]) {
-			$date = (new DateTime('now', new DateTimeZone('GMT+8')))->getTimestamp();
 			$ticketId = $_POST['ticketId'];
-			$uniqId = $_POST['uniqId'];
-			$title = $_POST['title'];
-			// $date = time();
-			
+
+			// $sqlSelect = "SELECT u.id, u.email as uEmail, t.uniqid, t.title 
+			$sqlSelect = "SELECT u.email as uEmail, t.uniqid, t.title 
+						FROM ".$this->usersTable." u 
+						INNER JOIN ".$this->ticketTable." t ON u.name = t.createdfor
+						WHERE t.id = ".$ticketId."";
+
+			$resultSel = mysqli_query($this->dbConnect, $sqlSelect);
+			$row = mysqli_fetch_array($resultSel, MYSQLI_ASSOC);
+
+			$date = (new DateTime('now', new DateTimeZone('GMT+8')))->getTimestamp();
+			$date = time();
+
 			$sqlDelete = "UPDATE ".$this->ticketTable." 
 				SET resolved = '1', dateresolved = '".$date."'
 				WHERE id = '".$ticketId."'";		
 			$result = mysqli_query($this->dbConnect, $sqlDelete);
-
-
+			
 			if($result) {
+				$email = $row['uEmail'];
+				$uniqId = $row['uniqid'];
+				$title = $row['title'];
+				$subject = $subject->getSubjectDetail($title);
+				$subjectName = $subject['name'];
 				// notify user in regards with their ticket
 				// re-implement policy to use their corporate email @oxc-ph
-				// $email = ;
-				$clientEmail = "@oxc-ph.com";
+				$userEmail = trim($email);
+
+				// Check if it has "@" already
+				if (strpos($userEmail, '@') === false) {
+					$userEmail .= '@oxc-ph.com';
+				}
 				
 				// Email
 				$mail = new PHPMailer\PHPMailer\PHPMailer(true);
-				$mail->SMTPDebug = 2; // Verbose output
-				$mail->Debugoutput = 'error_log'; // Send debug to error_log
+				$mail->SMTPDebug = 0;
 
 				try {
 					$mail->isSMTP();
 					$mail->isHTML(true);
-					$mail->SMTPDebug = 2;
+					$mail->SMTPDebug = 0;
 					$mail->Host       = 'smtp.gmail.com';
 					$mail->SMTPAuth   = true;
 					$mail->Username   = 'sudayonfernando01@gmail.com';
@@ -395,12 +416,12 @@ class Tickets extends Database {
 					$mail->Port       = 587;
 
 					$mail->setFrom('fpsudayon@oxc-ph.com', 'Ticket System');
-					$mail->addAddress($clientEmail, 'clientEmail'); 
-					$mail->addAddress('fpsudayon@oxc-ph.com', 'fpsudayon'); 
+					$mail->addAddress($userEmail, 'User'); 
+					$mail->addAddress('fpsudayon@oxc-ph.com', 'Furnands'); 
 
 					$mail->Subject = "Ticket " . $uniqId . " resolved"; 
 					$mail->Body = "Good day!<br><br>
-					We are reaching out to let you know that your helpdesk ticket with subject: ".$title."  has been resolved.<br>
+					We are reaching out to let you know that your helpdesk ticket with subject: <strong>{$subjectName}</strong> has been resolved.<br>
 					If you believe further assistance is needed or have additional concerns regarding this ticket, please feel free to reply to this email or create a new ticket through the Helpdesk portal.<br>
 					Best regards,
 					";
@@ -409,7 +430,15 @@ class Tickets extends Database {
 					error_log("Mailer Error: {$mail->$e}");
 				}
 
-				echo 'success ' . $uniqId;
+				// echo 'success ' . $uniqId;
+				// echo json_encode($row);
+				echo json_encode([
+					"status" => "success",
+					"uniqId" => $uniqId,
+					"title" => $title,
+					"subject" => $subjectName,
+					"emailSentTo" => $userEmail
+				]);
 			}
 			
 		}

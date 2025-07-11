@@ -88,3 +88,21 @@ input[type=radio],
     font-size: 12px;
     font-style: italic;
 }
+.guide {
+    border: 1px black dashed;
+    border-radius: 20px;
+    padding: 0 20px;
+}
+.download {
+    border: 1px black solid;
+    border-radius: 20px;
+    padding: 2px 15px;
+    background-color: #bdff9e;
+    color: black;
+    transition: .2s ease-out;
+}
+.download:hover {
+    text-decoration: none;
+    transition: .2s ease-in;
+    background-color: #ccc;
+}
