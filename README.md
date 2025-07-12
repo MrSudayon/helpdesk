@@ -1,5 +1,5 @@
 <h2>Helpdesk System</h2>
-<i>This is an existing system developed by Youtuber: Code with Lucky.</i><br>
+      <i>This is an existing system developed by Youtuber: Code with Lucky.</i><br><br>
 System is in good structure with OOP Method, I studied the code, implemented it locally and add a lot of features in this system to make it fully functional, reliable, and faster.
 Cleaned some bugs on system and modified queries into prepared statements to avoid mysql injection.
 
