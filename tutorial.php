@@ -56,9 +56,10 @@ $user = $users->getUserInfo();
 		<img src="assets/Logo.png" style="height: 30px; margin: 20px 0;"></img>
 		<?php include('menus.php'); ?>		
 	</div> 
-
+	<br>
     <div class="mainSubject">What is Microsoft 365 for Business?</div>
 	<div><div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;"><iframe src="https://cdn.iframe.ly/api/iframe?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DjugBQqE_2sM%26list%3DPLXPr7gfUMmKxiPKpMocZRkA-AUDI9N1RB&key=925108d922be940af814f71907a7df4b" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen scrolling="no" allow="accelerometer *; clipboard-write *; encrypted-media *; gyroscope *; picture-in-picture *; web-share *;"></iframe></div><a href="https://embedcodesgenerator.com/tools/youtube-embed-code?gad_source=1&gad_campaignid=22458335448&gbraid=0AAAAA_LxlSiub2yKPKBSZj56VKF4_Nnx2&gclid=Cj0KCQjw1JjDBhDjARIsABlM2Su-cv28vaHwtWxFFKR4mN1TeDWORcD67nKaFm7klwkGQY2_CIP3k6kaAur-EALw_wcB" rel="noopener" target="_blank" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">youtube embed code</a></div>
+	<p id="courtesy">Video courtesy of <a href="https://www.youtube.com/channel/UCc3pNIRzIZ8ynI38GO6H01Q" target="_blank">Microsoft 365</a>.</p>
 	<p>With Microsoft 365 for business, connect employees to the people, information, and content they need to do their best work, from any device.</p>
 	<p>Depending on your subscription plan, the benefits of your Microsoft 365 for business subscription may include:</p>
 	<ul class="lists">
@@ -69,7 +70,6 @@ $user = $users->getUserInfo();
 		<li>Frequent updates and upgrades not available anywhere else.</li>
 	</ul>
 		
-
 
 
 

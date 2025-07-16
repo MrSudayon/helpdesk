@@ -417,12 +417,13 @@ class Tickets extends Database {
 
 					$mail->setFrom('fpsudayon@oxc-ph.com', 'Ticket System');
 					$mail->addAddress($userEmail, 'User'); 
-					$mail->addAddress('fpsudayon@oxc-ph.com', 'Furnands'); 
+					$mail->addCC('ebsantos@oxc-ph.com', 'CC Recipient Name');
+					$mail->addCC('fpsudayon@oxc-ph.com', 'CC Recipient Name');
 
-					$mail->Subject = "Ticket " . $uniqId . " resolved"; 
+					$mail->Subject = "Ticket: " . $uniqId . " resolved"; 
 					$mail->Body = "Good day!<br><br>
 					We are reaching out to let you know that your helpdesk ticket with subject: <strong>{$subjectName}</strong> has been resolved.<br>
-					If you believe further assistance is needed or have additional concerns regarding this ticket, please feel free to reply to this email or create a new ticket through the Helpdesk portal.<br>
+					If you believe further assistance is needed or have additional concerns regarding this ticket, please feel free to reply to this email or create a new ticket through the Helpdesk portal.<br><br>
 					Best regards,
 					";
 					$mail->send();
