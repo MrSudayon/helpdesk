@@ -297,10 +297,11 @@ class Tickets extends Database {
 					$mail->isSMTP();
 					$mail->isHTML(true);
 					$mail->SMTPDebug = 2;
-					$mail->Host       = 'smtp.gmail.com';   
+					$mail->Host       = 'smtp.office365.com';   
 					$mail->SMTPAuth   = true;
-					$mail->Username   = 'sudayonfernando01@gmail.com';
-					$mail->Password   = 'ivfn tofh iych hkdd';    
+					$mail->Username   = 'fpsudayon@oxc-ph.com';
+					// $mail->Password   = 'ivfn tofh iych hkdd';    
+					$mail->Password   = 'IloveyouOXC420';    
 					$mail->SMTPSecure = 'tls';
 					$mail->Port       = 587;
 
