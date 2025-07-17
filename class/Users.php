@@ -102,6 +102,7 @@ class Users extends Database {
 			return $userDetails;
 		}
 	}
+	
 	public function getColoumn($id, $column) {     
         $sqlQuery = "SELECT * FROM ".$this->userTable." 
 			WHERE id ='".$id."'";
@@ -109,88 +110,6 @@ class Users extends Database {
 		$userDetails = mysqli_fetch_assoc($result);
 		return $userDetails[$column];       
     }
-	
-	
-	// public function listUser1(){
-		
-	// 	$sqlQuery = "SELECT * FROM ".$this->userTable;
-			
-	// 	if(!empty($_POST["search"]["value"])){
-	// 		$sqlQuery .= ' (name LIKE "%'.$_POST["search"]["value"].'%" ';					
-	// 		$sqlQuery .= ' OR email LIKE "%'.$_POST["search"]["value"].'%" ';
-	// 		$sqlQuery .= ' OR create_date LIKE "%'.$_POST["search"]["value"].'%" ';					
-	// 	}
-	// 	if(!empty($_POST["order"])){
-
-	// 		$orderColumnIndex = $_POST['order']['0']['column'];
-	// 		$orderColumnName = $_POST['columns'][$orderColumnIndex]['data'];
-
-	// 		if ($orderColumnName == '1' || $orderColumnName == 'name') {
-	// 			$sqlQuery .= ' ORDER BY name '.$_POST['order']['0']['dir'].' ';
-	// 		} 
-	// 		elseif ($orderColumnName == '2' || $orderColumnName == 'email') {
-	// 			$sqlQuery .= ' ORDER BY email '.$_POST['order']['0']['dir'].' ';
-	// 		} 
-	// 		elseif ($orderColumnName == '3' || $orderColumnName == 'create_date') {
-	// 			$sqlQuery .= ' ORDER BY create_date '.$_POST['order']['0']['dir'].' ';
-	// 		} 
-	// 		elseif ($orderColumnName == '4' || $orderColumnName == 'user_type') {
-	// 			$sqlQuery .= ' ORDER BY user_type '.$_POST['order']['0']['dir'].' ';
-	// 		}
-	// 		elseif ($orderColumnName == '5' || $orderColumnName == 'status') {
-	// 			$sqlQuery .= ' ORDER BY status '.$_POST['order']['0']['dir'].' ';
-	// 		}
-			
-	// 	} else {
-	// 		$sqlQuery .= ' ORDER BY status DESC ';
-	// 	}
-
-	// 	if($_POST["length"] != -1){
-	// 		$sqlQuery .= ' LIMIT ' . $_POST['start'] . ', ' . $_POST["length"];
-	// 	}	
-		
-	// 	$result = mysqli_query($this->dbConnect, $sqlQuery);
-	// 	$numRows = mysqli_num_rows($result);
-	// 	$userData = array();	
-	// 	while( $user = mysqli_fetch_assoc($result) ) {		
-	// 		$userRows = array();			
-	// 		$status = '';
-	// 		if($user['status'] == 1) {
-	// 			$status = '<span class="label label-success">Active</span>';
-	// 		} elseif($user['status'] == 0) {
-	// 			$status = '<span class="label label-danger">Inactive</span>';
-	// 		}	
-			
-	// 		$userRole = '';
-	// 		if($user['user_type'] == 'admin')	{	
-	// 			$userRole = '<span class="label label-danger">Admin</span>';
-	// 		} elseif($user['user_type'] == 'approver1') {
-	// 			$userRole = '<span class="label label-success">Approver</span>';
-	// 		} elseif($user['user_type'] == 'approver2') {
-	// 			$userRole = '<span class="label label-primary">Final Approver</span>';
-	// 		} elseif($user['user_type'] == 'user') {
-	// 			$userRole = '<span class="label label-default">Member</span>';
-	// 		}	
-			
-	// 		$userRows[] = $user['id'];
-	// 		$userRows[] = $user['name'];
-	// 		$userRows[] = $user['email'];
-	// 		$userRows[] = $user['create_date'];
-	// 		$userRows[] = $userRole;			
-	// 		$userRows[] = $status;
-				
-	// 		$userRows[] = '<button type="button" name="update" id="'.$user["id"].'" class="btn btn-warning btn-xs update">Edit</button>';
-	// 		$userRows[] = '<button type="button" name="delete" id="'.$user["id"].'" class="btn btn-danger btn-xs delete">Delete</button>';
-	// 		$userData[] = $userRows;
-	// 	}
-	// 	$output = array(
-	// 		"draw"				=>	intval($_POST["draw"]),
-	// 		"recordsTotal"  	=>  $numRows,
-	// 		"recordsFiltered" 	=> 	$numRows,
-	// 		"data"    			=> 	$userData
-	// 	);
-	// 	echo json_encode($output);
-	// }	
 
 	public function listUser() {
 		$start = $_POST['start'] ?? 0;  // Start index for pagination
